@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+  "dependencies": {
+    "xunit": "2.2.0-beta2-build3300",
+    "Webdictaat.CMS": "1.0.0-*",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "moq.netcore": "4.4.0-beta8",
+    "Castle.Core": "4.0.0-beta001",
+    "System.Reflection.TypeExtensions": "4.1.0"
+  },
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dotnet5.6",
+        "dnxcore50",
+        "portable-net45+win8"
+      ],
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        }
+      }
+    }
+  }
+}
