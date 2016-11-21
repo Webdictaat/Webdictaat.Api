@@ -5,27 +5,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Webdictaat.CMS.Models;
 
 namespace Webdictaat.CMS.Controllers
 {
+    [Route("api/dictaten/{dictaatName}/[controller]")]
     public class UploadController
     {
-        [HttpPost]
-        public async Task<IActionResult> Index(ICollection<IFormFile> files)
+        private IImageRepository _imageRepo;
+        public UploadController(IImageRepository imageRepo)
         {
-            var uploads = @"C:\webdictaat\images";
+            this._imageRepo = imageRepo;
+        }
+
+        [HttpPost]
+        public void Post(string dictaatName, ICollection<IFormFile> files)
+        {
+            List<string> result = new List<String>();
+
             foreach (var file in files)
             {
+                
                 if (file.Length > 0)
                 {
-                    using (var fileStream = new FileStream(Path.Combine(uploads, "test"), FileMode.Create))
-                    {
-                        await file.CopyToAsync(fileStream);
-                    }
+                    result.Add(this._imageRepo.CreateImage(dictaatName, file));
                 }
             }
-            return null;
+            
         }
     }
 }
