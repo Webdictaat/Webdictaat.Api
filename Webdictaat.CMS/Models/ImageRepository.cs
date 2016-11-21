@@ -29,7 +29,7 @@ namespace Webdictaat.CMS.Models
 
         public string CreateImage(string dictaatName, IFormFile file) 
         {
-            var path = _pathHelper.ImagesPath(dictaatName);
+            var path = _pathHelper.ImagesPath();
 
             var extension = System.IO.Path.GetExtension(file.FileName);
             var myUniqueFileName = string.Format(@"{0}{1}", Guid.NewGuid(), extension);

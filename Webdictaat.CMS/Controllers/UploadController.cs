@@ -19,19 +19,15 @@ namespace Webdictaat.CMS.Controllers
         }
 
         [HttpPost]
-        public void Post(string dictaatName, ICollection<IFormFile> files)
+        public string Post(string dictaatName, IFormFile file)
         {
-            List<string> result = new List<String>();
 
-            foreach (var file in files)
+            if (file?.Length > 0)
             {
-                
-                if (file.Length > 0)
-                {
-                    result.Add(this._imageRepo.CreateImage(dictaatName, file));
-                }
+               return this._imageRepo.CreateImage(dictaatName, file);
             }
-            
+
+            return null;
         }
     }
 }

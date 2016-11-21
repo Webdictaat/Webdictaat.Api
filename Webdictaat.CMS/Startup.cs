@@ -59,6 +59,8 @@ namespace Webdictaat.CMS
             
             app.UseCors(b => b.WithOrigins("*").WithHeaders("*").WithMethods("*").WithExposedHeaders("*"));
             app.UseMvc();
+
+            app.UseStaticFiles();
         }
     }
 }
