@@ -9,7 +9,7 @@ using Webdictaat.CMS.ViewModels;
 using Webdictaat.Core;
 using Xunit;
 
-namespace Webdictaat.CMS.Test
+namespace Webdictaat.Core.Test
 {
     public class DictaatFactoryTest
     {

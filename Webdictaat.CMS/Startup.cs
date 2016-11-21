@@ -38,6 +38,8 @@ namespace Webdictaat.CMS
             services.AddSingleton<IPageRepository, PageRepository>();
             services.AddSingleton<IMenuRepository, MenuRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddSingleton<IImageRepository, ImageRepository>();
+            
 
             services.AddSingleton<Core.IDirectory, Core.Directory>();
             services.AddSingleton<Core.IFile, Core.File>();

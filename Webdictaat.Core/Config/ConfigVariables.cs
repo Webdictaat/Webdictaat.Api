@@ -8,5 +8,6 @@ namespace Webdictaat.Core
         public string TemplatesDirectory { get; set; }
         public string MenuConfigName { get; set; }
         public string PagesDirectory { get; set; }
+        public string ImagesDirectory { get; set; }
     }
 }
