@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Webdictaat.CMS.Models;
-using Webdictaat.CMS.ViewModels;
+using Webdictaat.Api.Models;
+using Webdictaat.Api.ViewModels;
 using Webdictaat.Core;
 using Xunit;
 
-namespace Webdictaat.CMS.Test
+namespace Webdictaat.Api.Test
 {
     public class MenuRepositoryTest
     {

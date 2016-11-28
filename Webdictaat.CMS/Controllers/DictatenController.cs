@@ -16,6 +16,7 @@ namespace Webdictaat.CMS.Controllers
 
         public DictatenController(IDictaatRepository dictaatRepo)
         {
+
             _dictaatRepo = dictaatRepo;
         }
 

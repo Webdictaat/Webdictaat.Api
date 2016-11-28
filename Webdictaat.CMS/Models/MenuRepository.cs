@@ -16,7 +16,6 @@ namespace Webdictaat.CMS.Models
     public class MenuRepository : IMenuRepository
     {
         private string _directoryRoot;
-        private string _pagesDirectory;
         private string _menuConfigName;
         private IFile _file;
         private IMenuFactory _menuFactory;
