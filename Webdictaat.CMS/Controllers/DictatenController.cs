@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Webdictaat.CMS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,6 +17,7 @@ namespace Webdictaat.CMS.Controllers
 
         public DictatenController(IDictaatRepository dictaatRepo)
         {
+
             _dictaatRepo = dictaatRepo;
         }
 
@@ -47,6 +49,7 @@ namespace Webdictaat.CMS.Controllers
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet("{name}")]
+        [Authorize]
         public ViewModels.Dictaat Get(string name)
         {
             return _dictaatRepo.getDictaat(name);

@@ -18,9 +18,9 @@ namespace Webdictaat.CMS.Models
 
     public class QuestionRepository : IQuestionRepository
     {
-        private DomainContext _context;
+        private WebdictaatContext _context;
 
-        public QuestionRepository(DomainContext context)
+        public QuestionRepository(WebdictaatContext context)
         {
             _context = context; 
         }

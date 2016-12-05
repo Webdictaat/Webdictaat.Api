@@ -16,6 +16,10 @@ namespace Webdictaat.CMS.Controllers
     {
         private IQuestionRepository _questionRepo;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="questionRepo"></param>
         public QuestionsController(IQuestionRepository questionRepo)
         {
             _questionRepo = questionRepo;

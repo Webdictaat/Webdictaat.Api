@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Webdictaat.CMS.Models;
-using Webdictaat.CMS.ViewModels;
 using Webdictaat.Core;
 using Xunit;
 
