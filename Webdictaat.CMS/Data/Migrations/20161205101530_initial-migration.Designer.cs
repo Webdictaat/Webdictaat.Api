@@ -8,8 +8,8 @@ using Webdictaat.Domain;
 namespace Webdictaat.CMS.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20161128152625_MyFirstMigration")]
-    partial class MyFirstMigration
+    [Migration("20161205101530_initial-migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -6,16 +7,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using MVCWithAuth.Services;
+using Newtonsoft.Json.Serialization;
+using Swashbuckle.Swagger.Model;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 using Webdictaat.CMS.Models;
 using Webdictaat.Core;
 using Webdictaat.Domain;
 using Webdictaat.Domain.User;
 
+
 namespace Webdictaat.CMS
 {
     public class Startup
     {
+        private readonly IHostingEnvironment _hostingEnv;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -23,11 +33,7 @@ namespace Webdictaat.CMS
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            //if (env.IsDevelopment())
-            //{
-            //    // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-            //    builder.AddUserSecrets<Startup>();
-            //}
+            _hostingEnv = env;
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -42,15 +48,49 @@ namespace Webdictaat.CMS
             services.AddDbContext<WebdictaatContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToLogin = ctx =>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/api") &&
+                            ctx.Response.StatusCode == (int)HttpStatusCode.OK)
+                        {
+                            ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                        return Task.FromResult(0);
+                    }
+                };
+            })
                 .AddEntityFrameworkStores<WebdictaatContext>()
                 .AddDefaultTokenProviders();
 
 
-            services.AddMvc();
             services.AddCors();
             services.AddOptions();
+            services.AddMvc();
+  
 
+            ////Swagger
+            //services.AddSwaggerGen();
+            //services.ConfigureSwaggerGen(options =>
+            //{
+            //    options.SingleApiVersion(new Info
+            //    {
+            //        Version = "v1",
+            //        Title = "Webdictaat API",
+            //        Description = "API for dictaten",
+            //        TermsOfService = "None"
+            //    });
+            //    options.DescribeAllEnumsAsStrings();
+            //});
+
+            #region custom services
             services.AddSingleton<IDictaatRepository, DictaatRepository>();
             services.AddSingleton<IPageRepository, PageRepository>();
             services.AddSingleton<IMenuRepository, MenuRepository>();
@@ -59,6 +99,7 @@ namespace Webdictaat.CMS
             services.AddSingleton<Core.IDirectory, Core.Directory>();
             services.AddSingleton<Core.IFile, Core.File>();
             services.Configure<ConfigVariables>(Configuration.GetSection("ConfigVariables"));
+            #endregion
 
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -71,26 +112,29 @@ namespace Webdictaat.CMS
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
-            }
-
             app.UseStaticFiles();
-            app.UseCors(b => b.WithOrigins("*").WithHeaders("*").WithMethods("*").WithExposedHeaders("*"));
+            app.UseCors(b => b.WithOrigins("http://127.0.0.1:3000").AllowCredentials());
 
             app.UseIdentity();
+
 
             //// Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.UseGoogleAuthentication(new GoogleOptions
             {
-                ClientId = "1082440858387-eh3p4hakp02nbhvkb3sqr6ssgjksp5e5.apps.googleusercontent.com",
-                ClientSecret = "sWXw2LY2y6d2ATCZuS6BLWMn",
+                ClientId = Configuration.GetSection("IdentityProviders:Google:ClientId").Value,
+                ClientSecret = Configuration.GetSection("IdentityProviders:Google:ClientSecret").Value,
             });
 
             app.UseMvc();
+
+            //app.UseSwagger();
+            //app.UseSwaggerUi();
+
+        }
+
+        private string GetXmlCommentsPath(ApplicationEnvironment appEnvironment)
+        {
+            return Path.Combine(appEnvironment.ApplicationBasePath, "Webdictaat.CMS.xml");
         }
     }
 }

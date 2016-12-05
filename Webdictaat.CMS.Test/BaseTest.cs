@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Webdictaat.Api.Models;
+using Webdictaat.CMS.Models;
 
-namespace Webdictaat.Api.Test
+namespace Webdictaat.CMS.Test
 {
     public class BaseTest
     {

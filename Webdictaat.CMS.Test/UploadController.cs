@@ -1,5 +1,5 @@
 ﻿
-namespace Webdictaat.Api.Test
+namespace Webdictaat.CMS.Test
 {
 
     public class UploadControllerTest : BaseTest

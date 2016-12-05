@@ -13,6 +13,11 @@ namespace Webdictaat.CMS.Controllers
     public class UploadController
     {
         private IImageRepository _imageRepo;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imageRepo"></param>
         public UploadController(IImageRepository imageRepo)
         {
             this._imageRepo = imageRepo;

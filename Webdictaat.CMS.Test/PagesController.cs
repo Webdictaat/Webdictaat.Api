@@ -1,10 +1,10 @@
 ﻿using Moq;
-using Webdictaat.Api.Controllers;
-using Webdictaat.Api.Models;
-using Webdictaat.Api.ViewModels;
+using Webdictaat.CMS.Controllers;
+using Webdictaat.CMS.Models;
+using Webdictaat.CMS.ViewModels;
 using Xunit;
 
-namespace Webdictaat.Api.Test
+namespace Webdictaat.CMS.Test
 {
     public class PagesControllerTest
     {

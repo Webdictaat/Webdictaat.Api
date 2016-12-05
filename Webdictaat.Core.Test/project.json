@@ -7,7 +7,7 @@
     "moq.netcore": "4.4.0-beta8",
     "Castle.Core": "4.0.0-beta001",
     "System.Reflection.TypeExtensions": "4.3.0",
-    "Webdictaat.Core": "1.0.0-*"
+    "Webdictaat.Core": "0.0.1",
   },
   "frameworks": {
     "netcoreapp1.0": {
