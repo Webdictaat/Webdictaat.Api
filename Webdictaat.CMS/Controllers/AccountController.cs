@@ -10,12 +10,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MVCWithAuth.Services;
 using Webdictaat.Domain;
-using Webdictaat.CMS.Models.AccountViewModels;
 using System.Security.Principal;
 using Webdictaat.Core.JWT;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Webdictaat.Domain.User;
+using Webdictaat.CMS;
 
 namespace MVCWithAuth.Controllers
 {
@@ -146,10 +146,10 @@ namespace MVCWithAuth.Controllers
         [HttpGet]
         [Authorize]
         [Route("Current")]
-        public async Task<ApplicationUser> Current(string returnUrl = null, string remoteError = null)
+        public async Task<Webdictaat.CMS.ViewModels.User> Current(string returnUrl = null, string remoteError = null)
         {
-            ApplicationUser user = await _userManager.GetUserAsync(User);
-            return user;
+            ApplicationUser user = await this.GetCurrentUserAsync();
+            return new Webdictaat.CMS.ViewModels.User(user);
         }
 
         /// <summary>

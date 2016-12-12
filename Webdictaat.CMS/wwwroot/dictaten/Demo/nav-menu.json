@@ -1,0 +1,33 @@
+{
+  "Name": "mainMenu",
+  "SubMenus": [
+    {
+      "Name": "opdrachten",
+      "SubMenus": [],
+      "MenuItems": [
+        {
+          "Name": "week 1",
+          "Url": "week1"
+        },
+        {
+          "Name": "week 2",
+          "Url": "week2"
+        },
+        {
+          "Name": "week 3",
+          "Url": "week3"
+        }
+      ]
+    }
+  ],
+  "MenuItems": [
+    {
+      "Name": "contact",
+      "Url": "contact"
+    },
+    {
+      "Name": "Martijn",
+      "Url": "Martijn"
+    }
+  ]
+}
