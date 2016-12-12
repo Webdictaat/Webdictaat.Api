@@ -10,12 +10,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MVCWithAuth.Services;
 using Webdictaat.Domain;
+using Webdictaat.CMS.Models.AccountViewModels;
 using System.Security.Principal;
 using Webdictaat.Core.JWT;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Webdictaat.Domain.User;
-using Webdictaat.CMS;
+
 
 namespace MVCWithAuth.Controllers
 {

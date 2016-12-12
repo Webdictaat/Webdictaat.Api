@@ -75,7 +75,6 @@ namespace Webdictaat.CMS
             services.AddOptions();
             services.AddMvc();
 
-
             //Swagger
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options =>
@@ -126,7 +125,6 @@ namespace Webdictaat.CMS
             });
 
             app.UseMvc();
-
             app.UseSwagger();
             app.UseSwaggerUi();
 
