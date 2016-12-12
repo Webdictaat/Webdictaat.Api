@@ -245,3 +245,4 @@ ModelManifest.xml
 .fake/
 /Webdictaat.Database
 /Webdictaat.CMS/wwwroot/images
+/Webdictaat.CMS/appsettings.development.json
