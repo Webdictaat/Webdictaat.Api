@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Webdictaat.Domain.User;
 
+
 namespace MVCWithAuth.Controllers
 {
     /// <summary>
@@ -146,10 +147,10 @@ namespace MVCWithAuth.Controllers
         [HttpGet]
         [Authorize]
         [Route("Current")]
-        public async Task<ApplicationUser> Current(string returnUrl = null, string remoteError = null)
+        public async Task<Webdictaat.CMS.ViewModels.User> Current(string returnUrl = null, string remoteError = null)
         {
-            ApplicationUser user = await _userManager.GetUserAsync(User);
-            return user;
+            ApplicationUser user = await this.GetCurrentUserAsync();
+            return new Webdictaat.CMS.ViewModels.User(user);
         }
 
         /// <summary>

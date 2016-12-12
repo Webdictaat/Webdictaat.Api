@@ -74,21 +74,20 @@ namespace Webdictaat.CMS
             services.AddCors();
             services.AddOptions();
             services.AddMvc();
-  
 
-            ////Swagger
-            //services.AddSwaggerGen();
-            //services.ConfigureSwaggerGen(options =>
-            //{
-            //    options.SingleApiVersion(new Info
-            //    {
-            //        Version = "v1",
-            //        Title = "Webdictaat API",
-            //        Description = "API for dictaten",
-            //        TermsOfService = "None"
-            //    });
-            //    options.DescribeAllEnumsAsStrings();
-            //});
+            //Swagger
+            services.AddSwaggerGen();
+            services.ConfigureSwaggerGen(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "Webdictaat API",
+                    Description = "API for dictaten",
+                    TermsOfService = "None"
+                });
+                options.DescribeAllEnumsAsStrings();
+            });
 
             #region custom services
             services.AddSingleton<IDictaatRepository, DictaatRepository>();
@@ -126,9 +125,8 @@ namespace Webdictaat.CMS
             });
 
             app.UseMvc();
-
-            //app.UseSwagger();
-            //app.UseSwaggerUi();
+            app.UseSwagger();
+            app.UseSwaggerUi();
 
         }
 

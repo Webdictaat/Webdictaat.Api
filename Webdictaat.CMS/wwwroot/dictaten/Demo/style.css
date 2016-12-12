@@ -1,0 +1,64 @@
+.wd-row{
+    display:flex;
+}
+
+.wd-flex-1{
+    flex:1;
+}
+
+.wd-flex-2{
+    flex:2;
+}
+
+.wd-flex-3{
+    flex:3;
+}
+
+.wd-flex-4{
+    flex:4;
+}
+
+body{
+    background-color:#eee;
+    margin:0px;
+}
+
+.container{
+    width:80%;
+    background-color:white;
+    margin:auto;
+    min-width: 600px;
+    padding:15px;
+    margin-top:15px;
+    
+}
+
+header{
+    background-color:white;
+    border:1px solid white;
+}
+
+header h2{
+    display: inline-block;
+    margin:0px;
+    padding:10px;
+}
+
+header nav{
+    display:flex;
+}
+
+wd-nav-menu ul{
+    display:flex;
+    padding:0; margin:0;
+    list-style: none;
+}
+
+wd-nav-menu ul a{
+    padding:15px;
+    display:block;
+    cursor: pointer;
+}
+
+
+
