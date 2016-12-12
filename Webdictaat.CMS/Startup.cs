@@ -97,7 +97,9 @@ namespace Webdictaat.CMS
             services.AddSingleton<IImageRepository, ImageRepository>();
             services.AddSingleton<Core.IDirectory, Core.Directory>();
             services.AddSingleton<Core.IFile, Core.File>();
-            services.Configure<ConfigVariables>(Configuration.GetSection("ConfigVariables"));
+            IConfigurationSection config = Configuration.GetSection("ConfigVariables");
+            config["DictaatRoot"] = _hostingEnv.WebRootPath;
+            services.Configure<ConfigVariables>(config);
             #endregion
 
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -111,8 +113,9 @@ namespace Webdictaat.CMS
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseCors(b => b.WithOrigins("http://127.0.0.1:3000").AllowCredentials());
+            app.UseCors(b => b.WithOrigins("http://127.0.0.1:3000", "http://localhost:3000").AllowCredentials());
 
             app.UseIdentity();
 
