@@ -115,7 +115,11 @@ namespace Webdictaat.CMS
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseCors(b => b.WithOrigins("http://127.0.0.1:3000", "http://localhost:3000").AllowCredentials());
+            app.UseCors(b => 
+                b.WithOrigins("http://127.0.0.1:3000", "http://localhost:3000")
+                .AllowCredentials()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
 
             app.UseIdentity();
 
