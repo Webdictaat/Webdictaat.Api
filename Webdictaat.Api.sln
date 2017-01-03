@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.CMS.Test", "Webdictaat.CMS.Test\Webdictaat.CMS.Test.xproj", "{E18EC6A7-4D69-4B5E-AA26-D4F995DF70FF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{681E112E-374E-4D52-BA0F-F32BD5897768}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Core", "Webdictaat.Core\Webdictaat.Core.xproj", "{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F6AA2EF-CB46-4C6B-9A18-1D4FF9821683}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Domain", "Webdictaat.Domain\Webdictaat.Domain.xproj", "{403147F9-7049-46DB-9241-40DEB290FE77}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Api", "src\Webdictaat.Api\Webdictaat.Api.xproj", "{BF129114-F27F-4912-896B-66530AE61641}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Core.Test", "Webdictaat.Core.Test\Webdictaat.Core.Test.xproj", "{5CED3615-CDFD-456A-931B-7F64E32673FD}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Core", "src\Webdictaat.Core\Webdictaat.Core.xproj", "{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.CMS", "Webdictaat.CMS\Webdictaat.CMS.xproj", "{A83509F9-1DC7-4DE3-97F4-EE681480D2C4}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Domain", "src\Webdictaat.Domain\Webdictaat.Domain.xproj", "{403147F9-7049-46DB-9241-40DEB290FE77}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Core.Test", "src\Webdictaat.Core.Test\Webdictaat.Core.Test.xproj", "{5CED3615-CDFD-456A-931B-7F64E32673FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +24,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E18EC6A7-4D69-4B5E-AA26-D4F995DF70FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E18EC6A7-4D69-4B5E-AA26-D4F995DF70FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E18EC6A7-4D69-4B5E-AA26-D4F995DF70FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E18EC6A7-4D69-4B5E-AA26-D4F995DF70FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF129114-F27F-4912-896B-66530AE61641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF129114-F27F-4912-896B-66530AE61641}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF129114-F27F-4912-896B-66530AE61641}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF129114-F27F-4912-896B-66530AE61641}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,12 +40,14 @@ Global
 		{5CED3615-CDFD-456A-931B-7F64E32673FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CED3615-CDFD-456A-931B-7F64E32673FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CED3615-CDFD-456A-931B-7F64E32673FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A83509F9-1DC7-4DE3-97F4-EE681480D2C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A83509F9-1DC7-4DE3-97F4-EE681480D2C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A83509F9-1DC7-4DE3-97F4-EE681480D2C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A83509F9-1DC7-4DE3-97F4-EE681480D2C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BF129114-F27F-4912-896B-66530AE61641} = {681E112E-374E-4D52-BA0F-F32BD5897768}
+		{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB} = {681E112E-374E-4D52-BA0F-F32BD5897768}
+		{403147F9-7049-46DB-9241-40DEB290FE77} = {681E112E-374E-4D52-BA0F-F32BD5897768}
+		{5CED3615-CDFD-456A-931B-7F64E32673FD} = {681E112E-374E-4D52-BA0F-F32BD5897768}
 	EndGlobalSection
 EndGlobal

@@ -248,3 +248,4 @@ ModelManifest.xml
 /Webdictaat.CMS/wwwroot/dictaten
 /Webdictaat.CMS/wwwroot/templates
 /Webdictaat.CMS/appsettings.development.json
+/src/Webdictaat.Api/appsettings.development.json
