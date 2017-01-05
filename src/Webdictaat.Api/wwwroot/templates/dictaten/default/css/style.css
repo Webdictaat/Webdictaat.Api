@@ -24,6 +24,7 @@
   transition: all 0.4s ease 0s;
   height: 100%;
   max-width:200%;
+  z-index:1;
 }
 
 .side-nav{
@@ -34,6 +35,11 @@
   transition: all 0.4s ease 0s;
    height: 100%;
    width:50%;
+  
+}
+
+.side-nav .navbar-nav{
+   margin-left:0px;
 }
 
 .side-nav.active{
@@ -45,10 +51,20 @@
   text-indent: 20px;
 }
 
-@media (min-width:767px) {
+@media (max-width:767px) {
 
   .side-nav{
      transform: translate(0, 0);
+  }
+
+  .side-nav .dropdown-menu{
+      -webkit-box-shadow: none;
+      box-shadow:none;
+      border:none;
+      position:static;
+      margin:0px;
+      background-color:transparent;
+      padding-left:2px;
   }
 
 }
