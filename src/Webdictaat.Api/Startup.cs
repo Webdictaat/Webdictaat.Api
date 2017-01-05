@@ -94,6 +94,7 @@ namespace Webdictaat.CMS
             services.AddSingleton<IPageRepository, PageRepository>();
             services.AddSingleton<IMenuRepository, MenuRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddSingleton<IImageRepository, ImageRepository>();
             services.AddSingleton<Core.IDirectory, Core.Directory>();
             services.AddSingleton<Core.IFile, Core.File>();
@@ -116,7 +117,7 @@ namespace Webdictaat.CMS
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseCors(b => 
-                b.WithOrigins("http://localhost:8080", "http://localhost:3000", "http://student.aii.avans.nl"), "http://webdictaat.azurewebsites.net")
+                b.WithOrigins("http://localhost:8080", "http://localhost:3000", "http://student.aii.avans.nl", "http://webdictaat.azurewebsites.net")
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod());

@@ -12,6 +12,8 @@ namespace Webdictaat.Domain
     {
         public DbSet<Question> Questions { get; set; }
 
+        public DbSet<Rating> Ratings { get; set; }
+
         public WebdictaatContext(DbContextOptions<WebdictaatContext> options)
             : base(options)
         {
