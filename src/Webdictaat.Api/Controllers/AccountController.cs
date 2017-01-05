@@ -158,13 +158,13 @@ namespace MVCWithAuth.Controllers
         /// </summary>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("LogOff")]
-        public async Task<string> LogOff(string returnUrl)
+        public async Task<ActionResult> LogOff(string returnUrl)
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return "user logged out";
+            return Redirect(returnUrl);
         }
 
         #region Helpers
