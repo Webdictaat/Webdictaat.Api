@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webdictaat.Api.ViewModels;
 using Webdictaat.Domain;
 
 namespace Webdictaat.CMS.ViewModels
@@ -24,5 +25,7 @@ namespace Webdictaat.CMS.ViewModels
         public string Title { get; set; }
 
         public string Description { get; set; }
+
+        public RateVM MyRate { get; set; }
     }
 }

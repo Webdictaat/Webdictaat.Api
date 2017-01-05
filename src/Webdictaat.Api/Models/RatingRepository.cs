@@ -7,13 +7,18 @@ using Microsoft.Extensions.Options;
 using Webdictaat.Domain;
 using Microsoft.EntityFrameworkCore;
 using Webdictaat.CMS.ViewModels;
+using Webdictaat.Api.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Webdictaat.Domain.User;
+using Microsoft.AspNet.Http;
 
 namespace Webdictaat.CMS.Models
 {
     public interface IRatingRepository
     {
         RatingVM CreateRating(RatingVM question);
-        RatingVM GetRating(int ratingId);
+        RatingVM GetRating(int ratingId, string userId);
+        RateVM CreateRate(int ratingId, string userId, RateVM rate);
     }
 
     /// <summary>
@@ -26,6 +31,26 @@ namespace Webdictaat.CMS.Models
         public RatingRepository(WebdictaatContext context)
         {
             _context = context; 
+        }
+
+        public RateVM CreateRate(int ratingId, string userId, RateVM rate)
+        {
+            var r = new Rate()
+            {
+                Emotion = (int)rate.Emotion,
+                Feedback = rate.Feedback,
+                Timestamp = DateTime.Now,
+                UserId = userId,
+            };
+
+            Rating rating = _context.Ratings
+                .Include(ra => ra.Rates)
+                .FirstOrDefault(q => q.Id == ratingId);
+
+            rating.Rates.Add(r);
+            _context.SaveChanges();
+            rate.Id = r.Id;
+            return rate;
         }
 
         /// <summary>
@@ -53,14 +78,24 @@ namespace Webdictaat.CMS.Models
         /// </summary>
         /// <param name="ratingId"></param>
         /// <returns></returns>
-        public RatingVM GetRating(int ratingId)
+        public RatingVM GetRating(int ratingId, string userId)
         {
             Rating rating = _context.Ratings.FirstOrDefault(q => q.Id == ratingId);
 
             if (rating == null)
                 return null;
 
-            return new RatingVM(rating);
+            var result = new RatingVM(rating);
+
+            if (userId != null)
+            {
+                Rate rate = _context.Rates.FirstOrDefault(r => r.RatingId == rating.Id && r.UserId == userId);
+
+                if(rate != null)
+                    result.MyRate = new RateVM(rate);
+            }
+
+            return result;
         }
     }
 }

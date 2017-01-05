@@ -42,8 +42,9 @@ namespace Webdictaat.CMS.Controllers
             var dictaten = _dictaatRepo.GetDictaten();
             return dictaten;
         }
-    
+
         /// <summary>
+        /// Authorized (Requires the user to be logged in.)
         /// Returns a detailed summary of 1 webdictaat
         /// </summary>
         /// <param name="name"></param>

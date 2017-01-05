@@ -17,5 +17,7 @@ namespace Webdictaat.Domain
 
         [Required]
         public string Description { get; set; }
+
+        public virtual ICollection<Rate> Rates { get; set; }
     }
 }

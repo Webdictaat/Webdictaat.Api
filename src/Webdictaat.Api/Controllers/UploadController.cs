@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,14 @@ namespace Webdictaat.CMS.Controllers
             this._imageRepo = imageRepo;
         }
 
+        /// <summary>
+        /// Authorized (Requires the user to be logged in.)
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public string Post(string dictaatName, IFormFile file)
         {
 

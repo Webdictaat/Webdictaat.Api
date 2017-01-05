@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Webdictaat.CMS.Models;
 using Webdictaat.CMS.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,7 +32,14 @@ namespace Webdictaat.CMS.Controllers
             QuestionVM result = _questionRepo.GetQuestion(questionId);
             return result;
         }
-      
+
+        /// <summary>
+        /// Authorized (Requires the user to be logged in.)
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="question"></param>
+        /// <returns></returns>
+        [Authorize]
         [HttpPost] 
         public QuestionVM Post(string dictaatName, [FromBody]QuestionVM question)
         {
