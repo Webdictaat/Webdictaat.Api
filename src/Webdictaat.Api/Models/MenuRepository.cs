@@ -12,6 +12,7 @@ namespace Webdictaat.CMS.Models
         ViewModels.Menu AddMenuItem(string dictaat, string subMenu, ViewModels.MenuItem item );
         ViewModels.Menu GetMenu(string dictaat);
         ViewModels.Menu EditMenu(string dictaat, ViewModels.Menu item);
+        ViewModels.Menu RemoveMenuItem(string dictaatName, string pageName);
     }
     public class MenuRepository : IMenuRepository
     {
@@ -71,6 +72,29 @@ namespace Webdictaat.CMS.Models
             {
                 throw new System.IO.FileNotFoundException();
             }
+            return new ViewModels.Menu(newMenu);
+        }
+
+        public ViewModels.Menu RemoveMenuItem(string dictaatName, string pageName)
+        {
+            var menu = GetMenu(dictaatName);
+
+            if(menu.MenuItems.Any(p => p.Url.Contains(pageName)))
+            {
+                menu.MenuItems.Remove(menu.MenuItems.FirstOrDefault(p => p.Url.Contains(pageName)));
+            }
+            else
+            {
+                foreach(var sm in menu.SubMenus)
+                {
+                    if (sm.MenuItems.Any(p => p.Url.Contains(pageName)))
+                    {
+                        sm.MenuItems.Remove(sm.MenuItems.FirstOrDefault(p => p.Url.Contains(pageName)));
+                    }
+                }
+            }
+
+            menu = EditMenu(dictaatName, menu);
             return new ViewModels.Menu(newMenu);
         }
     }

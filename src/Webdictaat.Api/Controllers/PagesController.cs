@@ -69,6 +69,7 @@ namespace Webdictaat.CMS.Controllers
         [HttpDelete("{pageName}")]
         public void Delete(string dictaatName, string pageName)
         {
+            _menuRepo.RemoveMenuItem(dictaatName, pageName);
             _pageRepo.DeleteDictaatPage(dictaatName, pageName);
         }
 

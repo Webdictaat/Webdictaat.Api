@@ -46,6 +46,10 @@
    transform: translate(-250px, 0);
 }
 
+.dropdown-menu li {
+    width:100%;
+}
+
 .side-nav li{
   line-height: 40px;
   text-indent: 20px;
