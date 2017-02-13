@@ -95,8 +95,19 @@ namespace MVCWithAuth.Controllers
                 ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
                 return null;
             }
-
+ 
             var info = await _signInManager.GetExternalLoginInfoAsync();
+
+            //var emailClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            //var lastNameClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname);
+            //var givenNameClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName);
+            //var addressClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.StreetAddress);
+            //var countryClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Country);
+            //var stateClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.StateOrProvince);
+            //var postalClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.PostalCode);
+            //var phoneClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone);
+            //var genderClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Gender);
+
 
             if (info == null)
             {
@@ -107,6 +118,7 @@ namespace MVCWithAuth.Controllers
 
             // Sign in the user with this external login provider if the user already has a login.
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+
 
             if (result.Succeeded)
             {
@@ -128,7 +140,7 @@ namespace MVCWithAuth.Controllers
                     createUserResult = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
                     }
                 }

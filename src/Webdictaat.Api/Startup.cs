@@ -35,6 +35,19 @@ namespace Webdictaat.CMS
 
             _hostingEnv = env;
 
+
+
+            if (env.IsDevelopment())
+            {
+                //As a best practice, it is not recommended to store the secrets in a configuration file in the 
+                //application since they can be checked into source control which may be publicly accessible.+
+                //The SecretManager tool stores sensitive application settings in the user profile folder on the local 
+                //machine. These settings are then seamlessly merged with settings from all other
+                //sources during application startup.
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                builder.AddUserSecrets();
+            }
+
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -124,8 +137,12 @@ namespace Webdictaat.CMS
 
             app.UseIdentity();
 
+            //testje
+            string something = Configuration["IdentityProviders:Google:ClientId"];
 
-            //// Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+            //// Add external authentication middleware below. 
+            //To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+            //The client Id and ClientSecret are stored in the secret manager. 
             app.UseGoogleAuthentication(new GoogleOptions
             {
                 ClientId = Configuration.GetSection("IdentityProviders:Google:ClientId").Value,

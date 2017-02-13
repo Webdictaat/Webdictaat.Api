@@ -94,8 +94,7 @@ namespace Webdictaat.CMS.Models
                 }
             }
 
-            menu = EditMenu(dictaatName, menu);
-            return new ViewModels.Menu(newMenu);
+            return EditMenu(dictaatName, menu);
         }
     }
 }
