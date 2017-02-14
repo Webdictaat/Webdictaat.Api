@@ -137,9 +137,6 @@ namespace Webdictaat.CMS
 
             app.UseIdentity();
 
-            //testje
-            string something = Configuration["IdentityProviders:Google:ClientId"];
-
             //// Add external authentication middleware below. 
             //To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             //The client Id and ClientSecret are stored in the secret manager. 

@@ -41,7 +41,7 @@ namespace MVCWithAuth.Controllers
         /// <param name="emailSender"></param>
         /// <param name="smsSender"></param>
         public AccountController(
-            ILoggerFactory loggerFactory,
+              ILoggerFactory loggerFactory,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
@@ -98,17 +98,6 @@ namespace MVCWithAuth.Controllers
  
             var info = await _signInManager.GetExternalLoginInfoAsync();
 
-            //var emailClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
-            //var lastNameClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname);
-            //var givenNameClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName);
-            //var addressClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.StreetAddress);
-            //var countryClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Country);
-            //var stateClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.StateOrProvince);
-            //var postalClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.PostalCode);
-            //var phoneClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone);
-            //var genderClaim = info.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Gender);
-
-
             if (info == null)
             {
                 //Something is wrong with the callback provider
@@ -117,7 +106,7 @@ namespace MVCWithAuth.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
 
 
             if (result.Succeeded)
@@ -138,10 +127,10 @@ namespace MVCWithAuth.Controllers
                 if (createUserResult.Succeeded)
                 {
                     createUserResult = await _userManager.AddLoginAsync(user, info);
-                    if (result.Succeeded)
+                    if (createUserResult.Succeeded)
                     {
-                        await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
-                        _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);              
                     }
                 }
                 AddErrors(createUserResult);
@@ -153,13 +142,11 @@ namespace MVCWithAuth.Controllers
         /// <summary>
         /// Get the current user if logged in
         /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <param name="remoteError"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
         [Route("Current")]
-        public async Task<Webdictaat.CMS.ViewModels.User> Current(string returnUrl = null, string remoteError = null)
+        public async Task<Webdictaat.CMS.ViewModels.User> Current()
         {
             ApplicationUser user = await this.GetCurrentUserAsync();
             return new Webdictaat.CMS.ViewModels.User(user);
@@ -190,7 +177,7 @@ namespace MVCWithAuth.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return _userManager.GetUserAsync(HttpContext.User);
+            return _userManager.FindByNameAsync(User.Identity.Name);
         }
 
         #endregion
