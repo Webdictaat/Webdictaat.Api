@@ -8,8 +8,15 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Webdictaat.CMS
 {
+    /// <summary>
+    /// default C# class
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// default startpoint C# application
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()

@@ -22,10 +22,17 @@ using Webdictaat.Domain.User;
 
 namespace Webdictaat.CMS
 {
+    /// <summary>
+    /// Default dotnet core class to use for startup configuration
+    /// </summary>
     public class Startup
     {
         private readonly IHostingEnvironment _hostingEnv;
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        /// <param name="env"></param>
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -52,9 +59,15 @@ namespace Webdictaat.CMS
             Configuration = builder.Build();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
@@ -120,8 +133,14 @@ namespace Webdictaat.CMS
             services.AddTransient<ISmsSender, AuthMessageSender>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //Deze methode bevat alle middleware, de volgorde van de methodes zijn dus belangrijk!
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// Deze methode bevat alle middleware, de volgorde van de methodes zijn dus belangrijk!
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        /// <param name="loggerFactory"></param>
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -142,12 +161,15 @@ namespace Webdictaat.CMS
             //The client Id and ClientSecret are stored in the secret manager. 
             app.UseGoogleAuthentication(new GoogleOptions
             {
-                ClientId = Configuration.GetSection("IdentityProviders:Google:ClientId").Value,
-                ClientSecret = Configuration.GetSection("IdentityProviders:Google:ClientSecret").Value,
+                ClientId = "1082440858387-eh3p4hakp02nbhvkb3sqr6ssgjksp5e5.apps.googleusercontent.com",
+                ClientSecret = "sWXw2LY2y6d2ATCZuS6BLWMn"
             });
 
             app.UseMvc();
-            app.UseSwagger();
+            app.UseSwagger((httpRequest, swaggerDoc) =>
+            {
+                swaggerDoc.Host = httpRequest.Host.Value;
+            });
             app.UseSwaggerUi();
 
         }

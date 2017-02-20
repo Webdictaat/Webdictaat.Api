@@ -74,10 +74,6 @@ namespace Webdictaat.Core.Test
                 }
             };
 
-            string menuJson = "{ 'name': 'a', 'SubMenus': ["
-                + " { 'name': 'b', 'MenuItems': [ { 'name' : 'c' , 'url': 'd' } ] } "
-                + "], 'MenuItems': [ { 'name' : 'e' , 'url': 'f' }  ] }";
-
             _fileMock.Setup(f => f.TryEditFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(true);
 

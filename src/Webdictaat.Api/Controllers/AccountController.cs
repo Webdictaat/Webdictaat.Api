@@ -93,20 +93,17 @@ namespace MVCWithAuth.Controllers
             if (remoteError != null)
             {
                 ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
-                return null;
+                return Redirect(returnUrl);
             }
- 
             var info = await _signInManager.GetExternalLoginInfoAsync();
 
             if (info == null)
             {
-                //Something is wrong with the callback provider
-                //Bad cocokies maybe?
-                return null;
+                return Redirect(returnUrl);
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
 
 
             if (result.Succeeded)
