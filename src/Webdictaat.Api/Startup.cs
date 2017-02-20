@@ -161,16 +161,13 @@ namespace Webdictaat.CMS
             //The client Id and ClientSecret are stored in the secret manager. 
             app.UseGoogleAuthentication(new GoogleOptions
             {
-                ClientId = "1082440858387-eh3p4hakp02nbhvkb3sqr6ssgjksp5e5.apps.googleusercontent.com",
-                ClientSecret = "sWXw2LY2y6d2ATCZuS6BLWMn"
+                ClientId = Configuration.GetSection("IdentityProviders:Google:ClientId").Value,
+                ClientSecret = Configuration.GetSection("IdentityProviders:Google:ClientSecret").Value,
             });
 
             app.UseMvc();
-            app.UseSwagger((httpRequest, swaggerDoc) =>
-            {
-                swaggerDoc.Host = httpRequest.Host.Value;
-            });
-            app.UseSwaggerUi();
+            app.UseSwagger();
+            app.UseSwaggerUi(swaggerUrl: "/doc/ssmulder/swagger/v1/swagger.json");
 
         }
 

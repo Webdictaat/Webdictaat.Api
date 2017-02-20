@@ -80,5 +80,5 @@
         "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
     },
 
-    "userSecretsId": "aspnet-UserSecretDemo-79c563d8-751d-48e5-a5b1-d0ec19e5d2b0",
+    "userSecretsId": "aspnet-UserSecretDemo-79c563d8-751d-48e5-a5b1-d0ec19e5d2b0"
 }
