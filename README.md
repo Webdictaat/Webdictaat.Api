@@ -7,3 +7,5 @@
 * Dotnet core version
 * Package manager
 * project outline
+* database dingen
+  * SQL local db installeren en instellen
