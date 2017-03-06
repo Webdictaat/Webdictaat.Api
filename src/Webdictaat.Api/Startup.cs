@@ -167,7 +167,7 @@ namespace Webdictaat.CMS
 
             app.UseMvc();
             app.UseSwagger();
-            app.UseSwaggerUi(swaggerUrl: "/doc/ssmulder/swagger/v1/swagger.json");
+            app.UseSwaggerUi();
 
         }
 
