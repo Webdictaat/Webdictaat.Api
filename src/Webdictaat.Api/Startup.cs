@@ -149,7 +149,7 @@ namespace Webdictaat.CMS
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseCors(b => 
-                b.WithOrigins("http://localhost:8080", "http://localhost:3000", "http://student.aii.avans.nl", "http://webdictaat.azurewebsites.net")
+                b.WithOrigins("*")
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod());
