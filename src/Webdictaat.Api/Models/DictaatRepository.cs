@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Webdictaat.Core;
 using Microsoft.Extensions.Options;
 using Webdictaat.CMS.ViewModels;
+using Webdictaat.Core.Helper;
 
 namespace Webdictaat.CMS.Models
 {
@@ -13,6 +14,7 @@ namespace Webdictaat.CMS.Models
         IEnumerable<ViewModels.DictaatSummary> GetDictaten();
         ViewModels.Dictaat getDictaat(string name);
         void CreateDictaat(string name, string template);
+        void deleteRepo(string name);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -24,6 +26,7 @@ namespace Webdictaat.CMS.Models
         private IDirectory _directory;
         private IDictaatFactory _dictaatFactory;
 
+        private PathHelper _pathHelper;
 
         /// <summary>
         /// 
@@ -45,6 +48,7 @@ namespace Webdictaat.CMS.Models
 
             //best place to build the factory
             _dictaatFactory = new DictaatFactory(appSettings.Value, directory, file);
+            _pathHelper = new PathHelper(appSettings.Value);
 
         }
 
@@ -66,6 +70,12 @@ namespace Webdictaat.CMS.Models
         {
             string pagesPath = name + _pagesDirectory;
             Domain.Dictaat dictaat = _dictaatFactory.CreateDictaat(name, template);
+        }
+
+        public void deleteRepo(string name)
+        {
+            string dictaatPath = _pathHelper.DictaatPath(name);
+            _dictaatFactory.DeleteDictaaat(dictaatPath);
         }
     }
 }

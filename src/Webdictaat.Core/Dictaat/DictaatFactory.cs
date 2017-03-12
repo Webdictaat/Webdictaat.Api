@@ -14,6 +14,7 @@ namespace Webdictaat.Core
         Domain.Dictaat GetDictaat(string name);
         Dictaat CreateDictaat(string name, string template);
         IEnumerable<DirectorySummary> GetDictaten();
+        void DeleteDictaaat(string dictaatPath);
     }
 
     public class DictaatFactory : IDictaatFactory
@@ -67,6 +68,11 @@ namespace Webdictaat.Core
         public IEnumerable<DirectorySummary> GetDictaten()
         {
             return _directory.GetDirectoriesSummary(_pathHelper.DictatenPath());
+        }
+
+        public void DeleteDictaaat(string dictaatPath)
+        {
+            _directory.DeleteDirectory(dictaatPath);
         }
     }
 }

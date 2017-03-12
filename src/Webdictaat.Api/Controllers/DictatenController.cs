@@ -56,5 +56,28 @@ namespace Webdictaat.CMS.Controllers
             return _dictaatRepo.getDictaat(name);
         }
 
+        /// <summary>
+        /// Authorized (Requires the user to be logged in)
+        /// 
+        /// </summary>
+        /// <param name="name">Name of the dictaat to be deleted</param>
+        /// <returns>Returns success or fail (true of false)</returns>
+        [HttpDelete("{name}")]
+        [Authorize]
+        public bool Delete(string name)
+        {
+            //Nog niet goed nagedacht over wat er fout kan gaan bij het deleten.
+            //Dus nu maar even op een vieze manier goed of fout checken
+            try
+            {
+                _dictaatRepo.deleteRepo(name);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
     }
 }

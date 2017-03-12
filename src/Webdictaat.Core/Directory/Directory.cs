@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Webdictaat.Domain;
@@ -13,6 +14,7 @@ namespace Webdictaat.Core
         IEnumerable<FileSummary> GetFilesSummary(string path);
         void CopyDirectory(string name, string template);
         bool Exists(string pathNew);
+        void DeleteDirectory(string path);
     }
 
     public class Directory : IDirectory
@@ -113,6 +115,27 @@ namespace Webdictaat.Core
         {
             System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(pathNew);
             return dir.Exists;
+        }
+
+        public void DeleteDirectory(string path)
+        {
+            EmptyFolder(new DirectoryInfo(@path));
+        }
+
+        private void EmptyFolder(DirectoryInfo directoryInfo)
+        {
+            foreach (FileInfo file in directoryInfo.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subfolder in directoryInfo.GetDirectories())
+            {
+                EmptyFolder(subfolder);
+            }
+
+            //if the directory is empty, delete the directory.
+            directoryInfo.Delete();
         }
     }
 }
