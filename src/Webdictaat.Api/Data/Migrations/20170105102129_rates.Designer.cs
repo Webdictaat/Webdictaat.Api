@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Webdictaat.Domain;
+using Webdictaat.Data;
 
 namespace Webdictaat.CMS.Migrations
 {

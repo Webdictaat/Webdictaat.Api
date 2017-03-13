@@ -14,8 +14,10 @@ using Swashbuckle.Swagger.Model;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using Webdictaat.Api.Services;
 using Webdictaat.CMS.Models;
 using Webdictaat.Core;
+using Webdictaat.Data;
 using Webdictaat.Domain;
 using Webdictaat.Domain.User;
 
@@ -101,6 +103,7 @@ namespace Webdictaat.CMS
             services.AddOptions();
             services.AddMvc();
 
+
             //Swagger
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options =>
@@ -116,6 +119,7 @@ namespace Webdictaat.CMS
             });
 
             #region custom services
+            services.AddSingleton<IAuthorizeService, AuthorizeService>();
             services.AddSingleton<IDictaatRepository, DictaatRepository>();
             services.AddSingleton<IPageRepository, PageRepository>();
             services.AddSingleton<IMenuRepository, MenuRepository>();
@@ -148,8 +152,8 @@ namespace Webdictaat.CMS
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseCors(b => 
-                b.WithOrigins("*")
+            app.UseCors(b => b
+                .AllowAnyOrigin()
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod());

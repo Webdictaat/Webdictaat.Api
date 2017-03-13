@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webdictaat.Domain;
 using Webdictaat.Domain.User;
 
-namespace Webdictaat.Domain
+namespace Webdictaat.Data
 {
     public class WebdictaatContext : IdentityDbContext<ApplicationUser>
     {

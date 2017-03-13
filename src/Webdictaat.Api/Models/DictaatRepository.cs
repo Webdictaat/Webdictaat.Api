@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Webdictaat.Domain.User;
+using Webdictaat.Data;
 
 namespace Webdictaat.CMS.Models
 {

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Webdictaat.CMS.ViewModels;
 using Webdictaat.Domain;
 using Microsoft.EntityFrameworkCore;
+using Webdictaat.Data;
 
 namespace Webdictaat.CMS.Models
 {

@@ -7,7 +7,7 @@ using Webdictaat.Domain.User;
 
 namespace Webdictaat.Domain
 {
-    public class DictaatDetails
+    public class DictaatDetails : IResource
     {
         [Key]
         public string Name { get; set; }
@@ -17,5 +17,9 @@ namespace Webdictaat.Domain
 
         public ApplicationUser DictaatOwner { get; set; }
 
+        public ICollection<string> GetContributersIds()
+        {
+            return new string[] { this.DictaatOwnerId };
+        }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Webdictaat.Domain;
 using Webdictaat.CMS.Models;
 using Microsoft.AspNetCore.Authorization;
+using Webdictaat.Api.Services;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,11 +21,16 @@ namespace Webdictaat.CMS.Controllers
     {
         private IPageRepository _pageRepo;
         private IMenuRepository _menuRepo;
+        private IAuthorizeService _authorizeService;
 
-        public PagesController(IPageRepository pageRepo, IMenuRepository menuRepo)
+        public PagesController(
+            IPageRepository pageRepo, 
+            IMenuRepository menuRepo,
+            IAuthorizeService authorizeService)
         {
             _pageRepo = pageRepo;
             _menuRepo = menuRepo;
+            _authorizeService = authorizeService;
         }
 
         [HttpGet("{pageName}")]
@@ -58,8 +64,14 @@ namespace Webdictaat.CMS.Controllers
 
         // POST api/values
         [HttpPut("{pageName}")]
-        public ViewModels.DictaatPage Put(string dictaatName, string pageName, [FromBody]ViewModels.DictaatPage page)
+        public async Task<ViewModels.DictaatPage> Put(string dictaatName, string pageName, [FromBody]ViewModels.DictaatPage page)
         {
+            if (!await _authorizeService.IsDictaatOwner(User.Identity.Name, dictaatName))
+            {
+                HttpContext.Response.StatusCode = 403;
+                return null;
+            }
+
             return _pageRepo.EditDictaatPage(dictaatName, page);
         }
 
@@ -67,10 +79,17 @@ namespace Webdictaat.CMS.Controllers
 
         // POST api/values
         [HttpDelete("{pageName}")]
-        public void Delete(string dictaatName, string pageName)
+        public async Task<bool> Delete(string dictaatName, string pageName)
         {
+            if (!await _authorizeService.IsDictaatOwner(User.Identity.Name, dictaatName))
+            {
+                HttpContext.Response.StatusCode = 403;
+                return false;
+            }
+
             _menuRepo.RemoveMenuItem(dictaatName, pageName);
             _pageRepo.DeleteDictaatPage(dictaatName, pageName);
+            return true;
         }
 
     }

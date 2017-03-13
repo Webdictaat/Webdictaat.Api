@@ -11,6 +11,7 @@ using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain.User;
 using Microsoft.AspNet.Http;
+using Webdictaat.Data;
 
 namespace Webdictaat.CMS.Models
 {

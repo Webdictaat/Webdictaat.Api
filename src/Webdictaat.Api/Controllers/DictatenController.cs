@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Webdictaat.CMS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Webdictaat.Domain;
+using Webdictaat.Data;
+using Webdictaat.Api.Services;
+using Webdictaat.Domain.User;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,14 +19,18 @@ namespace Webdictaat.CMS.Controllers
     public class DictatenController : Controller
     {
         private IDictaatRepository _dictaatRepo;
-        private UserManager<Domain.User.ApplicationUser> _userManager;
+        IAuthorizeService _authorizationService;
+        private UserManager<ApplicationUser> _userManager;
 
         public DictatenController(
             IDictaatRepository dictaatRepo,
-            UserManager<Domain.User.ApplicationUser> userManager)
+            UserManager<Domain.User.ApplicationUser> userManager,
+            IAuthorizeService authorizationService,
+            WebdictaatContext context)
         {
-            _userManager = userManager;
+            _authorizationService = authorizationService;
             _dictaatRepo = dictaatRepo;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -30,6 +38,7 @@ namespace Webdictaat.CMS.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public async Task<IEnumerable<ViewModels.DictaatSummary>> Post([FromBody]ViewModels.DictaatForm form)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -69,8 +78,14 @@ namespace Webdictaat.CMS.Controllers
         /// <returns>Returns success or fail (true of false)</returns>
         [HttpDelete("{name}")]
         [Authorize]
-        public bool Delete(string name)
+        public async Task<bool> Delete(string name)
         {
+            if (!await _authorizationService.IsDictaatOwner(User.Identity.Name, name))
+            {
+                HttpContext.Response.StatusCode = 403;
+                return false;
+            }
+
             //Nog niet goed nagedacht over wat er fout kan gaan bij het deleten.
             //Dus nu maar even op een vieze manier goed of fout checken
             try
@@ -80,6 +95,7 @@ namespace Webdictaat.CMS.Controllers
             }
             catch (Exception e)
             {
+                HttpContext.Response.StatusCode = 500;
                 return false;
             }
         }
