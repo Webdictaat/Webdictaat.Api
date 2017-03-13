@@ -90,7 +90,7 @@ namespace Webdictaat.CMS.Controllers
             //Dus nu maar even op een vieze manier goed of fout checken
             try
             {
-                _dictaatRepo.deleteRepo(name);
+                _dictaatRepo.DeleteRepo(name);
                 return true;
             }
             catch (Exception e)

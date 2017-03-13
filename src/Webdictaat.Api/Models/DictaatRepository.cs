@@ -19,7 +19,7 @@ namespace Webdictaat.CMS.Models
         IEnumerable<ViewModels.DictaatSummary> GetDictaten();
         ViewModels.Dictaat getDictaat(string name);
         void CreateDictaat(string name, ApplicationUser user, string template);
-        void deleteRepo(string name);
+        void DeleteRepo(string name);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -104,10 +104,13 @@ namespace Webdictaat.CMS.Models
         /// Delete a dictaat with given name. 
         /// </summary>
         /// <param name="name"></param>
-        public void deleteRepo(string name)
+        public void DeleteRepo(string name)
         {
             string dictaatPath = _pathHelper.DictaatPath(name);
             _dictaatFactory.DeleteDictaaat(dictaatPath);
+
+            _context.DictaatDetails.Remove(_context.DictaatDetails.FirstOrDefault(dd => dd.Name == name));
+            _context.SaveChanges();
         }
     }
 }
