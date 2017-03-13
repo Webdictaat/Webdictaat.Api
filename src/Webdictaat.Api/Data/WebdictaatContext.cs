@@ -16,6 +16,8 @@ namespace Webdictaat.Domain
 
         public DbSet<Rate> Rates { get; set; }
 
+        public DbSet<DictaatDetails> DictaatDetails { get; set; }
+
         public WebdictaatContext(DbContextOptions<WebdictaatContext> options)
             : base(options)
         {

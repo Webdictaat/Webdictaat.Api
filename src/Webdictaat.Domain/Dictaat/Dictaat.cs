@@ -11,10 +11,11 @@ namespace Webdictaat.Domain
 
         public string Location { get; set; }
 
+        public string Owner { get; set;  }
+
         public IEnumerable<FileSummary> Pages { get; set; }
 
         public Menu Menu { get; set; }
-        public string PagesDirectory { get; set; }
 
         public Dictaat()
         {

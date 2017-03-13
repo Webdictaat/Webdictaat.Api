@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Webdictaat.CMS.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,10 +15,13 @@ namespace Webdictaat.CMS.Controllers
     public class DictatenController : Controller
     {
         private IDictaatRepository _dictaatRepo;
+        private UserManager<Domain.User.ApplicationUser> _userManager;
 
-        public DictatenController(IDictaatRepository dictaatRepo)
+        public DictatenController(
+            IDictaatRepository dictaatRepo,
+            UserManager<Domain.User.ApplicationUser> userManager)
         {
-
+            _userManager = userManager;
             _dictaatRepo = dictaatRepo;
         }
 
@@ -26,9 +30,10 @@ namespace Webdictaat.CMS.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public IEnumerable<ViewModels.DictaatSummary> Post([FromBody]ViewModels.DictaatForm form)
+        public async Task<IEnumerable<ViewModels.DictaatSummary>> Post([FromBody]ViewModels.DictaatForm form)
         {
-            _dictaatRepo.CreateDictaat(form.Name, form.Template);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            _dictaatRepo.CreateDictaat(form.Name, user, form.Template);
             return this.Get();
         }
 

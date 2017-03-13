@@ -8,5 +8,6 @@ namespace Webdictaat.Domain.User
 {
     public class ApplicationUser : IdentityUser
     {
+        public ICollection<DictaatDetails> OwnedDictaten { get; set; }
     }
 }

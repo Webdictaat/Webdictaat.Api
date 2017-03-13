@@ -4,8 +4,12 @@ using System.Linq;
 using System.Collections.Generic;
 using Webdictaat.Core;
 using Microsoft.Extensions.Options;
-using Webdictaat.CMS.ViewModels;
 using Webdictaat.Core.Helper;
+using Webdictaat.Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using Webdictaat.Domain.User;
 
 namespace Webdictaat.CMS.Models
 {
@@ -13,7 +17,7 @@ namespace Webdictaat.CMS.Models
     {
         IEnumerable<ViewModels.DictaatSummary> GetDictaten();
         ViewModels.Dictaat getDictaat(string name);
-        void CreateDictaat(string name, string template);
+        void CreateDictaat(string name, ApplicationUser user, string template);
         void deleteRepo(string name);
     }
 
@@ -23,10 +27,15 @@ namespace Webdictaat.CMS.Models
         private string _pagesDirectory;
         private string _templatesDirectory;
         private string _dictatenDirectory;
+
         private IDirectory _directory;
         private IDictaatFactory _dictaatFactory;
 
+        private WebdictaatContext _context;
+
+
         private PathHelper _pathHelper;
+        private UserManager<object> _userManager;
 
         /// <summary>
         /// 
@@ -34,10 +43,12 @@ namespace Webdictaat.CMS.Models
         /// <param name="appSettings"></param>
         /// <param name="directory"></param>
         /// <param name="dictaatFactory"></param>
+        /// <param name="context"></param>
         public DictaatRepository(
             IOptions<ConfigVariables> appSettings, 
             IDirectory directory,
-             IFile file)
+            IFile file,
+            WebdictaatContext context)
         {
             _directoryRoot = appSettings.Value.DictaatRoot;
             _pagesDirectory = appSettings.Value.PagesDirectory;
@@ -45,6 +56,7 @@ namespace Webdictaat.CMS.Models
             _templatesDirectory = appSettings.Value.TemplatesDirectory;
             var menuConfigName = appSettings.Value.MenuConfigName;
             _directory = directory;
+            _context = context;
 
             //best place to build the factory
             _dictaatFactory = new DictaatFactory(appSettings.Value, directory, file);
@@ -66,12 +78,31 @@ namespace Webdictaat.CMS.Models
                 
         }
 
-        public void CreateDictaat(string name, string template)
+        /// <summary>
+        /// Create a new dictaat based on a given template. 
+        /// </summary>
+        /// <param name="name">Name of the dictaat. Must be unique.</param>
+        /// <param name="template">optional template name, default = defaultTemplate</param>
+        public void CreateDictaat(string name, ApplicationUser user, string template)
         {
-            string pagesPath = name + _pagesDirectory;
+            //Create the database entry
+            var dictaatDetails = new DictaatDetails()
+            {
+                Name = name,
+                DictaatOwnerId = user.Id,
+            };
+
+            _context.DictaatDetails.Add(dictaatDetails);
+            _context.SaveChanges();
+
+            //Create the folder
             Domain.Dictaat dictaat = _dictaatFactory.CreateDictaat(name, template);
         }
 
+        /// <summary>
+        /// Delete a dictaat with given name. 
+        /// </summary>
+        /// <param name="name"></param>
         public void deleteRepo(string name)
         {
             string dictaatPath = _pathHelper.DictaatPath(name);
