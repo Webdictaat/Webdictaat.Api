@@ -3,10 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Webdictaat.Domain;
 using Webdictaat.Data;
 
-namespace Webdictaat.CMS.Migrations
+namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
     partial class WebdictaatContextModelSnapshot : ModelSnapshot

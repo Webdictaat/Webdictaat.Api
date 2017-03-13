@@ -3,14 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Webdictaat.Domain;
 using Webdictaat.Data;
 
-namespace Webdictaat.CMS.Migrations
+namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20170104174304_ratings")]
-    partial class ratings
+    [Migration("20170313142102_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -143,6 +142,21 @@ namespace Webdictaat.CMS.Migrations
                     b.ToTable("Answer");
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.DictaatDetails", b =>
+                {
+                    b.Property<string>("Name")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DictaatOwnerId")
+                        .IsRequired();
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("DictaatOwnerId");
+
+                    b.ToTable("DictaatDetails");
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -155,14 +169,39 @@ namespace Webdictaat.CMS.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.Rate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Emotion");
+
+                    b.Property<string>("Feedback")
+                        .IsRequired();
+
+                    b.Property<int>("RatingId");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RatingId");
+
+                    b.ToTable("Rates");
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.Rating", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -261,6 +300,22 @@ namespace Webdictaat.CMS.Migrations
                     b.HasOne("Webdictaat.Domain.Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatDetails", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.User.ApplicationUser", "DictaatOwner")
+                        .WithMany("OwnedDictaten")
+                        .HasForeignKey("DictaatOwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.Rate", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.Rating")
+                        .WithMany("Rates")
+                        .HasForeignKey("RatingId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

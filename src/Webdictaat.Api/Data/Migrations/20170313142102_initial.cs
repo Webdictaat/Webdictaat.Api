@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Webdictaat.CMS.Migrations
+namespace Webdictaat.Api.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,6 +48,20 @@ namespace Webdictaat.CMS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Questions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: false),
+                    Title = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,6 +132,29 @@ namespace Webdictaat.CMS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Rates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Emotion = table.Column<int>(nullable: false),
+                    Feedback = table.Column<string>(nullable: false),
+                    RatingId = table.Column<int>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rates_Ratings_RatingId",
+                        column: x => x.RatingId,
+                        principalTable: "Ratings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -182,6 +219,24 @@ namespace Webdictaat.CMS.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DictaatDetails",
+                columns: table => new
+                {
+                    Name = table.Column<string>(nullable: false),
+                    DictaatOwnerId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DictaatDetails", x => x.Name);
+                    table.ForeignKey(
+                        name: "FK_DictaatDetails_AspNetUsers_DictaatOwnerId",
+                        column: x => x.DictaatOwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
@@ -211,6 +266,16 @@ namespace Webdictaat.CMS.Migrations
                 name: "IX_Answer_QuestionId",
                 table: "Answer",
                 column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DictaatDetails_DictaatOwnerId",
+                table: "DictaatDetails",
+                column: "DictaatOwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rates_RatingId",
+                table: "Rates",
+                column: "RatingId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -245,13 +310,22 @@ namespace Webdictaat.CMS.Migrations
                 name: "Answer");
 
             migrationBuilder.DropTable(
+                name: "DictaatDetails");
+
+            migrationBuilder.DropTable(
+                name: "Rates");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "Ratings");
         }
     }
 }
