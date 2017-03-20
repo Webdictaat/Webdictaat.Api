@@ -55,6 +55,10 @@
   text-indent: 20px;
 }
 
+.wd-component img, .wd-component iframe{
+    width: 100%;
+}
+
 @media (max-width:767px) {
 
   .side-nav{
@@ -72,3 +76,4 @@
   }
 
 }
+
