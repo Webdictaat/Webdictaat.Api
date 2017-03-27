@@ -66,7 +66,7 @@ namespace Webdictaat.CMS.Models
 
         public DictaatPageSummary CreateDictaatPage(string dictaatName, ViewModels.DictaatPageSummary page)
         {
-            string path = _pathHelper.PagePath(dictaatName, page.Name);
+            string path = _pathHelper.PagePath(dictaatName, page.Url);
             string pathTemplate = _pathHelper.PageTemplatePath("default");
 
             if (!_file.TryCopyFile(path, pathTemplate))

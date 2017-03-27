@@ -39,7 +39,7 @@ namespace Webdictaat.Core
             dictaat.Name = name;
             dictaat.Location = _pathHelper.DictaatPath(name);
             dictaat.Pages = _directory.GetFilesSummary(_pathHelper.PagesPath(name));
-            dictaat.Menu = _menuFactory.GetMenu(name);
+            dictaat.MenuItems = _menuFactory.GetMenu(name);
 
             return dictaat;
         }

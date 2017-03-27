@@ -21,6 +21,8 @@ namespace Webdictaat.CMS.ViewModels
 
         public string Name { get; set; }
 
+        public string Url { get; set; }
+
         public DateTime LastChanged { get; set; }
 
     }

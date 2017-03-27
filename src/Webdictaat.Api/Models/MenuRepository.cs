@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webdictaat.CMS.ViewModels;
 using Webdictaat.Core;
 
 namespace Webdictaat.CMS.Models
 {
     public interface IMenuRepository
     {
-        ViewModels.Menu AddMenuItem(string dictaat, string subMenu, ViewModels.MenuItem item );
-        ViewModels.Menu GetMenu(string dictaat);
-        ViewModels.Menu EditMenu(string dictaat, ViewModels.Menu item);
-        ViewModels.Menu RemoveMenuItem(string dictaatName, string pageName);
+        List<ViewModels.MenuItem> AddMenuItem(string dictaat, string parentMenu, ViewModels.MenuItem item );
+        List<ViewModels.MenuItem> GetMenu(string dictaat);
+        List<ViewModels.MenuItem> EditMenu(string dictaat, List<ViewModels.MenuItem> item);
+        List<ViewModels.MenuItem> RemoveMenuItem(string dictaatName, string pageName);
     }
     public class MenuRepository : IMenuRepository
     {
@@ -40,61 +41,51 @@ namespace Webdictaat.CMS.Models
         }
 
 
-        public ViewModels.Menu GetMenu(string dictaat)
+        public List<ViewModels.MenuItem> GetMenu(string dictaat)
         {
-            return new ViewModels.Menu(_menuFactory.GetMenu(dictaat));
+            var menuItems = _menuFactory.GetMenu(dictaat);
+            return menuItems.ToList().Select(mi => new ViewModels.MenuItem(mi)).ToList();
         }
 
-        public ViewModels.Menu AddMenuItem(string dictaat, string subMenu, ViewModels.MenuItem item)
+        public List<ViewModels.MenuItem> AddMenuItem(string dictaat, string parentMenu, ViewModels.MenuItem item)
         {
             var menu = GetMenu(dictaat);
 
-            if(subMenu != null)
+            if(parentMenu != null)
             {
-                menu.SubMenus.FirstOrDefault(s => s.Name.Equals(subMenu))
-                    .MenuItems.Add(item);
+                MenuItem parent = menu.FirstOrDefault(s => s.Name.Equals(parentMenu));
+                if(parent != null)
+                {
+                    parent.MenuItems.Add(item);
+                }
             }
             else
             {
-                menu.MenuItems.Add(item);
+                menu.Add(item);
             }
 
-            menu = EditMenu(dictaat, menu);
-            return menu;
-
+            return EditMenu(dictaat, menu);
         }
 
 
-        public ViewModels.Menu EditMenu(string dictaat, ViewModels.Menu menu)
+        public List<ViewModels.MenuItem> EditMenu(string dictaat, List<ViewModels.MenuItem> menuItems)
         {
-            var newMenu = _menuFactory.EditMenu(dictaat, menu.ToPoco());
-            if(newMenu == null)
+            var newMenuItems = _menuFactory.EditMenu(dictaat, menuItems.Select(mi => mi.ToPoco()));
+            if(newMenuItems == null)
             {
                 throw new System.IO.FileNotFoundException();
             }
-            return new ViewModels.Menu(newMenu);
+            return newMenuItems.ToList().Select(mi => new ViewModels.MenuItem(mi)).ToList();
         }
 
-        public ViewModels.Menu RemoveMenuItem(string dictaatName, string pageName)
+        public List<MenuItem> RemoveMenuItem(string dictaatName, string pageName)
         {
-            var menu = GetMenu(dictaatName);
+            var menuItems = GetMenu(dictaatName);
 
-            if(menu.MenuItems.Any(p => p.Url.Contains(pageName)))
-            {
-                menu.MenuItems.Remove(menu.MenuItems.FirstOrDefault(p => p.Url.Contains(pageName)));
-            }
-            else
-            {
-                foreach(var sm in menu.SubMenus)
-                {
-                    if (sm.MenuItems.Any(p => p.Url.Contains(pageName)))
-                    {
-                        sm.MenuItems.Remove(sm.MenuItems.FirstOrDefault(p => p.Url.Contains(pageName)));
-                    }
-                }
-            }
+            menuItems.RemoveAll(m => m.Url == pageName);
+            menuItems.ForEach(mi => mi.MenuItems.RemoveAll(smi => smi.Url.Equals(pageName)));
 
-            return EditMenu(dictaatName, menu);
+            return EditMenu(dictaatName, menuItems);
         }
     }
 }

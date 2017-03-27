@@ -48,17 +48,17 @@ namespace Webdictaat.CMS.Controllers
 
         // POST api/values
         [HttpPost]
-        public ViewModels.DictaatPageSummary Post(string dictaatName, [FromBody]ViewModels.DictaatPageForm form)
+        public List<ViewModels.MenuItem> Post(string dictaatName, [FromBody]ViewModels.DictaatPageForm form)
         {
             var MenuItem = new ViewModels.MenuItem()
             {
                 Name = form.Page.Name,
-                Url = form.Page.Name
+                Url = form.Page.Url
             };
             
             var result = _pageRepo.CreateDictaatPage(dictaatName, form.Page); 
-            _menuRepo.AddMenuItem(dictaatName, form.SubMenu, MenuItem);
-            return result;
+            var menu = _menuRepo.AddMenuItem(dictaatName, form.SubMenu, MenuItem);
+            return menu;
         }
 
 
@@ -79,17 +79,17 @@ namespace Webdictaat.CMS.Controllers
 
         // POST api/values
         [HttpDelete("{pageName}")]
-        public async Task<bool> Delete(string dictaatName, string pageName)
+        public async Task<List<ViewModels.MenuItem>> Delete(string dictaatName, string pageName)
         {
             if (!await _authorizeService.IsDictaatOwner(User.Identity.Name, dictaatName))
             {
                 HttpContext.Response.StatusCode = 403;
-                return false;
+                return null;
             }
 
-            _menuRepo.RemoveMenuItem(dictaatName, pageName);
+            var menu = _menuRepo.RemoveMenuItem(dictaatName, pageName);
             _pageRepo.DeleteDictaatPage(dictaatName, pageName);
-            return true;
+            return menu;
         }
 
     }

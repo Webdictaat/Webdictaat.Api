@@ -1,33 +1,27 @@
-{
-    "Name": "mainMenu",
-    "SubMenus": [
-        {
-            "Name": "opdrachten",
-            "SubMenus": [],
-            "MenuItems": [
-                {
-                    "Name": "week 1",
-                    "Url": "week1"
-                },
-                {
-                    "Name": "week 2",
-                    "Url": "week2"
-                },
-                {
-                    "Name": "week 3",
-                    "Url": "week3"
-                }
-            ]
-        }
-    ],
-  "MenuItems": [
+[
     {
-      "Name": "Home",
-      "Url": "home"
+        "Name": "Home",
+        "Url": "home",
     },
     {
-      "Name": "contact",
-      "Url": "contact"
+        "Name": "Opdrachten",
+        "MenuItems": [
+            {
+                "Name": "week 1",
+                "Url": "week1"
+            },
+            {
+                "Name": "week 2",
+                "Url": "week2"
+            },
+            {
+                "Name": "week 3",
+                "Url": "week3"
+            }
+        ]
+    },
+    {
+        "Name": "Contact",
+        "Url": "contact"
     }
-  ]
-}
+]

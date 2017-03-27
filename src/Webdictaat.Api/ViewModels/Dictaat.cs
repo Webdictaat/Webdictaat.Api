@@ -14,13 +14,13 @@ namespace Webdictaat.CMS.ViewModels
 
         public IEnumerable<FileSummary> Pages { get; set; }
 
-        public object Menu { get; set; }
+        public List<ViewModels.MenuItem> MenuItems { get; set; }
 
         public Dictaat(Domain.Dictaat dictaat)
         {
             this.Name = dictaat.Name;
             this.Pages = dictaat.Pages;
-            this.Menu = dictaat.Menu;
+            this.MenuItems = dictaat.MenuItems.Select(mi => new ViewModels.MenuItem(mi)).ToList();
         }
     }
 }

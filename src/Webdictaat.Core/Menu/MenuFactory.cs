@@ -12,9 +12,9 @@ namespace Webdictaat.Core
     public interface IMenuFactory
     {
 
-        Domain.Menu GetMenu(string dictaatName);
+        IEnumerable<Domain.MenuItem> GetMenu(string dictaatName);
 
-        Domain.Menu EditMenu(string dictaatName, Domain.Menu menu);
+        IEnumerable<Domain.MenuItem> EditMenu(string dictaatName, IEnumerable<Domain.MenuItem> menu);
     }
 
     public class MenuFactory : IMenuFactory
@@ -29,20 +29,20 @@ namespace Webdictaat.Core
             _file = file;
         }
 
-        public Menu GetMenu(string dictaatName)
+        public IEnumerable<Domain.MenuItem> GetMenu(string dictaatName)
         {
             var path = _pathHelper.MenuConfigPath(dictaatName);
-            Menu menu = null;
+            IEnumerable<Domain.MenuItem> menu = null;
             string menuString = _file.TryReadFile(path);
 
             if(menuString != null)
             {
-                menu = Newtonsoft.Json.JsonConvert.DeserializeObject<Menu>(menuString);
+                menu = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Domain.MenuItem>>(menuString);
             }
             return menu;
         }
 
-        public Menu EditMenu(string dictaatName, Menu menu)
+        public IEnumerable<Domain.MenuItem> EditMenu(string dictaatName, IEnumerable<Domain.MenuItem> menu)
         {
             var path = _pathHelper.MenuConfigPath(dictaatName);
 

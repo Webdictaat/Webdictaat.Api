@@ -15,11 +15,12 @@ namespace Webdictaat.Domain
 
         public IEnumerable<FileSummary> Pages { get; set; }
 
-        public Menu Menu { get; set; }
+        public IEnumerable<MenuItem> MenuItems { get; set; }
 
         public Dictaat()
         {
             Pages = new List<FileSummary>();
+            MenuItems = new List<MenuItem>();
         }
     }
 }

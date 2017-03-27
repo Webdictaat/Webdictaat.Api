@@ -18,7 +18,6 @@ namespace Webdictaat.CMS.ViewModels
         public Menu(Domain.Menu menu)
         {
             this.Name = menu.Name;
-            this.SubMenus = menu.SubMenus.Select(sm => new ViewModels.Menu(sm)).ToList();
             this.MenuItems = menu.MenuItems.Select(i => new ViewModels.MenuItem(i)).ToList();
 
         }
@@ -27,7 +26,6 @@ namespace Webdictaat.CMS.ViewModels
         {
             var menu = new Domain.Menu();
             menu.Name = this.Name;
-            menu.SubMenus = this.SubMenus.Select(sm => sm.ToPoco()).ToList();
             menu.MenuItems = this.MenuItems.Select(i => i.ToPoco()).ToList();
             return menu;
         }

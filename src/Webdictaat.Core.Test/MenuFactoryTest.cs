@@ -30,63 +30,35 @@ namespace Webdictaat.Core.Test
         {
 
             //1. arrange
-            string menuJson = "{ 'name': 'a', 'SubMenus': ["
-                + " { 'name': 'b', 'MenuItems': [ { 'name' : 'c' , 'url': 'd' } ] } "
-                + "], 'MenuItems': [ { 'name' : 'e' , 'url': 'f' }  ] }";
+            string menuJson = @"
+                [
+                    { 'Name': 'A', 'Url': 'B' },
+                    { 'Name': 'C', 'MenuItems': [ 
+                        { 'Name': 'D', 'Url': 'E' },
+                        { 'Name': 'F', 'Url': 'G' }
+                    ]},
+                    { 'Name': 'H', 'Url': 'I' },
+                ]
+            ";
 
             _fileMock.Setup(f => f.TryReadFile(It.IsAny<string>()))
                 .Returns(menuJson);
       
             //2. act
-            Domain.Menu menu = _menuFactory.GetMenu("");
+            List<Domain.MenuItem> menu = _menuFactory.GetMenu("").ToList();
 
             //3. assert
-            Assert.Equal("a", menu.Name);
-            Assert.Equal("b", menu.SubMenus.FirstOrDefault().Name);
-            Assert.Equal("c", menu.SubMenus.FirstOrDefault().MenuItems.FirstOrDefault().Name);
-            Assert.Equal("d", menu.SubMenus.FirstOrDefault().MenuItems.FirstOrDefault().Url);
-            Assert.Equal("e", menu.MenuItems.FirstOrDefault().Name);
-            Assert.Equal("f", menu.MenuItems.FirstOrDefault().Url);
+            Assert.Equal("A", menu[0].Name);
+            Assert.Equal("B", menu[0].Url);
+            Assert.Equal("C", menu[1].Name);
+            Assert.Equal("D", menu[1].MenuItems.ToArray()[0].Name);
+            Assert.Equal("E", menu[1].MenuItems.ToArray()[0].Url);
+            Assert.Equal("F", menu[1].MenuItems.ToArray()[1].Name);
+            Assert.Equal("G", menu[1].MenuItems.ToArray()[1].Url);
+            Assert.Equal("H", menu[2].Name);
+            Assert.Equal("I", menu[2].Url);
 
 
-        }
-
-        [Fact]
-        public void MenuFactoryTest_EditMenu_Success()
-        {
-
-            //1. arrange
-            var menu = new Domain.Menu()
-            {
-                Name = "a",
-                SubMenus = new List<Domain.Menu>() {
-                    new Domain.Menu() {
-                        Name = "b",
-                        MenuItems = new List<Domain.MenuItem>()
-                        {
-                            new Domain.MenuItem() { Name = "c", Url = "d" },
-                        }
-                    },
-                },
-                MenuItems = new List<Domain.MenuItem>()
-                {
-                    new Domain.MenuItem() { Name = "e", Url = "f" },
-                }
-            };
-
-            _fileMock.Setup(f => f.TryEditFile(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
-
-            //2. act
-            Domain.Menu result = _menuFactory.EditMenu("3", menu);
-
-            //3. assert
-            _fileMock.Verify(f => f.TryEditFile(
-                It.Is<string>(s => s == "1\\3\\2"),
-                It.IsAny<string>()
-            ), Times.Once());
-
-            Assert.Equal<Domain.Menu>(menu, result);
         }
     }
 }

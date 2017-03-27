@@ -10,5 +10,7 @@ namespace Webdictaat.Domain
         public string Name { get; set; }
 
         public string Url { get; set; }
+
+        public IEnumerable<MenuItem> MenuItems { get; set; }
     }
 }

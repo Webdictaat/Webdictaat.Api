@@ -9,13 +9,10 @@ namespace Webdictaat.Domain
     {
         public string Name { get; set; }
 
-        public IEnumerable<Menu> SubMenus { get; set; }
-
         public IEnumerable<MenuItem> MenuItems { get; set; }
 
         public Menu()
         {
-            SubMenus = new List<Menu>();
             MenuItems = new List<MenuItem>();
         }
 
