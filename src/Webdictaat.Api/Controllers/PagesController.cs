@@ -55,8 +55,11 @@ namespace Webdictaat.CMS.Controllers
                 Name = form.Page.Name,
                 Url = form.Page.Url
             };
+
+            //always use default
+            form.TemplateName = "default";
             
-            var result = _pageRepo.CreateDictaatPage(dictaatName, form.Page); 
+            var result = _pageRepo.CreateDictaatPage(dictaatName, form.Page, form.TemplateName); 
             var menu = _menuRepo.AddMenuItem(dictaatName, form.SubMenu, MenuItem);
             return menu;
         }

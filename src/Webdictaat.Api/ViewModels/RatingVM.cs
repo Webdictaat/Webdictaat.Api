@@ -16,6 +16,8 @@ namespace Webdictaat.CMS.ViewModels
 
         public RatingVM(Rating rating)
         {
+            this.HappyCounter = rating.Rates.Count(r => r.Emotion == (int)Emotion.Happy);
+            this.SadCounter = rating.Rates.Count(r => r.Emotion == (int)Emotion.Sad);
             this.Id = rating.Id;
             this.Title = rating.Title;
             this.Description = rating.Description;
@@ -27,5 +29,7 @@ namespace Webdictaat.CMS.ViewModels
         public string Description { get; set; }
 
         public RateVM MyRate { get; set; }
+        public int HappyCounter { get; private set; }
+        public int SadCounter { get; private set; }
     }
 }

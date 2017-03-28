@@ -20,9 +20,10 @@ namespace Webdictaat.Core.Helper
                 _configVariables.DictaatRoot, _configVariables.DictatenDirectory);
         }
 
-        public string ImagesPath()
+        public string ImagesPath(string dictaatName)
         {
-            return String.Format("wwwroot\\{0}", _configVariables.ImagesDirectory);
+            return String.Format("{0}\\{1}", 
+                DictaatPath(dictaatName), _configVariables.ImagesDirectory);
         }
 
         public string DictaatPath(string dictaatName)

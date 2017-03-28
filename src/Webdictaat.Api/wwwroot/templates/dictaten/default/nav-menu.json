@@ -1,7 +1,7 @@
 [
     {
         "Name": "Home",
-        "Url": "home",
+        "Url": "home"
     },
     {
         "Name": "Opdrachten",
@@ -17,6 +17,10 @@
             {
                 "Name": "week 3",
                 "Url": "week3"
+            },
+            {
+                "Name": "week 4",
+                "Url": "week4"
             }
         ]
     },

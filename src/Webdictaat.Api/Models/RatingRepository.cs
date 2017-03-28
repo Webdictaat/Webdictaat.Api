@@ -81,7 +81,7 @@ namespace Webdictaat.CMS.Models
         /// <returns></returns>
         public RatingVM GetRating(int ratingId, string userId)
         {
-            Rating rating = _context.Ratings.FirstOrDefault(q => q.Id == ratingId);
+            Rating rating = _context.Ratings.Include("Rates").FirstOrDefault(q => q.Id == ratingId);
 
             if (rating == null)
                 return null;

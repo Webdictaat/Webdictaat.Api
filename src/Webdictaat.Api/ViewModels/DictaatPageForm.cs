@@ -10,5 +10,7 @@ namespace Webdictaat.CMS.ViewModels
         public DictaatPageSummary Page { get; set; }
 
         public string SubMenu { get; set; }
+
+        public string TemplateName { get; set; }
     }
 }

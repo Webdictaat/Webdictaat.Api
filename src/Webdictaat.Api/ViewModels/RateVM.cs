@@ -31,5 +31,6 @@ namespace Webdictaat.Api.ViewModels
         public Emotion Emotion { get; set; }
 
         public string Feedback { get; set; }
+
     }
 }

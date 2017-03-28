@@ -79,11 +79,11 @@ namespace Webdictaat.CMS.Controllers
         /// <returns></returns>
         [HttpPost("{ratingId}/rates")]
         [Authorize]
-        public RateVM Post(int ratingId, [FromBody] RateVM rate)
+        public RatingVM Post(int ratingId, [FromBody] RateVM rate)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
             RateVM result = _ratingRepo.CreateRate(ratingId, userId, rate);
-            return result;
+            return _ratingRepo.GetRating(ratingId, userId);         
         }
 
     }

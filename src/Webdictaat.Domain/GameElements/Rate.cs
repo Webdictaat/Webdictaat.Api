@@ -25,6 +25,9 @@ namespace Webdictaat.Domain
         [Required]
         public int RatingId { get; set; }
 
+        [Required]
+        public virtual Rating Rating { get; set; }
+
 
         public DateTime Timestamp { get; set; }
     }

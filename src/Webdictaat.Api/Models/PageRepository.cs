@@ -14,7 +14,7 @@ namespace Webdictaat.CMS.Models
     {
         ViewModels.DictaatPage GetDictaatPage(string dictaatName, string fileName);
         IEnumerable<ViewModels.DictaatPageSummary> GetDictaatPages(string dictaatName);
-        DictaatPageSummary CreateDictaatPage(string dictaatName, DictaatPageSummary page);
+        DictaatPageSummary CreateDictaatPage(string dictaatName, DictaatPageSummary page, string templateName);
         void DeleteDictaatPage(string dictaatName, string page);
         DictaatPage EditDictaatPage(string dictaatName, DictaatPage page);
     }
@@ -64,10 +64,10 @@ namespace Webdictaat.CMS.Models
             };
         }
 
-        public DictaatPageSummary CreateDictaatPage(string dictaatName, ViewModels.DictaatPageSummary page)
+        public DictaatPageSummary CreateDictaatPage(string dictaatName, ViewModels.DictaatPageSummary page, string templateName)
         {
             string path = _pathHelper.PagePath(dictaatName, page.Url);
-            string pathTemplate = _pathHelper.PageTemplatePath("default");
+            string pathTemplate = _pathHelper.PageTemplatePath(templateName);
 
             if (!_file.TryCopyFile(path, pathTemplate))
             {
