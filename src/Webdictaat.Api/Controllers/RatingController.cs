@@ -67,7 +67,7 @@ namespace Webdictaat.CMS.Controllers
         [Authorize]
         public RatingVM Post(string dictaatName, [FromBody]RatingVM rating)
         {
-            RatingVM result = _ratingRepo.CreateRating(rating);
+            RatingVM result = _ratingRepo.CreateRating(dictaatName, rating);
             return result;
         }
 

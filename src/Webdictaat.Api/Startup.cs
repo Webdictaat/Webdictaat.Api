@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -98,7 +99,6 @@ namespace Webdictaat.CMS
                 .AddEntityFrameworkStores<WebdictaatContext>()
                 .AddDefaultTokenProviders();
 
-
             services.AddCors();
             services.AddOptions();
             services.AddMvc();
@@ -126,6 +126,7 @@ namespace Webdictaat.CMS
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddSingleton<IImageRepository, ImageRepository>();
+            services.AddSingleton<IQuizRepository, QuizRepository>();
             services.AddSingleton<Core.IDirectory, Core.Directory>();
             services.AddSingleton<Core.IFile, Core.File>();
             IConfigurationSection config = Configuration.GetSection("ConfigVariables");
@@ -145,7 +146,7 @@ namespace Webdictaat.CMS
         /// <param name="env"></param>
         /// <param name="loggerFactory"></param>
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, WebdictaatContext db)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -172,6 +173,9 @@ namespace Webdictaat.CMS
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUi();
+
+            //finnaly, update db if needed
+            db.Database.Migrate();
 
         }
 

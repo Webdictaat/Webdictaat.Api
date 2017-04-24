@@ -15,7 +15,7 @@ namespace Webdictaat.CMS.ViewModels
 
         public QuestionVM()
         {
-            Answers = new List<AnswerVM>();
+            this.Answers = new List<AnswerVM>();
         }
 
         public QuestionVM(Question question)
@@ -23,6 +23,16 @@ namespace Webdictaat.CMS.ViewModels
             this.Id = question.Id;
             this.Text = question.Text;
             this.Answers = question.Answers.Select(a => new AnswerVM(a)).ToList();
+        }
+
+        internal Question ToPoco()
+        {
+            return new Question()
+            {
+                Id = this.Id,
+                Text = this.Text,
+                Answers = this.Answers.Select(a => a.ToPoco()).ToList(),
+            };
         }
     }
 }

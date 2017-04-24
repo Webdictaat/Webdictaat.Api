@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Webdictaat.Domain;
 
 namespace Webdictaat.Domain
 {
-    public class Rating
+    public class Quiz
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public string Title { get; set; }
 
         [Required]
@@ -23,7 +21,12 @@ namespace Webdictaat.Domain
 
         public DateTime Timestamp { get; set; }
 
-        public virtual ICollection<Rate> Rates { get; set; }
+        public virtual ICollection<QuestionQuiz> Questions { get; set; }
+
+        public Quiz()
+        {
+
+        }
 
     }
 }

@@ -17,7 +17,7 @@ namespace Webdictaat.CMS.Models
 {
     public interface IRatingRepository
     {
-        RatingVM CreateRating(RatingVM question);
+        RatingVM CreateRating(string dictaatName, RatingVM question);
         RatingVM GetRating(int ratingId, string userId);
         RateVM CreateRate(int ratingId, string userId, RateVM rate);
     }
@@ -59,10 +59,12 @@ namespace Webdictaat.CMS.Models
         /// </summary>
         /// <param name="rating"></param>
         /// <returns></returns>
-        public RatingVM CreateRating(RatingVM rating)
+        public RatingVM CreateRating(string dictaatName, RatingVM rating)
         {
             var r = new Rating()
             {
+                DictaatDetailsName = dictaatName,
+                Timestamp = DateTime.Now,
                 Title = rating.Title,
                 Description = rating.Description,
             };
