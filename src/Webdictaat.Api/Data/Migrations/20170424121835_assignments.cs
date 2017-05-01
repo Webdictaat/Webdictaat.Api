@@ -19,7 +19,8 @@ namespace Webdictaat.Api.Migrations
                     DictaatDetailsName = table.Column<string>(nullable: false),
                     Metadata = table.Column<string>(nullable: true),
                     Points = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true)
+                    Title = table.Column<string>(nullable: true),
+                    Secret = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
