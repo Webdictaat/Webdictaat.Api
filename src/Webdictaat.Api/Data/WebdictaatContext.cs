@@ -6,13 +6,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Webdictaat.Domain;
+using Webdictaat.Domain.Assignments;
 using Webdictaat.Domain.User;
 
 namespace Webdictaat.Data
 {
     public class WebdictaatContext : IdentityDbContext<ApplicationUser>
     {
-    
+        public DbSet<Assignment> Assignments { get; set; }
+
+        public DbSet<AssignmentSubmission> AssignmentSubmissions { get; set; }
 
         public DbSet<Rating> Ratings { get; set; }
 
@@ -43,6 +46,7 @@ namespace Webdictaat.Data
             //koppel tabellen
             builder.Entity<QuestionQuiz>().HasKey(t => new { t.QuestionId, t.QuizId });
             builder.Entity<QuizAttemptAnswer>().HasKey(t => new { t.QuizAttemptId, t.AnswerId });
+            builder.Entity<AssignmentSubmission>().HasKey(t => new { t.AssignmentId, t.UserId });
         }
 
     }

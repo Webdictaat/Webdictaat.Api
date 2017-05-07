@@ -7,8 +7,6 @@ namespace Webdictaat.Api.ViewModels
 {
     public class QuizAttemptForm
     {
-        public int QuizId { get; set; }
-
-        public ICollection<int> GivenAnswers { get; set; } 
+        public int[] GivenAnswers { get; set; } 
     }
 }

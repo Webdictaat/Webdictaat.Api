@@ -30,7 +30,7 @@ namespace Webdictaat.CMS.Models
 
         public QuizAttemptVM AddAttempt(int quizId, string userId, ICollection<int> givenAnswers)
         {
-            QuizAttempt qa = new QuizAttempt()
+             QuizAttempt qa = new QuizAttempt()
             {
                 QuizId = quizId,
                 UserId = userId,
@@ -42,7 +42,7 @@ namespace Webdictaat.CMS.Models
             _context.SaveChanges();
 
             //retrieve fresh attempt from database, so we can include the full answer objects
-            qa = _context.QuizAttempts.Include("Answers.Answer").FirstOrDefault(attempt => attempt.Id == qa.Id);
+            qa = _context.QuizAttempts.OrderByDescending(mqa => mqa.Timestamp).Include("Answers.Answer").FirstOrDefault(attempt => attempt.Id == qa.Id);
 
             return new QuizAttemptVM(qa);
         }
@@ -75,6 +75,7 @@ namespace Webdictaat.CMS.Models
             var vm = new QuizVM(quiz);
             vm.MyAttempts = _context.QuizAttempts
                     .Where(qa => qa.UserId == userId && qa.QuizId == quizId )
+                    .OrderByDescending(qa => qa.Timestamp)
                     .ToList()
                     .Select(qa => new QuizAttemptVM(qa));
 

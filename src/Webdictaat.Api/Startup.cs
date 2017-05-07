@@ -15,6 +15,7 @@ using Swashbuckle.Swagger.Model;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
 using Webdictaat.CMS.Models;
 using Webdictaat.Core;
@@ -128,6 +129,8 @@ namespace Webdictaat.CMS
             services.AddSingleton<IImageRepository, ImageRepository>();
             services.AddSingleton<IQuizRepository, QuizRepository>();
             services.AddSingleton<Core.IDirectory, Core.Directory>();
+            services.AddSingleton<IAssignmentRepository, AssignmentRepository>();
+            services.AddSingleton<ISecretService, SecretService>();
             services.AddSingleton<Core.IFile, Core.File>();
             IConfigurationSection config = Configuration.GetSection("ConfigVariables");
             config["DictaatRoot"] = _hostingEnv.WebRootPath;
