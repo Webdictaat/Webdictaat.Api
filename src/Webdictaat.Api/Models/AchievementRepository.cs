@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webdictaat.Api.ViewModels;
+using Webdictaat.Data;
 using Webdictaat.Domain;
 
 namespace Webdictaat.Api.Models
@@ -19,6 +20,13 @@ namespace Webdictaat.Api.Models
 
     public class AchievementRepository : IAchievementRepository
     {
+        private WebdictaatContext _context;
+
+        public AchievementRepository(WebdictaatContext context)
+        {
+            _context = context;
+        }
+
         public void AddAchievement(string dictaatName, Achievement achieve)
         {
             throw new NotImplementedException();
