@@ -16,12 +16,5 @@ namespace Webdictaat.Domain
 
         [Required]
         public Boolean Hidden { get; set; }
-
-        [Required]
-        public Boolean Completed { get; set; }
-
-        [Required]
-        public string Image { get; set; }
-
     }
 }
