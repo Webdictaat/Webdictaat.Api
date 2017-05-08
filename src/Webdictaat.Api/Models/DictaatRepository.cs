@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Webdictaat.Domain.User;
 using Webdictaat.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Webdictaat.CMS.Models
 {
     public interface IDictaatRepository
     {
-        IEnumerable<ViewModels.DictaatSummary> GetDictaten();
+        IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null);
         ViewModels.Dictaat getDictaat(string name);
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
@@ -65,10 +66,16 @@ namespace Webdictaat.CMS.Models
 
         }
 
-        public IEnumerable<ViewModels.DictaatSummary> GetDictaten()
+        public IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null)
         {
-            return _dictaatFactory.GetDictaten() 
-                .Select(s => new ViewModels.DictaatSummary(s));
+            var dictaatDetails = _context.DictaatDetails
+                .Include(dd => dd.Contributers).ThenInclude(Contributer => Contributer.User)
+                .Include(dd => dd.DictaatOwner)
+                .ToList();
+
+            //var dictaatSummarys = _dictaatFactory.GetDictaten();
+
+            return dictaatDetails.Select(dd => new ViewModels.DictaatSummary(dd, userId)).ToList();
         }
 
         public ViewModels.Dictaat getDictaat(string name)

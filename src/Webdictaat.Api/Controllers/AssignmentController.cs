@@ -60,7 +60,7 @@ namespace Webdictaat.Api.Controllers
             }
             else
             {
-                if (!await _authorizeService.IsDictaatOwner(User.Identity.Name, dictaatName))
+                if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
                 {
                     HttpContext.Response.StatusCode = 403;
                     return null;

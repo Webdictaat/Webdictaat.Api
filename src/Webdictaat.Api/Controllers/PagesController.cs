@@ -69,7 +69,7 @@ namespace Webdictaat.CMS.Controllers
         [HttpPut("{pageName}")]
         public async Task<ViewModels.DictaatPage> Put(string dictaatName, string pageName, [FromBody]ViewModels.DictaatPage page)
         {
-            if (!await _authorizeService.IsDictaatOwner(User.Identity.Name, dictaatName))
+            if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
             {
                 HttpContext.Response.StatusCode = 403;
                 return null;
@@ -84,7 +84,7 @@ namespace Webdictaat.CMS.Controllers
         [HttpDelete("{pageName}")]
         public async Task<List<ViewModels.MenuItem>> Delete(string dictaatName, string pageName)
         {
-            if (!await _authorizeService.IsDictaatOwner(User.Identity.Name, dictaatName))
+            if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
             {
                 HttpContext.Response.StatusCode = 403;
                 return null;

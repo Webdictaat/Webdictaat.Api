@@ -53,7 +53,8 @@ namespace Webdictaat.CMS.Controllers
         [HttpGet]
         public IEnumerable<ViewModels.DictaatSummary> Get()
         {
-            var dictaten = _dictaatRepo.GetDictaten();
+            string userId = _userManager.GetUserId(HttpContext.User);
+            var dictaten = _dictaatRepo.GetDictaten(userId);
             return dictaten;
         }
 
@@ -80,7 +81,7 @@ namespace Webdictaat.CMS.Controllers
         [Authorize]
         public async Task<bool> Delete(string name)
         {
-            if (!await _authorizationService.IsDictaatOwner(User.Identity.Name, name))
+            if (!await _authorizationService.IsDictaatContributer(User.Identity.Name, name))
             {
                 HttpContext.Response.StatusCode = 403;
                 return false;

@@ -17,9 +17,16 @@ namespace Webdictaat.Domain
 
         public ApplicationUser DictaatOwner { get; set; }
 
+        public virtual ICollection<DictaatContributer> Contributers { get; set; }
+
         public ICollection<string> GetContributersIds()
         {
-            return new string[] { this.DictaatOwnerId };
+            var result = new List<string>{ this.DictaatOwnerId };
+            if (this.Contributers != null)
+            {
+                this.Contributers.ToList().ForEach(c => result.Add(c.UserId));
+            }
+            return result;
         }
     }
 }

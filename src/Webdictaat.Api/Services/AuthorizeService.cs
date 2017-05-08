@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Webdictaat.Api.Services
     /// </summary>
     public interface IAuthorizeService
     {
-        Task<bool> IsDictaatOwner(string userName, string dictaatName);
+        Task<bool> IsDictaatContributer(string userName, string dictaatName);
     }
 
     public class AuthorizeService : IAuthorizeService
@@ -35,10 +36,10 @@ namespace Webdictaat.Api.Services
         /// <param name="userName"></param>
         /// <param name="dictaatName"></param>
         /// <returns></returns>
-        public async Task<bool> IsDictaatOwner(string userName, string dictaatName)
+        public async Task<bool> IsDictaatContributer(string userName, string dictaatName)
         {
             
-            IResource details = _context.DictaatDetails.FirstOrDefault(dd => dd.Name == dictaatName);
+            IResource details = _context.DictaatDetails.Include(dd => dd.Contributers).FirstOrDefault(dd => dd.Name == dictaatName);
             var user = await _userManager.FindByNameAsync(userName);
 
             return details.GetContributersIds().Contains(user.Id);
