@@ -17,6 +17,11 @@ namespace Webdictaat.Api.ViewModels
         public Boolean Completed { get; set; }
 
         public string Image { get; set; }
+        
+        public AchievementVM()
+        {
+
+        }
 
         public AchievementVM(int id, string name, Boolean hidden, Boolean completed, string image)
         {
