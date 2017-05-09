@@ -122,6 +122,21 @@ namespace Webdictaat.Api.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.Achievement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Hidden");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Achievements");
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.Answer", b =>
                 {
                     b.Property<int>("Id")
@@ -146,6 +161,8 @@ namespace Webdictaat.Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AssignmentSecret");
+
                     b.Property<string>("Description")
                         .IsRequired();
 
@@ -156,9 +173,8 @@ namespace Webdictaat.Api.Migrations
 
                     b.Property<int>("Points");
 
-                    b.Property<string>("Secret");
-
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

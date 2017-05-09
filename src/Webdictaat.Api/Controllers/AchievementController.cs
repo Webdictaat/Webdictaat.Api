@@ -26,10 +26,10 @@ namespace Webdictaat.Api.Controllers
 
         [HttpGet]
         [Authorize]
-        public AchievementVM Get(string dictaatName)
+        public List<AchievementVM> Get(string dictaatName)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            AchievementVM result = _achievementRepo.GetAllAchievements(dictaatName, userId);
+            List<AchievementVM> result = _achievementRepo.GetAllAchievements(dictaatName, userId);
             return result;
         }
 

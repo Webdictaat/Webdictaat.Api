@@ -57,6 +57,7 @@ namespace Webdictaat.Api.Models
 
         public List<AchievementVM> GetAllAchievements(string dictaatName, string userId)
         {
+            throw new NotImplementedException();
             List<AchievementVM> achievlist;
 
 
