@@ -31,6 +31,19 @@ namespace Webdictaat.CMS.Controllers
             _quizRepo = quizRepo;
         }
 
+        /// <summary>
+        /// Returns a list of quizes 
+        /// </summary>
+        /// <param name="dictaatName"></param> 
+        /// <returns></returns>
+        [HttpGet]
+        public ICollection<QuizSummaryVM> Get(string dictaatName)
+        {
+            string userId = _userManager.GetUserId(HttpContext.User);
+            ICollection<QuizSummaryVM> result = _quizRepo.GetQuizes(dictaatName, userId);
+            return result;
+        }
+
         [HttpGet("{quizId}")]
         [Authorize]
         public QuizVM Get(string dictaatName, int quizId)

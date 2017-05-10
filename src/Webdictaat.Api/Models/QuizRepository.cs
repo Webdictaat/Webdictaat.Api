@@ -17,6 +17,7 @@ namespace Webdictaat.CMS.Models
         QuizVM CreateQuiz(string dictaatName, QuizVM quiz);
         QuizVM GetQuiz(int quizId, string userId);
         QuizAttemptVM AddAttempt(int quizId, string userId, ICollection<int> givenAnswers);
+        ICollection<QuizSummaryVM> GetQuizes(string dictaatName, string userId);
     }
 
     public class QuizRepository : IQuizRepository
@@ -30,7 +31,7 @@ namespace Webdictaat.CMS.Models
 
         public QuizAttemptVM AddAttempt(int quizId, string userId, ICollection<int> givenAnswers)
         {
-             QuizAttempt qa = new QuizAttempt()
+            QuizAttempt qa = new QuizAttempt()
             {
                 QuizId = quizId,
                 UserId = userId,
@@ -45,6 +46,16 @@ namespace Webdictaat.CMS.Models
             qa = _context.QuizAttempts.OrderByDescending(mqa => mqa.Timestamp).Include("Answers.Answer").FirstOrDefault(attempt => attempt.Id == qa.Id);
 
             return new QuizAttemptVM(qa);
+        }
+
+        public ICollection<QuizSummaryVM> GetQuizes(string dictaatId, string userId)
+        {
+            var quizes = _context.Quizes
+                .Include("QuizAttempts")
+                .Include("Questions")
+                .Where(q => q.DictaatDetailsName == dictaatId).ToList();
+
+            return quizes.Select(q => new QuizSummaryVM(q)).ToList();
         }
 
         public QuizVM CreateQuiz(string dictaatName, QuizVM quiz)
@@ -82,5 +93,7 @@ namespace Webdictaat.CMS.Models
 
             return vm;
         }
+
+
     }
 }
