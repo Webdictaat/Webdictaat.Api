@@ -23,6 +23,8 @@ namespace Webdictaat.Domain
 
         public virtual ICollection<QuestionQuiz> Questions { get; set; }
 
+        public virtual ICollection<QuizAttempt> QuizAttempts { get; set; }
+
         public Quiz()
         {
 
