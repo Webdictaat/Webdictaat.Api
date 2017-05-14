@@ -122,21 +122,6 @@ namespace Webdictaat.Api.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Webdictaat.Domain.Achievement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Hidden");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Achievements");
-                });
-
             modelBuilder.Entity("Webdictaat.Domain.Answer", b =>
                 {
                     b.Property<int>("Id")
@@ -217,9 +202,11 @@ namespace Webdictaat.Api.Migrations
                     b.Property<string>("DictaatOwnerId")
                         .IsRequired();
 
+                    b.Property<string>("DictaatOwnersId");
+
                     b.HasKey("Name");
 
-                    b.HasIndex("DictaatOwnerId");
+                    b.HasIndex("DictaatOwnersId");
 
                     b.ToTable("DictaatDetails");
                 });
@@ -281,8 +268,6 @@ namespace Webdictaat.Api.Migrations
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("QuizId");
 
                     b.ToTable("QuizAttempts");
                 });
@@ -462,10 +447,9 @@ namespace Webdictaat.Api.Migrations
 
             modelBuilder.Entity("Webdictaat.Domain.DictaatDetails", b =>
                 {
-                    b.HasOne("Webdictaat.Domain.User.ApplicationUser", "DictaatOwner")
+                    b.HasOne("Webdictaat.Domain.User.ApplicationUser", "DictaatOwners")
                         .WithMany("OwnedDictaten")
-                        .HasForeignKey("DictaatOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DictaatOwnersId");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.QuestionQuiz", b =>
@@ -477,14 +461,6 @@ namespace Webdictaat.Api.Migrations
 
                     b.HasOne("Webdictaat.Domain.Quiz", "Quiz")
                         .WithMany("Questions")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Webdictaat.Domain.QuizAttempt", b =>
-                {
-                    b.HasOne("Webdictaat.Domain.Quiz")
-                        .WithMany("QuizAttempts")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
