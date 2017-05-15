@@ -18,6 +18,7 @@ namespace Webdictaat.Api.ViewModels
             this.Id = q.Id;
             this.Title = q.Title;
             this.Description = q.Description;
+            this.Dictaat = q.DictaatDetailsName;
 
             this.QuestionCount = q.Questions.Count();
             this.CompletedByCount = q.QuizAttempts.GroupBy(qa => qa.UserId).Count();
@@ -33,7 +34,7 @@ namespace Webdictaat.Api.ViewModels
         public int QuestionCount {get; set; }
 
         public int CompletedByCount { get; set; }
-
+        public string Dictaat { get; private set; }
     }
 
 }
