@@ -24,21 +24,27 @@ namespace Webdictaat.Api.Controllers
         private IAchievementRepository _achievementRepo;
         private UserManager<ApplicationUser> _userManager;
 
+        public AchievementController(IAchievementRepository achieveRepo, UserManager<ApplicationUser> userManager)
+        {
+            _achievementRepo = achieveRepo;
+            _userManager = userManager;
+        }
+
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public List<AchievementVM> Get(string dictaatName)
         {
-            string userId = _userManager.GetUserId(HttpContext.User);
-            List<AchievementVM> result = _achievementRepo.GetAllAchievements(dictaatName, userId);
+            //string userId = _userManager.GetUserId(HttpContext.User);
+            List<AchievementVM> result = _achievementRepo.GetAllAchievements(dictaatName);
             return result;
         }
 
         [HttpGet("{achievementId}")]
-        [Authorize]
+        //[Authorize]
         public AchievementVM Get(int achievementId, string dictaatName)
         {
-            string userId = _userManager.GetUserId(HttpContext.User);
-            AchievementVM result = _achievementRepo.GetAchievement(achievementId, dictaatName, userId);
+            //string userId = _userManager.GetUserId(HttpContext.User);
+            AchievementVM result = _achievementRepo.GetAchievement(achievementId, dictaatName);
             return result;
         }
     }

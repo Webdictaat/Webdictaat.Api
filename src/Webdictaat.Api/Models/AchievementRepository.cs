@@ -10,8 +10,8 @@ namespace Webdictaat.Api.Models
 {
     public interface IAchievementRepository
     {
-        AchievementVM GetAchievement(int achievementId, string dictaatName, string userId);
-        List<AchievementVM> GetAllAchievements(string dictaatName, string userId);
+        AchievementVM GetAchievement(int achievementId, string dictaatName);
+        List<AchievementVM> GetAllAchievements(string dictaatName);
         void CheckAchievement(string dictaatName, int AchievementId, Boolean check, string userId);
         void AddAchievement(string dictaatName, Achievement achieve);
         void DeleteAchievement(string dictaatName, int achievementId);
@@ -42,7 +42,7 @@ namespace Webdictaat.Api.Models
             throw new NotImplementedException();
         }
 
-        public AchievementVM GetAchievement(int achievementId, string dictaatName, string userId)
+        public AchievementVM GetAchievement(int achievementId, string dictaatName)
         {
             Achievement achiev = _context.Achievements.First(a => a.Id == achievementId);
 
@@ -55,7 +55,7 @@ namespace Webdictaat.Api.Models
             return achievVM;
         }
 
-        public List<AchievementVM> GetAllAchievements(string dictaatName, string userId)
+        public List<AchievementVM> GetAllAchievements(string dictaatName)
         {
             throw new NotImplementedException();
             List<AchievementVM> achievlist;
