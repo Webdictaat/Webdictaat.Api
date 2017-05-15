@@ -21,9 +21,10 @@ namespace Webdictaat.Domain
         [Required]
         public int QuestionId { get; set; }
 
-        
-        public virtual ICollection<QuizAttemptAnswer> QuizAttempts { get; set; }
+        public bool IsDeleted { get; set; }
 
+        public virtual ICollection<QuizAttemptAnswer> QuizAttempts { get; set; }
+        
         public Answer()
         {
             this.QuizAttempts = new List<QuizAttemptAnswer>();

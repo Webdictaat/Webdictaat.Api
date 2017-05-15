@@ -8,6 +8,8 @@ namespace Webdictaat.CMS.ViewModels
 {
     public class QuestionVM
     {
+        public bool IsDeleted;
+
         public int Id { get; set; }
         public string Text { get; set; }
 
@@ -22,7 +24,8 @@ namespace Webdictaat.CMS.ViewModels
         {
             this.Id = question.Id;
             this.Text = question.Text;
-            this.Answers = question.Answers.Select(a => new AnswerVM(a)).ToList();
+            this.IsDeleted = question.IsDeleted;
+            this.Answers = question.Answers.Where(a => !a.IsDeleted).Select(a => new AnswerVM(a)).ToList();
         }
 
         internal Question ToPoco()

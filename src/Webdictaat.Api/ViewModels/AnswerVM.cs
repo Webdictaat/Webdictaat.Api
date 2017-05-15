@@ -16,6 +16,8 @@ namespace Webdictaat.CMS.ViewModels
 
         public int AnsweredCount { get; set; }
 
+        public bool IsDeleted { get; set; }
+
 
         //oeps lege constructor vergeten.
         public AnswerVM()
@@ -28,6 +30,7 @@ namespace Webdictaat.CMS.ViewModels
             this.Id = answer.Id;
             this.Text = answer.Text;
             this.IsCorrect = answer.IsCorrect;
+            this.IsDeleted = answer.IsDeleted;
             this.AnsweredCount = answer.QuizAttempts.Count();
         }
 

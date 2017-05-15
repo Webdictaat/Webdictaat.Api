@@ -9,6 +9,7 @@ using Webdictaat.Domain;
 using Microsoft.EntityFrameworkCore;
 using Webdictaat.Data;
 using Webdictaat.Api.ViewModels;
+using System.Threading.Tasks;
 
 namespace Webdictaat.CMS.Models
 {
@@ -18,15 +19,18 @@ namespace Webdictaat.CMS.Models
         QuizVM GetQuiz(int quizId, string userId);
         QuizAttemptVM AddAttempt(int quizId, string userId, ICollection<int> givenAnswers);
         ICollection<QuizSummaryVM> GetQuizes(string dictaatName, string userId);
+        QuizVM UpdateQuiz(string dictaatName, QuizVM quiz);
     }
 
     public class QuizRepository : IQuizRepository
     {
         private WebdictaatContext _context;
+        private IQuestionRepository _questionRepo;
 
-        public QuizRepository(WebdictaatContext context)
+        public QuizRepository(IQuestionRepository questionRepo, WebdictaatContext context)
         {
-            _context = context; 
+            _context = context;
+            _questionRepo = questionRepo;
         }
 
         public QuizAttemptVM AddAttempt(int quizId, string userId, ICollection<int> givenAnswers)
@@ -75,25 +79,59 @@ namespace Webdictaat.CMS.Models
             return new QuizVM(q);
         }
 
-        public QuizVM GetQuiz(int quizId, string userId)
+        public QuizVM GetQuiz(int quizId, string userId = null)
         {
-            Quiz quiz = _context.Quizes.Include("Questions.Question.Answers.QuizAttempts")
+            Quiz quiz = _context.Quizes
+                .Include("Questions.Question.Answers.QuizAttempts")          
                 .FirstOrDefault(q => q.Id == quizId);
 
             if (quiz == null)
                 return null;
             
             var vm = new QuizVM(quiz);
-            vm.MyAttempts = _context.QuizAttempts
-                    .Where(qa => qa.UserId == userId && qa.QuizId == quizId )
-                    .OrderByDescending(qa => qa.Timestamp)
-                    .ToList()
-                    .Select(qa => new QuizAttemptVM(qa));
+
+            if (userId != null)
+            {
+                vm.MyAttempts = _context.QuizAttempts
+                        .Where(qa => qa.UserId == userId && qa.QuizId == quizId)
+                        .OrderByDescending(qa => qa.Timestamp)
+                        .ToList()
+                        .Select(qa => new QuizAttemptVM(qa));
+            }
 
 
             return vm;
         }
 
+        public QuizVM UpdateQuiz(string dictaatName, QuizVM form)
+        {
+            Quiz quiz = _context.Quizes.FirstOrDefault(q => q.Id == form.Id);
+            quiz.Title = form.Title;
+            quiz.Description = form.Description;
 
+            //update all questions and add all new
+            foreach(var qForm in form.Questions)
+            {
+                if(qForm.Id != 0)
+                {
+                    _questionRepo.UpdateQuestion(qForm);
+                }
+                else
+                {
+                    quiz.Questions.Add(new QuestionQuiz()
+                    {
+                        Question = new Question()
+                        {
+                            Text = qForm.Text,
+                            Answers = qForm.Answers.Select(a =>
+                                new Answer() { Text = a.Text, IsCorrect = a.IsCorrect }).ToList()
+                        }
+                    });
+                }
+            }
+
+            _context.SaveChanges();
+            return this.GetQuiz(quiz.Id, null);
+        }
     }
 }
