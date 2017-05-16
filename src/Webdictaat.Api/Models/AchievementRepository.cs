@@ -44,7 +44,7 @@ namespace Webdictaat.Api.Models
 
         public AchievementVM GetAchievement(int achievementId, string dictaatName)
         {
-            Achievement achiev = _context.Achievements.First(a => a.Id == achievementId);
+            Achievement achiev = _context.Achievements.FirstOrDefault(a => a.Id == achievementId);
 
             if (achiev == null)
             {

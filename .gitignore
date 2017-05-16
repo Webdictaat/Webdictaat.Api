@@ -252,3 +252,4 @@ ModelManifest.xml
 /src/Webdictaat.Api/wwwroot/dictaten/*
 /src/Webdictaat.Api/appsettings.dev.json
 /src/Webdictaat.Api/wwwroot/images
+src/Webdictaat.Api/appsettings.development.json
