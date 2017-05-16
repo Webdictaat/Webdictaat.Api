@@ -57,10 +57,9 @@ namespace Webdictaat.Api.Models
 
         public List<AchievementVM> GetAllAchievements(string dictaatName)
         {
-            throw new NotImplementedException();
-            List<AchievementVM> achievlist;
+            List<Achievement> achievlist = _context.Achievements.ToList();
 
-
+            return achievlist.Select(q => new AchievementVM(q)).ToList();
         }
 
         public void UpdateAchievement(string dictaatName, int achievementId, Achievement achieve)
