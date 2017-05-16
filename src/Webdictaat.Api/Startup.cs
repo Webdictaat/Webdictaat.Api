@@ -131,6 +131,7 @@ namespace Webdictaat.CMS
             services.AddSingleton<Core.IDirectory, Core.Directory>();
             services.AddSingleton<IAssignmentRepository, AssignmentRepository>();
             services.AddSingleton<ISecretService, SecretService>();
+            services.AddScoped<IAchievementRepository, AchievementRepository>();
             services.AddSingleton<Core.IFile, Core.File>();
             IConfigurationSection config = Configuration.GetSection("ConfigVariables");
             config["DictaatRoot"] = _hostingEnv.WebRootPath;
