@@ -7,6 +7,13 @@ namespace Webdictaat.Api.ViewModels.Assignments
 {
     public class AssignmentFormVM
     {
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string Metadata { get; set; }
+
+        public int Points { get; set; }
     }
 
     public class AssignmentSubmissionFormVM

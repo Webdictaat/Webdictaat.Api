@@ -120,19 +120,20 @@ namespace Webdictaat.CMS
             });
 
             #region custom services
-            services.AddSingleton<IAuthorizeService, AuthorizeService>();
-            services.AddSingleton<IDictaatRepository, DictaatRepository>();
-            services.AddSingleton<IPageRepository, PageRepository>();
-            services.AddSingleton<IMenuRepository, MenuRepository>();
+            services.AddScoped<IAuthorizeService, AuthorizeService>();
+            services.AddScoped<IDictaatRepository, DictaatRepository>();
+            services.AddScoped<IPageRepository, PageRepository>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IRatingRepository, RatingRepository>();
-            services.AddSingleton<IImageRepository, ImageRepository>();
-            services.AddSingleton<IQuizRepository, QuizRepository>();
-            services.AddSingleton<Core.IDirectory, Core.Directory>();
-            services.AddSingleton<IAssignmentRepository, AssignmentRepository>();
-            services.AddSingleton<ISecretService, SecretService>();
+            services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IQuizRepository, QuizRepository>();
+            services.AddScoped<Core.IDirectory, Core.Directory>();
+            services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+            services.AddScoped<ISecretService, SecretService>();
+            services.AddScoped<Core.IFile, Core.File>();
             services.AddScoped<IAchievementRepository, AchievementRepository>();
-            services.AddSingleton<Core.IFile, Core.File>();
+
             IConfigurationSection config = Configuration.GetSection("ConfigVariables");
             config["DictaatRoot"] = _hostingEnv.WebRootPath;
             services.Configure<ConfigVariables>(config);

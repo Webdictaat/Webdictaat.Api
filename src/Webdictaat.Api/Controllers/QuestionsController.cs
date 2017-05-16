@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Webdictaat.CMS.Controllers
 {
-
-    [Route("api/dictaten/{dictaatName}/[controller]")]
+    /// <summary>
+    /// Sub route of quiz
+    /// </summary>
+    [Route("api/dictaten/{dictaatName}/quiz/{quizId}/[controller]")]
     public class QuestionsController : Controller
     {
         private IQuestionRepository _questionRepo;
@@ -26,12 +28,6 @@ namespace Webdictaat.CMS.Controllers
             _questionRepo = questionRepo;
         }
 
-        [HttpGet("{questionId}")]
-        public QuestionVM Get(string dictaatName, int questionId)
-        {
-            QuestionVM result = _questionRepo.GetQuestion(questionId);
-            return result;
-        }
 
         /// <summary>
         /// Authorized (Requires the user to be logged in.)
@@ -40,12 +36,27 @@ namespace Webdictaat.CMS.Controllers
         /// <param name="question"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost] 
+        [HttpPost]
         public QuestionVM Post(string dictaatName, [FromBody]QuestionVM question)
         {
             QuestionVM result = _questionRepo.CreateQuestion(question);
             return result;
         }
 
+        [Authorize]
+        [HttpPut("{questionId}")]
+        public QuestionVM Put(string dictaatName, int questionId, [FromBody]QuestionVM question)
+        {
+            QuestionVM result = _questionRepo.UpdateQuestion(question);
+            return result;
+        }
+
+        [Authorize]
+        [HttpDelete("{questionId}")]
+        public QuestionVM Delete(string dictaatName, int questionId)
+        {
+            QuestionVM result = _questionRepo.DeleteQuestion(questionId);
+            return result;
+        }
     }
 }

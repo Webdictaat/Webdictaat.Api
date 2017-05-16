@@ -42,6 +42,19 @@ namespace Webdictaat.Api.Controllers
             return _assignmentRepo.GetAssignment(assignmentId, userId);
         }
 
+
+        [HttpGet]
+        public IEnumerable<AssignmentVM> Get(string dictaatName)
+        {
+            string userId = "";
+            if (HttpContext.User != null)
+            {
+                userId = _userManager.GetUserId(HttpContext.User);
+            }
+
+            return _assignmentRepo.GetAllAssignments(dictaatName, userId);
+        }
+
         [HttpPost]
         public AssignmentVM Post(string dictaatName, [FromBody] AssignmentFormVM form)
         {

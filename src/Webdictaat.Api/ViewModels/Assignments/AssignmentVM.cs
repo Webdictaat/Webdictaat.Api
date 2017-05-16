@@ -17,8 +17,12 @@ namespace Webdictaat.Api.ViewModels.Assignments
         public string Metadata { get; set; }
 
         public int Points { get; set; }
+
+        public ICollection<AssignmentSubmission> Submissions { get; set; }
  
         public AssignmentSubmission MySubmission { get; set; }
+
+        public int SubmissionCount { get; set; }
 
         public AssignmentVM()
         {
@@ -32,6 +36,13 @@ namespace Webdictaat.Api.ViewModels.Assignments
             this.Description = assignment.Description;
             this.Metadata = assignment.Metadata;
             this.Points = assignment.Points;
+            this.Submissions = assignment.Attempts;
+
+            if (this.Submissions != null)
+            {
+                this.SubmissionCount = this.Submissions.GroupBy(s => s.UserId).Count();
+            }
+            
         }
     }
 }

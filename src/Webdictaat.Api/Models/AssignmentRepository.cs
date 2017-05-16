@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace Webdictaat.Api.Models
         /// <returns></returns>
         AssignmentVM CompleteAssignment(int assignmentId, string userId);
         AssignmentVM CompleteAssignment(int assignmentId, string userId, string token);
+        IEnumerable<AssignmentVM> GetAllAssignments(string dictaatName, string userId);
     }
 
     public class AssignmentRepository : IAssignmentRepository
@@ -91,11 +93,21 @@ namespace Webdictaat.Api.Models
         }
 
       
-
         public AssignmentVM CreateAssignment(string dictaatName, AssignmentFormVM form)
         {
+            var a = new Assignment()
+            {
+                Title = form.Title,
+                DictaatDetailsName = dictaatName,
+                Description = form.Description,
+                Metadata = form.Metadata,
+                Points = form.Points
+            };
 
-            throw new NotImplementedException();
+            _context.Assignments.Add(a);
+            _context.SaveChanges();
+
+            return new AssignmentVM(a);
         }
 
         public AssignmentVM GetAssignment(int assignmentId, string userId = null)
@@ -110,6 +122,16 @@ namespace Webdictaat.Api.Models
 
             return response;
 
+        }
+
+        public IEnumerable<AssignmentVM> GetAllAssignments(string dictaatName, string userId)
+        {
+            var assignments = _context.Assignments
+                .Include(a => a.Attempts)
+                .Where(a => a.DictaatDetailsName == dictaatName)
+                .ToList();
+
+            return assignments.Select(a => new AssignmentVM(a));
         }
     }
 }

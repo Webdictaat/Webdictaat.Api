@@ -8,9 +8,10 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    partial class WebdictaatContextModelSnapshot : ModelSnapshot
+    [Migration("20170515131657_delete flag for quiz items")]
+    partial class deleteflagforquizitems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -120,21 +121,6 @@ namespace Webdictaat.Api.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Webdictaat.Domain.Achievement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Hidden");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Achievements");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.Answer", b =>

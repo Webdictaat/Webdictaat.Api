@@ -40,6 +40,7 @@ namespace Webdictaat.Domain
 
         public string Text { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
+        public bool IsDeleted { get; set; }
 
         public Question()
         {

@@ -28,7 +28,7 @@ namespace Webdictaat.Api.ViewModels
             this.Id = quiz.Id;
             this.Title = quiz.Title;
             this.Description = quiz.Description;
-            this.Questions = quiz.Questions.Select(q => new QuestionVM(q.Question));
+            this.Questions = quiz.Questions.Where(q => !q.Question.IsDeleted).Select(q => new QuestionVM(q.Question));
         }
 
      

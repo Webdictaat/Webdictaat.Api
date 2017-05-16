@@ -48,8 +48,8 @@ namespace Webdictaat.CMS.Controllers
         [Authorize]
         public QuizVM Get(string dictaatName, int quizId)
         {
-            string userId = _userManager.GetUserId(HttpContext.User);
-            QuizVM result = _quizRepo.GetQuiz(quizId, userId);
+            var user = _userManager.GetUserId(HttpContext.User);
+            QuizVM result = _quizRepo.GetQuiz(quizId, user);
             return result;
         }
 
@@ -71,6 +71,20 @@ namespace Webdictaat.CMS.Controllers
         /// Authorized (Requires the user to be logged in.)
         /// </summary>
         /// <param name="dictaatName"></param>
+        /// <param name="quiz"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{quizId}")]
+        public QuizVM Put(string dictaatName, [FromBody]QuizVM quiz)
+        {
+            QuizVM result = _quizRepo.UpdateQuiz(dictaatName, quiz);
+            return result;
+        }
+
+        /// <summary>
+        /// Authorized (Requires the user to be logged in.)
+        /// </summary>
+        /// <param name="dictaatName"></param>
         /// <param name="quizId"></param>
         /// <param name="quizAttempt"></param>
         /// <returns></returns>
@@ -82,6 +96,5 @@ namespace Webdictaat.CMS.Controllers
             Api.ViewModels.QuizAttemptVM result = _quizRepo.AddAttempt(quizId, userId, quiz.GivenAnswers);
             return result;
         }
-
     }
 }
