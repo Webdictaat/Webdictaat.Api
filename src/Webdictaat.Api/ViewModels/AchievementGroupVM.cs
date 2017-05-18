@@ -13,7 +13,7 @@ namespace Webdictaat.Api.ViewModels
 
         public int Order { get; set; }
 
-        public List<AchievementVM> Achievememts { get; set; }
+        public List<AchievementVM> Achievements { get; set; }
 
         public AchievementGroupVM()
         {
@@ -25,7 +25,7 @@ namespace Webdictaat.Api.ViewModels
             this.Id = id;
             this.Name = name;
             this.Order = order;
-            this.Achievememts = achievements;
+            this.Achievements = achievements;
         }
 
         public AchievementGroupVM(AchievementGroupVM achievegroupvm)
@@ -33,7 +33,7 @@ namespace Webdictaat.Api.ViewModels
             this.Id = achievegroupvm.Id;
             this.Name = achievegroupvm.Name;
             this.Order = achievegroupvm.Order;
-            this.Achievememts = achievegroupvm.Achievememts;
+            this.Achievements = achievegroupvm.Achievements;
         }
     }
 }
