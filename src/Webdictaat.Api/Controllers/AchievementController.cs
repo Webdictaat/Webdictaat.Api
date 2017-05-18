@@ -32,10 +32,11 @@ namespace Webdictaat.Api.Controllers
 
         [HttpGet]
         //[Authorize]
-        public List<AchievementVM> Get(string dictaatName)
+        public AchievementGroupVM Get(string dictaatName)
         {
             //string userId = _userManager.GetUserId(HttpContext.User);
-            List<AchievementVM> result = _achievementRepo.GetAllAchievements(dictaatName);
+            List<AchievementVM> achievements = _achievementRepo.GetAllAchievements(dictaatName);
+            AchievementGroupVM result = new AchievementGroupVM(1, "main", 1, achievements);
             return result;
         }
 
