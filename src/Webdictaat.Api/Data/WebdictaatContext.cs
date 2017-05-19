@@ -50,6 +50,7 @@ namespace Webdictaat.Data
             builder.Entity<QuizAttemptAnswer>().HasKey(t => new { t.QuizAttemptId, t.AnswerId });
             builder.Entity<AssignmentSubmission>().HasKey(t => new { t.AssignmentId, t.UserId });
             builder.Entity<DictaatContributer>().HasKey(t => new { t.UserId, t.DictaatDetailsId });
+            builder.Entity<DictaatAchievement>().HasKey(t => new { t.DictaatId, t.AchievementId });
         }
 
     }
