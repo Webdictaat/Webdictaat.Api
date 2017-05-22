@@ -9,14 +9,14 @@ namespace Webdictaat.Domain
 {
     public class DictaatAchievement
     {
-        [ForeignKey("DictaatId")]
-        public int DictaatId { get; set; }
+        [ForeignKey("DictaatName")]
+        public int DictaatName { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string GroupName { get; set; }
 
         [Required]
-        public int Order { get; set; }
+        public int GroupOrder { get; set; }
 
         [ForeignKey("AchievementId")]
         public int AchievementId { get; set; }
@@ -31,5 +31,11 @@ namespace Webdictaat.Domain
 
         [Required]
         public Boolean Hidden { get; set; }
+
+        [Required]
+        public string Image { get; set; }
+
+        [ForeignKey("DictaatName")]
+        public string DictaatName { get; set; }
     }
 }
