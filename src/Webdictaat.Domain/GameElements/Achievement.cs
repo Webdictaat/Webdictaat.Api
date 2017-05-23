@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Webdictaat.Domain
 {
+    
     public class DictaatAchievement
     {
         [ForeignKey("DictaatName")]
-        public int DictaatName { get; set; }
+        public string DictaatName { get; set; }
 
         [Required]
         public string GroupName { get; set; }
@@ -21,6 +22,7 @@ namespace Webdictaat.Domain
         [ForeignKey("AchievementId")]
         public int AchievementId { get; set; }
     }
+    
     public class Achievement
     {
         [Key]
