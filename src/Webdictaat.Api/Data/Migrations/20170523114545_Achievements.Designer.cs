@@ -8,7 +8,7 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20170515183953_Achievements")]
+    [Migration("20170523114545_Achievements")]
     partial class Achievements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,7 +128,12 @@ namespace Webdictaat.Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("DictaatName");
+
                     b.Property<bool>("Hidden");
+
+                    b.Property<string>("Image")
+                        .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -144,6 +149,8 @@ namespace Webdictaat.Api.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("IsCorrect");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<int>("QuestionId");
 
@@ -197,6 +204,22 @@ namespace Webdictaat.Api.Migrations
                     b.ToTable("AssignmentSubmissions");
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.DictaatAchievement", b =>
+                {
+                    b.Property<string>("DictaatName");
+
+                    b.Property<int>("AchievementId");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired();
+
+                    b.Property<int>("GroupOrder");
+
+                    b.HasKey("DictaatName", "AchievementId");
+
+                    b.ToTable("DictaatAchievement");
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.DictaatContributer", b =>
                 {
                     b.Property<string>("UserId");
@@ -229,6 +252,8 @@ namespace Webdictaat.Api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Text");
 

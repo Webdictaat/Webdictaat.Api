@@ -127,7 +127,12 @@ namespace Webdictaat.Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("DictaatName");
+
                     b.Property<bool>("Hidden");
+
+                    b.Property<string>("Image")
+                        .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -196,6 +201,22 @@ namespace Webdictaat.Api.Migrations
                     b.HasKey("AssignmentId", "UserId");
 
                     b.ToTable("AssignmentSubmissions");
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatAchievement", b =>
+                {
+                    b.Property<string>("DictaatName");
+
+                    b.Property<int>("AchievementId");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired();
+
+                    b.Property<int>("GroupOrder");
+
+                    b.HasKey("DictaatName", "AchievementId");
+
+                    b.ToTable("DictaatAchievement");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.DictaatContributer", b =>
