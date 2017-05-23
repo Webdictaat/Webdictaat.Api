@@ -105,7 +105,7 @@ namespace Webdictaat.CMS.Models
 
         public QuizVM UpdateQuiz(string dictaatName, QuizVM form)
         {
-            Quiz quiz = _context.Quizes.FirstOrDefault(q => q.Id == form.Id);
+            Quiz quiz = _context.Quizes.Include("Questions").FirstOrDefault(q => q.Id == form.Id);
             quiz.Title = form.Title;
             quiz.Description = form.Description;
 
