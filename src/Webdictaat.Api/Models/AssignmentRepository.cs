@@ -27,6 +27,8 @@ namespace Webdictaat.Api.Models
         AssignmentVM CompleteAssignment(int assignmentId, string userId);
         AssignmentVM CompleteAssignment(int assignmentId, string userId, string token);
         IEnumerable<AssignmentVM> GetAllAssignments(string dictaatName, string userId);
+        AssignmentVM UpdateAssignment(string dictaatName, int assignmentId, AssignmentFormVM form);
+        AssignmentVM DeleteAssignment(string dictaatName, int assignmentId);
     }
 
     public class AssignmentRepository : IAssignmentRepository
@@ -132,6 +134,38 @@ namespace Webdictaat.Api.Models
                 .ToList();
 
             return assignments.Select(a => new AssignmentVM(a));
+        }
+
+        public AssignmentVM UpdateAssignment(string dictaatName, int assignmentId, AssignmentFormVM form)
+        {
+            var assignment = _context.Assignments.FirstOrDefault(a => a.Id == assignmentId);
+
+            if (assignment == null)
+                return null;
+
+            assignment.Title = form.Title;
+            assignment.Points = form.Points;
+            assignment.Metadata = form.Metadata;
+            assignment.Description = form.Description;
+            _context.SaveChanges();
+
+            return new AssignmentVM(assignment);
+
+
+
+        }
+
+        public AssignmentVM DeleteAssignment(string dictaatName, int assignmentId)
+        {
+            var assignment = _context.Assignments.FirstOrDefault(a => a.Id == assignmentId);
+
+            if (assignment == null)
+                return null;
+
+            _context.Remove(assignment);
+            _context.SaveChanges();
+            return new AssignmentVM(assignment);
+
         }
     }
 }
