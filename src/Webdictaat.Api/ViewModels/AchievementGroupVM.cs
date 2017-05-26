@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webdictaat.Domain;
 
 namespace Webdictaat.Api.ViewModels
 {
     public class AchievementGroupVM
     {
-        public int Id { get; set; }
+        public string DictaatId { get; set; }
 
-        public string Name { get; set; }
+        public string GroupName { get; set; }
 
         public int Order { get; set; }
 
@@ -20,18 +21,18 @@ namespace Webdictaat.Api.ViewModels
 
         }
 
-        public AchievementGroupVM(int id, string name, int order, List<AchievementVM> achievements)
+        public AchievementGroupVM(string id, string name, int order, List<AchievementVM> achievements)
         {
-            this.Id = id;
-            this.Name = name;
+            this.DictaatId = id;
+            this.GroupName = name;
             this.Order = order;
             this.Achievements = achievements;
         }
 
         public AchievementGroupVM(AchievementGroupVM achievegroupvm)
         {
-            this.Id = achievegroupvm.Id;
-            this.Name = achievegroupvm.Name;
+            this.DictaatId = achievegroupvm.DictaatId;
+            this.GroupName = achievegroupvm.GroupName;
             this.Order = achievegroupvm.Order;
             this.Achievements = achievegroupvm.Achievements;
         }

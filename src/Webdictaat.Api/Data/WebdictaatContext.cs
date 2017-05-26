@@ -24,6 +24,8 @@ namespace Webdictaat.Data
         public DbSet<DictaatDetails> DictaatDetails { get; set; }
 
         public DbSet<Achievement> Achievements { get; set; }
+        
+        public DbSet<DictaatAchievement> DictaatAchievements { get; set; }
 
         /** Quizes **/
 

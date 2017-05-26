@@ -16,6 +16,9 @@ namespace Webdictaat.Api.Models
         void AddAchievement(string dictaatName, Achievement achieve);
         void DeleteAchievement(string dictaatName, int achievementId);
         void UpdateAchievement(string dictaatName, int achievementId, Achievement achieve);
+
+        List<AchievementGroupVM> GetAchievementGroups(string dictaatName);
+        AchievementGroupVM GetAchievementGroup(string dictaatName, string groupName);
     }
 
     public class AchievementRepository : IAchievementRepository
@@ -65,6 +68,33 @@ namespace Webdictaat.Api.Models
         public void UpdateAchievement(string dictaatName, int achievementId, Achievement achieve)
         {
             throw new NotImplementedException();
+        }
+
+        public List<AchievementGroupVM> GetAchievementGroups(string dictaatName)
+        {
+            List<DictaatAchievement> dictaatAchievements = _context.DictaatAchievements
+                .Where(a => a.DictaatName == dictaatName)
+                .ToList();
+
+            List<AchievementGroupVM> result = new List<AchievementGroupVM>();
+            return result;        
+        }
+
+        public AchievementGroupVM GetAchievementGroup(string dictaatName, string groupName)
+        {
+            List<DictaatAchievement> dictaatAchievements = _context.DictaatAchievements
+                //.Where(a => a.DictaatName == dictaatName && a.GroupName == groupName)
+                .ToList();
+
+            AchievementGroupVM result = new AchievementGroupVM();
+
+            foreach (DictaatAchievement a in dictaatAchievements)
+            {
+
+            }
+
+            
+            return result;
         }
     }
 }
