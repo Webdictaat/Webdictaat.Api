@@ -34,11 +34,7 @@ namespace Webdictaat.Api.Controllers
         //[Authorize]
         public List<AchievementGroupVM> Get(string dictaatName)
         {
-            //string userId = _userManager.GetUserId(HttpContext.User);
-            List<AchievementVM> achievements = _achievementRepo.GetAllAchievements(dictaatName);
-            List<AchievementGroupVM> result = new List<AchievementGroupVM>();
-            result.Add(new AchievementGroupVM("meep", "main", 1, achievements));
-
+            List<AchievementGroupVM> result = _achievementRepo.GetAchievementGroups(dictaatName);
             return result;
         }
 

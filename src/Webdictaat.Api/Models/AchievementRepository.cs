@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,11 +73,23 @@ namespace Webdictaat.Api.Models
 
         public List<AchievementGroupVM> GetAchievementGroups(string dictaatName)
         {
-            List<DictaatAchievement> dictaatAchievements = _context.DictaatAchievements
-                .Where(a => a.DictaatName == dictaatName)
+            List<string> groupNames = _context.DictaatAchievements
+                .Where(x => x.DictaatName == dictaatName)
+                .Select(x => x.GroupName).Distinct()
                 .ToList();
 
+            if(groupNames.Count == 0)
+            {
+                return null;
+            }
+
             List<AchievementGroupVM> result = new List<AchievementGroupVM>();
+
+            foreach (string a in groupNames)
+            {
+                result.Add(GetAchievementGroup(dictaatName, a));
+            }
+            
             return result;        
         }
 
@@ -86,14 +99,23 @@ namespace Webdictaat.Api.Models
                 .Where(a => a.DictaatName == dictaatName && a.GroupName == groupName)
                 .ToList();
 
-            AchievementGroupVM result = new AchievementGroupVM();
+            if(dictaatAchievements.Count == 0)
+            {
+                return null;
+            }
+
+            List<AchievementVM> achievements = new List<AchievementVM>();
 
             foreach (DictaatAchievement a in dictaatAchievements)
             {
 
+                Achievement achiev = _context.Achievements.FirstOrDefault(b => b.Id == a.AchievementId);
+                AchievementVM achievement = new AchievementVM(achiev);
+                achievements.Add(achievement);
             }
 
-            
+            AchievementGroupVM result = new AchievementGroupVM(dictaatName, groupName, dictaatAchievements[0].GroupOrder, achievements);
+
             return result;
         }
     }
