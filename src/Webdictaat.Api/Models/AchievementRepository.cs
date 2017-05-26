@@ -83,7 +83,7 @@ namespace Webdictaat.Api.Models
         public AchievementGroupVM GetAchievementGroup(string dictaatName, string groupName)
         {
             List<DictaatAchievement> dictaatAchievements = _context.DictaatAchievements
-                //.Where(a => a.DictaatName == dictaatName && a.GroupName == groupName)
+                .Where(a => a.DictaatName == dictaatName && a.GroupName == groupName)
                 .ToList();
 
             AchievementGroupVM result = new AchievementGroupVM();

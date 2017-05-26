@@ -26,7 +26,7 @@ namespace Webdictaat.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DictaatAchievement",
+                name: "DictaatAchievements",
                 columns: table => new
                 {
                     DictaatName = table.Column<string>(nullable: false),
@@ -36,7 +36,7 @@ namespace Webdictaat.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DictaatAchievement", x => new { x.DictaatName, x.AchievementId });
+                    table.PrimaryKey("PK_DictaatAchievements", x => new { x.DictaatName, x.AchievementId });
                 });
         }
 
@@ -46,7 +46,7 @@ namespace Webdictaat.Api.Migrations
                 name: "Achievements");
 
             migrationBuilder.DropTable(
-                name: "DictaatAchievement");
+                name: "DictaatAchievements");
         }
     }
 }

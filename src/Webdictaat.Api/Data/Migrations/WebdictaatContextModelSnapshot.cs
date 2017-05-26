@@ -216,7 +216,7 @@ namespace Webdictaat.Api.Migrations
 
                     b.HasKey("DictaatName", "AchievementId");
 
-                    b.ToTable("DictaatAchievement");
+                    b.ToTable("DictaatAchievements");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.DictaatContributer", b =>

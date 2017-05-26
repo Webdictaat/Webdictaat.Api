@@ -8,7 +8,7 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20170523114545_Achievements")]
+    [Migration("20170526101048_Achievements")]
     partial class Achievements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -217,7 +217,7 @@ namespace Webdictaat.Api.Migrations
 
                     b.HasKey("DictaatName", "AchievementId");
 
-                    b.ToTable("DictaatAchievement");
+                    b.ToTable("DictaatAchievements");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.DictaatContributer", b =>
