@@ -61,6 +61,21 @@ namespace Webdictaat.Api.Controllers
             return _assignmentRepo.CreateAssignment(dictaatName, form);
         }
 
+
+        [HttpPut("{assignmentId}")]
+        public AssignmentVM Put(string dictaatName, int assignmentId, [FromBody] AssignmentFormVM form)
+        {
+            return _assignmentRepo.UpdateAssignment(dictaatName, assignmentId, form);
+        }
+
+        [HttpDelete("{assignmentId}")]
+        public AssignmentVM Delete(string dictaatName, int assignmentId)
+        {
+            return _assignmentRepo.DeleteAssignment(dictaatName, assignmentId);
+        }
+
+
+
         [HttpPost("{assignmentId}/submissions")]
         [Authorize]
         public async Task<AssignmentVM> PostSubmission(string dictaatName, int assignmentId, [FromBody] AssignmentSubmissionFormVM form)
