@@ -10,8 +10,13 @@ namespace Webdictaat.Domain
     
     public class DictaatAchievement
     {
-        [ForeignKey("DictaatName")]
+
         public string DictaatName { get; set; }
+
+        [ForeignKey("DictaatName")]
+
+        public virtual DictaatDetails Dictaat { get; set; }
+
 
         [Required]
         public string GroupName { get; set; }
@@ -19,8 +24,11 @@ namespace Webdictaat.Domain
         [Required]
         public int GroupOrder { get; set; }
 
-        [ForeignKey("AchievementId")]
         public int AchievementId { get; set; }
+
+        [ForeignKey("AchievementId")]
+
+        public virtual Achievement Achievement { get; set; }
     }
     
     public class Achievement

@@ -19,6 +19,9 @@ namespace Webdictaat.Domain
 
         public virtual ICollection<DictaatContributer> Contributers { get; set; }
 
+        public virtual ICollection<DictaatAchievement> Achievements { get; set; }
+
+
         public ICollection<string> GetContributersIds()
         {
             var result = new List<string>{ this.DictaatOwnerId };
