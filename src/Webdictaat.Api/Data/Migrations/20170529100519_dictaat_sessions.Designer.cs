@@ -8,9 +8,10 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    partial class WebdictaatContextModelSnapshot : ModelSnapshot
+    [Migration("20170529100519_dictaat_sessions")]
+    partial class dictaat_sessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -155,8 +156,6 @@ namespace Webdictaat.Api.Migrations
 
                     b.Property<string>("DictaatDetailsName")
                         .IsRequired();
-
-                    b.Property<int>("Level");
 
                     b.Property<string>("Metadata");
 
