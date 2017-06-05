@@ -7,23 +7,25 @@ namespace Webdictaat.Core
 {
     public interface IJson{
 
-    bool TryReadFile(string path, out string content);
+    dynamic ReadFile(string path);
 
 
-    bool TryEditFile(string path, string source);
+    bool EditFile(string path, dynamic source);
 }
 
     public class Json : IJson
     {
-        public bool TryEditFile(string path, string source)
+        public bool EditFile(string path, dynamic source)
         {
-            throw new NotImplementedException();
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(source, Newtonsoft.Json.Formatting.Indented);
+            System.IO.File.WriteAllText(path, output);
+            return true;
         }
 
-        public bool TryReadFile(string path, out string content)
+        public dynamic ReadFile(string path)
         {
-            throw new NotImplementedException();
-
+            string json = System.IO.File.ReadAllText(path);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(json);      
         }
     }
 }

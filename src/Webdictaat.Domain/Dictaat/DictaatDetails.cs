@@ -21,6 +21,8 @@ namespace Webdictaat.Domain
 
         public virtual ICollection<DictaatAchievement> Achievements { get; set; }
 
+        //used to link participants 
+        public virtual ICollection<DictaatSession> Sessions { get; set; }
 
         public ICollection<string> GetContributersIds()
         {

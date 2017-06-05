@@ -8,9 +8,10 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    partial class WebdictaatContextModelSnapshot : ModelSnapshot
+    [Migration("20170529100519_dictaat_sessions")]
+    partial class dictaat_sessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -122,26 +123,6 @@ namespace Webdictaat.Api.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Webdictaat.Domain.Achievement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("DictaatName");
-
-                    b.Property<bool>("Hidden");
-
-                    b.Property<string>("Image")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Achievements");
-                });
-
             modelBuilder.Entity("Webdictaat.Domain.Answer", b =>
                 {
                     b.Property<int>("Id")
@@ -176,8 +157,6 @@ namespace Webdictaat.Api.Migrations
                     b.Property<string>("DictaatDetailsName")
                         .IsRequired();
 
-                    b.Property<int>("Level");
-
                     b.Property<string>("Metadata");
 
                     b.Property<int>("Points");
@@ -203,22 +182,6 @@ namespace Webdictaat.Api.Migrations
                     b.HasKey("AssignmentId", "UserId");
 
                     b.ToTable("AssignmentSubmissions");
-                });
-
-            modelBuilder.Entity("Webdictaat.Domain.DictaatAchievement", b =>
-                {
-                    b.Property<string>("DictaatName");
-
-                    b.Property<int>("AchievementId");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired();
-
-                    b.Property<int>("GroupOrder");
-
-                    b.HasKey("DictaatName", "AchievementId");
-
-                    b.ToTable("DictaatAchievements");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.DictaatContributer", b =>

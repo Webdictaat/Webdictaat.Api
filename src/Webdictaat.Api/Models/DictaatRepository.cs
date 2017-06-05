@@ -21,6 +21,7 @@ namespace Webdictaat.CMS.Models
         ViewModels.Dictaat getDictaat(string name);
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
+        bool Join(string dictaatName, string userId);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -50,6 +51,7 @@ namespace Webdictaat.CMS.Models
             IOptions<ConfigVariables> appSettings, 
             IDirectory directory,
             IFile file,
+            Core.IJson json,
             WebdictaatContext context)
         {
             _directoryRoot = appSettings.Value.DictaatRoot;
@@ -61,7 +63,7 @@ namespace Webdictaat.CMS.Models
             _context = context;
 
             //best place to build the factory
-            _dictaatFactory = new DictaatFactory(appSettings.Value, directory, file);
+            _dictaatFactory = new DictaatFactory(appSettings.Value, directory, file, json);
             _pathHelper = new PathHelper(appSettings.Value);
 
         }
@@ -118,6 +120,34 @@ namespace Webdictaat.CMS.Models
 
             _context.DictaatDetails.Remove(_context.DictaatDetails.FirstOrDefault(dd => dd.Name == name));
             _context.SaveChanges();
+        }
+
+        public bool Join(string dictaatName, string userId)
+        {
+            var dictaatDetails = _context.DictaatDetails
+                .Include("Sessions.Participants")
+                .FirstOrDefault(dd => dd.Name == dictaatName);
+
+            if(dictaatDetails == null)
+                return false;
+
+            var currentSession = dictaatDetails.Sessions.OrderBy(s => s.StartedOn).FirstOrDefault();
+
+            if(currentSession.Participants.Any(p => p.UserId == userId))
+            {
+                return false; //already in the partcipant list
+            }
+            else
+            {
+                currentSession.Participants.Add(new DictaatSessionUser()
+                {
+                    UserId = userId
+                });
+                _context.SaveChanges();
+                return true; //Joined this ditaat :D
+            }
+
+
         }
     }
 }

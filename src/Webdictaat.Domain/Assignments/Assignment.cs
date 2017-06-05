@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Webdictaat.Domain.Assignments
 {
+    public enum AssignmentLevel
+    {
+        Bronze = 0, Silver = 1, Gold = 2
+    }
+
     public class Assignment
     {
         [Key]
@@ -23,6 +28,8 @@ namespace Webdictaat.Domain.Assignments
         public string Metadata { get; set; }
 
         public string AssignmentSecret { get; set; }
+
+        public AssignmentLevel Level { get; set; }
 
         public int Points { get; set; }
 

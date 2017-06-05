@@ -24,13 +24,14 @@ namespace Webdictaat.Core
         private Core.IDirectory _directory;
         private Core.IFile _file;
         private Core.IMenuFactory _menuFactory;
+        private IJson _json;
 
-        public DictaatFactory(ConfigVariables configVariables, Core.IDirectory directory, Core.IFile file)
+        public DictaatFactory(ConfigVariables configVariables, Core.IDirectory directory, Core.IFile file, Core.IJson json)
         {
             _directory = directory;
-            _file = file;
             _pathHelper = new PathHelper(configVariables);
-            _menuFactory = new MenuFactory(configVariables, _file);
+            _menuFactory = new MenuFactory(configVariables, file);
+            _json = json;
         }
 
         public Dictaat GetDictaat(string name)
@@ -49,12 +50,19 @@ namespace Webdictaat.Core
             //Default value van template is 'default'
             string pathTemplate = _pathHelper.DirectoryTemplatePath(template == null ? "default" : template);
             string pathNew = _pathHelper.DictaatPath(name);
+            string pathNewConfig = _pathHelper.DictaatConfigPath(name);
 
             if (_directory.Exists(pathNew)){
                 return null;
             }
 
+            //copy template
             _directory.CopyDirectory(pathNew, pathTemplate);
+
+            //edit custom files
+            var dictaatConfig = _json.ReadFile(pathNewConfig);
+            dictaatConfig["name"] = name;
+            _json.EditFile(pathNewConfig, dictaatConfig);
 
             return this.GetDictaat(name);
               

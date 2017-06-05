@@ -53,6 +53,7 @@ namespace Webdictaat.Data
             builder.Entity<AssignmentSubmission>().HasKey(t => new { t.AssignmentId, t.UserId });
             builder.Entity<DictaatContributer>().HasKey(t => new { t.UserId, t.DictaatDetailsId });
             builder.Entity<DictaatAchievement>().HasKey(t => new { t.DictaatName, t.AchievementId });
+            builder.Entity<DictaatSessionUser>().HasKey(t => new { t.UserId, t.DictaatSessionId });
         }
 
     }

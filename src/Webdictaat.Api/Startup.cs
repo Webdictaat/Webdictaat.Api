@@ -133,6 +133,7 @@ namespace Webdictaat.CMS
             services.AddScoped<ISecretService, SecretService>();
             services.AddScoped<Core.IFile, Core.File>();
             services.AddScoped<IAchievementRepository, AchievementRepository>();
+            services.AddScoped<Core.IJson, Core.Json>();
 
             IConfigurationSection config = Configuration.GetSection("ConfigVariables");
             config["DictaatRoot"] = _hostingEnv.WebRootPath;

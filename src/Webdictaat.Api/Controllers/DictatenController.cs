@@ -101,5 +101,17 @@ namespace Webdictaat.CMS.Controllers
             }
         }
 
+        /// <summary>
+        /// A route to join a dictaat by posting on it's participants list 
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("{dictaatName}/participants")]
+        public Boolean Join(string dictaatName )
+        {
+            string userId = _userManager.GetUserId(HttpContext.User);
+            return _dictaatRepo.Join(dictaatName, userId);
+        }
+
     }
 }
