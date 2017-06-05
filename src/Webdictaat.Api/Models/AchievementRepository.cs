@@ -73,11 +73,13 @@ namespace Webdictaat.Api.Models
 
         public List<AchievementGroupVM> GetAchievementGroups(string dictaatName)
         {
+            /*
             var dictaat =_context.DictaatDetails
                 .Include("Achievements.Achievement")
                 .FirstOrDefault(d => d.Name == dictaatName);
 
             var groups = dictaat.Achievements.GroupBy(a => a.GroupName);
+            */
 
             List<string> groupNames = _context.DictaatAchievements
                 .Where(x => x.DictaatName == dictaatName)
