@@ -31,6 +31,8 @@ namespace Webdictaat.Data
 
         public DbSet<QuizAttempt> QuizAttempts { get; set; }
 
+        public DbSet<DictaatSession> DictaatSession { get; set; }
+
         public WebdictaatContext(DbContextOptions<WebdictaatContext> options)
             : base(options)
         {

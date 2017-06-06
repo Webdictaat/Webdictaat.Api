@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace Webdictaat.CMS.Models.ManageViewModels
+namespace Webdictaat.Api.Models.ManageViewModels
 {
     public class ManageLoginsViewModel
     {

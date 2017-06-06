@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Webdictaat.Api.ViewModels;
 using Webdictaat.Domain;
 
-namespace Webdictaat.CMS.ViewModels
+namespace Webdictaat.Api.ViewModels
 {
     public class RatingVM
     {

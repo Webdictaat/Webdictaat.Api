@@ -17,14 +17,14 @@ using System.Net;
 using System.Threading.Tasks;
 using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
-using Webdictaat.CMS.Models;
+using Webdictaat.Api.Models;
 using Webdictaat.Core;
 using Webdictaat.Data;
 using Webdictaat.Domain;
 using Webdictaat.Domain.User;
 
 
-namespace Webdictaat.CMS
+namespace Webdictaat.Api
 {
     /// <summary>
     /// Default dotnet core class to use for startup configuration
@@ -185,7 +185,7 @@ namespace Webdictaat.CMS
 
         private string GetXmlCommentsPath(ApplicationEnvironment appEnvironment)
         {
-            return Path.Combine(appEnvironment.ApplicationBasePath, "Webdictaat.CMS.xml");
+            return Path.Combine(appEnvironment.ApplicationBasePath, "Webdictaat.Api.xml");
         }
     }
 }

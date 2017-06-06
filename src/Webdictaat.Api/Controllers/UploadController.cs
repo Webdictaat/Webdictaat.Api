@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Webdictaat.CMS.Models;
+using Webdictaat.Api.Models;
 
-namespace Webdictaat.CMS.Controllers
+namespace Webdictaat.Api.Controllers
 {
     [Route("api/dictaten/{dictaatName}/[controller]")]
     public class UploadController

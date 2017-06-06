@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Webdictaat.CMS.Models.AccountViewModels
+namespace Webdictaat.Api.Models.AccountViewModels
 {
     public class SendCodeViewModel
     {

@@ -12,13 +12,16 @@ using System.Threading.Tasks;
 using Webdictaat.Domain.User;
 using Webdictaat.Data;
 using Microsoft.EntityFrameworkCore;
+using Webdictaat.Api;
+using Webdictaat.Api.ViewModels;
 
-namespace Webdictaat.CMS.Models
+namespace Webdictaat.Api.Models
 {
     public interface IDictaatRepository
     {
         IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null);
         ViewModels.Dictaat getDictaat(string name);
+        ViewModels.Session GetCurrentSession(string dictaatName, string userId = null);
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
         bool Join(string dictaatName, string userId);
@@ -148,6 +151,32 @@ namespace Webdictaat.CMS.Models
             }
 
 
+        }
+
+        public ViewModels.Session GetCurrentSession(string dictaatName, string userId = null)
+        {
+            var count = this._context.DictaatSession.Where(s => s.DictaatDetailsId == dictaatName).Count();
+
+            if(count == 0) {
+                var s = new DictaatSession()
+                {
+                    DictaatDetailsId = dictaatName,
+                    StartedOn = DateTime.Now,
+                };
+                _context.DictaatSession.Add(s);
+                _context.SaveChanges();
+            }
+
+            var session = _context.DictaatSession
+                .Include("Participants.User")
+                .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null);
+
+            var response = new ViewModels.Session(session);
+            if(userId != null && response.ParticipantIds.Contains(userId))
+            {
+                response.ContainsMe = true;
+            }
+            return response;
         }
     }
 }

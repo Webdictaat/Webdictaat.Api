@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webdictaat.Api.Services;
-using Webdictaat.CMS.Models;
+using Webdictaat.Api.Models;
 
 namespace Webdictaat.Api.Controllers
 {
@@ -29,14 +29,14 @@ namespace Webdictaat.Api.Controllers
 
         // GET: api/values
         [HttpGet]
-        public List<CMS.ViewModels.MenuItem> Get(string dictaatName)
+        public List<ViewModels.MenuItem> Get(string dictaatName)
         {
             return _menuRepo.GetMenu(dictaatName);
         }
 
         // POST api/values
         [HttpPut]
-        public List<CMS.ViewModels.MenuItem> Put(string dictaatName, [FromBody]List<CMS.ViewModels.MenuItem> menuItems)
+        public List<ViewModels.MenuItem> Put(string dictaatName, [FromBody]List<ViewModels.MenuItem> menuItems)
         {
             return _menuRepo.EditMenu(dictaatName, menuItems);
         }

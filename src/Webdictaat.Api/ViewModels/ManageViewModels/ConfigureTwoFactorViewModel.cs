@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Webdictaat.CMS.Models.ManageViewModels
+namespace Webdictaat.Api.Models.ManageViewModels
 {
     public class ConfigureTwoFactorViewModel
     {

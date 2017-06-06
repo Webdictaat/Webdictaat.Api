@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Webdictaat.CMS.ViewModels;
+using Webdictaat.Api.ViewModels;
 using Webdictaat.Core;
 using Webdictaat.Core.Helper;
 
-namespace Webdictaat.CMS.Models
+namespace Webdictaat.Api.Models
 {
     public interface IPageRepository
     {

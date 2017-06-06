@@ -8,7 +8,7 @@ using Webdictaat.Core;
 using Webdictaat.Domain;
 using Webdictaat.Domain.User;
 
-namespace Webdictaat.CMS.ViewModels
+namespace Webdictaat.Api.ViewModels
 {
     public class DictaatSummary
     {
