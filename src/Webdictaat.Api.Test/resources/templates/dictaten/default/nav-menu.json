@@ -1,0 +1,31 @@
+[
+    {
+        "Name": "Home",
+        "Url": "home"
+    },
+    {
+        "Name": "Opdrachten",
+        "MenuItems": [
+            {
+                "Name": "week 1",
+                "Url": "week1"
+            },
+            {
+                "Name": "week 2",
+                "Url": "week2"
+            },
+            {
+                "Name": "week 3",
+                "Url": "week3"
+            },
+            {
+                "Name": "week 4",
+                "Url": "week4"
+            }
+        ]
+    },
+    {
+        "Name": "Contact",
+        "Url": "contact"
+    }
+]
