@@ -25,6 +25,7 @@ namespace Webdictaat.Api.Models
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
         bool Join(string dictaatName, string userId);
+        ViewModels.DictaatMarkings getMarkings(string name);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -127,14 +128,10 @@ namespace Webdictaat.Api.Models
 
         public bool Join(string dictaatName, string userId)
         {
-            var dictaatDetails = _context.DictaatDetails
-                .Include("Sessions.Participants")
-                .FirstOrDefault(dd => dd.Name == dictaatName);
 
-            if(dictaatDetails == null)
-                return false;
-
-            var currentSession = dictaatDetails.Sessions.OrderBy(s => s.StartedOn).FirstOrDefault();
+            var currentSession = _context.DictaatSession
+                .Include(s => s.Participants)
+                .FirstOrDefault(s => s.EndedOn == null && dictaatName == dictaatName);
 
             if(currentSession.Participants.Any(p => p.UserId == userId))
             {
@@ -155,7 +152,9 @@ namespace Webdictaat.Api.Models
 
         public ViewModels.Session GetCurrentSession(string dictaatName, string userId = null)
         {
-            var count = this._context.DictaatSession.Where(s => s.DictaatDetailsId == dictaatName).Count();
+            var count = this._context.DictaatSession
+                .Include(ds => ds.DictaatDetails)
+                .Where(s => s.DictaatDetailsId == dictaatName).Count();
 
             if(count == 0) {
                 var s = new DictaatSession()
@@ -177,6 +176,22 @@ namespace Webdictaat.Api.Models
                 response.ContainsMe = true;
             }
             return response;
+        }
+
+        public DictaatMarkings getMarkings(string name)
+        {
+            var assignments = _context.Assignments
+                .Include(a => a.Attempts)
+                .Where(a => a.DictaatDetailsId == name)
+                .ToList();
+
+            var participants = _context.DictaatSession
+                .Include("Participants.User")
+                .FirstOrDefault(s => s.DictaatDetailsId == name && s.EndedOn == null)
+                .Participants.Select(p => p.User);
+
+            return new DictaatMarkings(assignments, participants);
+
         }
     }
 }
