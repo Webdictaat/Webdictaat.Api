@@ -19,5 +19,7 @@ namespace Webdictaat.Api.ViewModels.Assignments
     public class AssignmentSubmissionFormVM
     {
         public string Token { get; set; }
+
+        public string UserId { get; set; }
     }
 }

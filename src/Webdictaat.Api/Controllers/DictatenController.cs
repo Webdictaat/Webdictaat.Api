@@ -72,6 +72,20 @@ namespace Webdictaat.Api.Controllers
         }
 
         /// <summary>
+        /// Authorized (Requires the user to be logged in.)
+        /// Returns a detailed summary of 1 webdictaat
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("{name}/markings")]
+        [Authorize]
+        public ViewModels.DictaatMarkings GetMarkings(string name)
+        {
+            return _dictaatRepo.getMarkings(name);
+        }
+
+
+        /// <summary>
         /// Authorized (Requires the user to be logged in)
         /// 
         /// </summary>

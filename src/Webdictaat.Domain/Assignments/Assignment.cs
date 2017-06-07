@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,8 +23,13 @@ namespace Webdictaat.Domain.Assignments
         [Required]
         public string Description { get; set; }
 
+
+        [ForeignKey("DictaatDetailsId")]
+        public virtual DictaatDetails DictaatDetails { get; set; }
+
+
         [Required]
-        public string DictaatDetailsName { get; set; }
+        public string DictaatDetailsId { get; set; }
 
         public string Metadata { get; set; }
 

@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Webdictaat.Api.Services;
-using Webdictaat.CMS.Models;
-using Webdictaat.CMS.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Webdictaat.Api.Models;
 using Webdictaat.Api.ViewModels;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain.User;
-using Webdictaat.Domain;
-using Webdictaat.Api.Models;
+
 
 namespace Webdictaat.Api.Controllers
 {

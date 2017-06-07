@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Webdictaat.Domain.Assignments;
 using Webdictaat.Domain.User;
 
 namespace Webdictaat.Domain
@@ -21,8 +22,9 @@ namespace Webdictaat.Domain
 
         public virtual ICollection<DictaatAchievement> Achievements { get; set; }
 
-        //used to link participants 
         public virtual ICollection<DictaatSession> Sessions { get; set; }
+
+        public virtual ICollection<Assignment> Assignments { get; set; }
 
         public ICollection<string> GetContributersIds()
         {
