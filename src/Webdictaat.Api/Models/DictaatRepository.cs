@@ -12,15 +12,20 @@ using System.Threading.Tasks;
 using Webdictaat.Domain.User;
 using Webdictaat.Data;
 using Microsoft.EntityFrameworkCore;
+using Webdictaat.Api;
+using Webdictaat.Api.ViewModels;
 
-namespace Webdictaat.CMS.Models
+namespace Webdictaat.Api.Models
 {
     public interface IDictaatRepository
     {
         IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null);
         ViewModels.Dictaat getDictaat(string name);
+        ViewModels.Session GetCurrentSession(string dictaatName, string userId = null);
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
+        bool Join(string dictaatName, string userId);
+        ViewModels.DictaatMarkings getMarkings(string name);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -50,6 +55,7 @@ namespace Webdictaat.CMS.Models
             IOptions<ConfigVariables> appSettings, 
             IDirectory directory,
             IFile file,
+            Core.IJson json,
             WebdictaatContext context)
         {
             _directoryRoot = appSettings.Value.DictaatRoot;
@@ -61,7 +67,7 @@ namespace Webdictaat.CMS.Models
             _context = context;
 
             //best place to build the factory
-            _dictaatFactory = new DictaatFactory(appSettings.Value, directory, file);
+            _dictaatFactory = new DictaatFactory(appSettings.Value, directory, file, json);
             _pathHelper = new PathHelper(appSettings.Value);
 
         }
@@ -118,6 +124,74 @@ namespace Webdictaat.CMS.Models
 
             _context.DictaatDetails.Remove(_context.DictaatDetails.FirstOrDefault(dd => dd.Name == name));
             _context.SaveChanges();
+        }
+
+        public bool Join(string dictaatName, string userId)
+        {
+
+            var currentSession = _context.DictaatSession
+                .Include(s => s.Participants)
+                .FirstOrDefault(s => s.EndedOn == null && dictaatName == dictaatName);
+
+            if(currentSession.Participants.Any(p => p.UserId == userId))
+            {
+                return false; //already in the partcipant list
+            }
+            else
+            {
+                currentSession.Participants.Add(new DictaatSessionUser()
+                {
+                    UserId = userId
+                });
+                _context.SaveChanges();
+                return true; //Joined this ditaat :D
+            }
+
+
+        }
+
+        public ViewModels.Session GetCurrentSession(string dictaatName, string userId = null)
+        {
+            var count = this._context.DictaatSession
+                .Include(ds => ds.DictaatDetails)
+                .Where(s => s.DictaatDetailsId == dictaatName).Count();
+
+            if(count == 0) {
+                var s = new DictaatSession()
+                {
+                    DictaatDetailsId = dictaatName,
+                    StartedOn = DateTime.Now,
+                };
+                _context.DictaatSession.Add(s);
+                _context.SaveChanges();
+            }
+
+            var session = _context.DictaatSession
+                .Include("Participants.User")
+                .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null);
+
+            var response = new ViewModels.Session(session);
+            if(userId != null && response.ParticipantIds.Contains(userId))
+            {
+                response.ContainsMe = true;
+            }
+            return response;
+        }
+
+        public DictaatMarkings getMarkings(string name)
+        {
+            var assignments = _context.Assignments
+                .Include(a => a.Attempts)
+                .Where(a => a.DictaatDetailsId == name)
+                .ToList();
+
+            var participants = _context.DictaatSession
+                .Include("Participants.User")
+                .FirstOrDefault(s => s.DictaatDetailsId == name && s.EndedOn == null)
+                .Participants.Select(p => p.User);
+
+            return new DictaatMarkings(assignments, participants);
+
         }
     }
 }

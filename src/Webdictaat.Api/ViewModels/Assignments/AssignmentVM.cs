@@ -23,6 +23,7 @@ namespace Webdictaat.Api.ViewModels.Assignments
         public AssignmentSubmission MySubmission { get; set; }
 
         public int SubmissionCount { get; set; }
+        public string Level { get; private set; }
 
         public AssignmentVM()
         {
@@ -37,6 +38,7 @@ namespace Webdictaat.Api.ViewModels.Assignments
             this.Metadata = assignment.Metadata;
             this.Points = assignment.Points;
             this.Submissions = assignment.Attempts;
+            this.Level = assignment.Level.ToString();
 
             if (this.Submissions != null)
             {

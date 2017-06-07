@@ -9,5 +9,6 @@ namespace Webdictaat.Core
         public string MenuConfigName { get; set; }
         public string PagesDirectory { get; set; }
         public string ImagesDirectory { get; set; }
+        public string DictaatConfigName { get; set; }
     }
 }

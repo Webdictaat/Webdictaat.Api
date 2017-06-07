@@ -52,6 +52,12 @@ namespace Webdictaat.Core.Helper
               DictaatPath(dictaatName), _configVariables.PagesDirectory);
         }
 
+        internal string DictaatConfigPath(string dictaatName)
+        {
+            return string.Format("{0}\\{1}",
+              DictaatPath(dictaatName), _configVariables.DictaatConfigName); //ff variabele aanmaken!!!!
+        }
+
         /// <summary>
         /// concacts a string to a valid path to a file with extension.
         /// Default extension value is '.html'

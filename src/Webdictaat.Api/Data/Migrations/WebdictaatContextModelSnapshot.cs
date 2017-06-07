@@ -122,6 +122,26 @@ namespace Webdictaat.Api.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.Achievement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DictaatName");
+
+                    b.Property<bool>("Hidden");
+
+                    b.Property<string>("Image")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Achievements");
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.Answer", b =>
                 {
                     b.Property<int>("Id")
@@ -153,8 +173,10 @@ namespace Webdictaat.Api.Migrations
                     b.Property<string>("Description")
                         .IsRequired();
 
-                    b.Property<string>("DictaatDetailsName")
+                    b.Property<string>("DictaatDetailsId")
                         .IsRequired();
+
+                    b.Property<int>("Level");
 
                     b.Property<string>("Metadata");
 
@@ -164,6 +186,8 @@ namespace Webdictaat.Api.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DictaatDetailsId");
 
                     b.ToTable("Assignments");
                 });
@@ -181,6 +205,24 @@ namespace Webdictaat.Api.Migrations
                     b.HasKey("AssignmentId", "UserId");
 
                     b.ToTable("AssignmentSubmissions");
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatAchievement", b =>
+                {
+                    b.Property<string>("DictaatName");
+
+                    b.Property<int>("AchievementId");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired();
+
+                    b.Property<int>("GroupOrder");
+
+                    b.HasKey("DictaatName", "AchievementId");
+
+                    b.HasIndex("AchievementId");
+
+                    b.ToTable("DictaatAchievements");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.DictaatContributer", b =>
@@ -209,6 +251,37 @@ namespace Webdictaat.Api.Migrations
                     b.HasIndex("DictaatOwnerId");
 
                     b.ToTable("DictaatDetails");
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DictaatDetailsId");
+
+                    b.Property<DateTime?>("EndedOn");
+
+                    b.Property<DateTime?>("StartedOn");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DictaatDetailsId");
+
+                    b.ToTable("DictaatSession");
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatSessionUser", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("DictaatSessionId");
+
+                    b.HasKey("UserId", "DictaatSessionId");
+
+                    b.HasIndex("DictaatSessionId");
+
+                    b.ToTable("DictaatSessionUser");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.Question", b =>
@@ -428,11 +501,32 @@ namespace Webdictaat.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.Assignments.Assignment", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.DictaatDetails", "DictaatDetails")
+                        .WithMany("Assignments")
+                        .HasForeignKey("DictaatDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.Assignments.AssignmentSubmission", b =>
                 {
                     b.HasOne("Webdictaat.Domain.Assignments.Assignment")
                         .WithMany("Attempts")
                         .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatAchievement", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.Achievement", "Achievement")
+                        .WithMany()
+                        .HasForeignKey("AchievementId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Webdictaat.Domain.DictaatDetails", "Dictaat")
+                        .WithMany("Achievements")
+                        .HasForeignKey("DictaatName")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -454,6 +548,26 @@ namespace Webdictaat.Api.Migrations
                     b.HasOne("Webdictaat.Domain.User.ApplicationUser", "DictaatOwner")
                         .WithMany("OwnedDictaten")
                         .HasForeignKey("DictaatOwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatSession", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.DictaatDetails", "DictaatDetails")
+                        .WithMany("Sessions")
+                        .HasForeignKey("DictaatDetailsId");
+                });
+
+            modelBuilder.Entity("Webdictaat.Domain.DictaatSessionUser", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.DictaatSession", "DictaatSession")
+                        .WithMany("Participants")
+                        .HasForeignKey("DictaatSessionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Webdictaat.Domain.User.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

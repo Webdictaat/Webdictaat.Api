@@ -74,7 +74,22 @@ namespace Webdictaat.Api.Controllers
             return _assignmentRepo.DeleteAssignment(dictaatName, assignmentId);
         }
 
+        [HttpDelete("{assignmentId}/submissions/{userId}")]
+        [Authorize]
+        public async Task<Boolean> DeleteSubmission(string dictaatName, int assignmentId, string userId)
+        {
+            if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
+            {
+                HttpContext.Response.StatusCode = 403;
+                return false;
+            }
+            else
+            {
+                return _assignmentRepo.UndoCompleteAssignment(assignmentId, userId);
+            }
 
+            
+        }
 
         [HttpPost("{assignmentId}/submissions")]
         [Authorize]
@@ -95,7 +110,7 @@ namespace Webdictaat.Api.Controllers
                 }
                 else
                 {
-                    return _assignmentRepo.CompleteAssignment(assignmentId, userId);
+                    return _assignmentRepo.CompleteAssignment(assignmentId, form.UserId);
                 }
             }
         }

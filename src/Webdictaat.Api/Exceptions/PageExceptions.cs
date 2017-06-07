@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Webdictaat.CMS.Exceptions
+namespace Webdictaat.Api.Exceptions
 {
     public class PageAlreadyExcistsException : Exception
     {

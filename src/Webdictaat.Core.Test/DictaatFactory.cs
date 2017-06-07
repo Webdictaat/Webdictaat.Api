@@ -18,12 +18,13 @@ namespace Webdictaat.Core.Test
         {
             _config = new ConfigVariables()
             {
-                DictaatRoot = "C:\\webdictaat.test",
+                DictaatRoot = "./resources",
                 PagesDirectory = "pages",
-                MenuConfigName = "menu-config.json"
+                MenuConfigName = "menu-config.json",
+                DictaatConfigName = "dictaat.config.json"
             };
 
-            _fac = new DictaatFactory(_config, new Directory(), new File());
+            _fac = new DictaatFactory(_config, new Directory(), new File(), new Core.Json());
         }
 
         [Fact]
@@ -33,13 +34,13 @@ namespace Webdictaat.Core.Test
             _fac.CreateDictaat("a");
 
             //assert
-            System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo("C:\\webdictaat.test\\a");
+            System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(_config.DictaatRoot + "/dictaten/a");
             Assert.True(dir.Exists);
             Assert.Equal(2, dir.GetFiles().Length);
 
 
             //clean up
-            System.IO.Directory.Delete("C:\\webdictaat.test\\a", true);
+            System.IO.Directory.Delete(_config.DictaatRoot + "/dictaten/a", true);
         }
 
 

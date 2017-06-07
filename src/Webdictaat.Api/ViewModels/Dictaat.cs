@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Webdictaat.CMS.Models;
+using Webdictaat.Api.Models;
 using Webdictaat.Core;
 using Webdictaat.Domain;
 
-namespace Webdictaat.CMS.ViewModels
+namespace Webdictaat.Api.ViewModels
 {
     public class Dictaat
     {

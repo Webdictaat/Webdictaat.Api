@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Webdictaat.CMS.Models;
+using Webdictaat.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain;
@@ -13,7 +13,7 @@ using Webdictaat.Domain.User;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Webdictaat.CMS.Controllers
+namespace Webdictaat.Api.Controllers
 {
     [Route("api/[controller]")]
     public class DictatenController : Controller
@@ -72,6 +72,20 @@ namespace Webdictaat.CMS.Controllers
         }
 
         /// <summary>
+        /// Authorized (Requires the user to be logged in.)
+        /// Returns a detailed summary of 1 webdictaat
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("{name}/markings")]
+        [Authorize]
+        public ViewModels.DictaatMarkings GetMarkings(string name)
+        {
+            return _dictaatRepo.getMarkings(name);
+        }
+
+
+        /// <summary>
         /// Authorized (Requires the user to be logged in)
         /// 
         /// </summary>
@@ -99,6 +113,18 @@ namespace Webdictaat.CMS.Controllers
                 HttpContext.Response.StatusCode = 500;
                 return false;
             }
+        }
+
+        /// <summary>
+        /// A route to join a dictaat by posting on it's participants list 
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("{dictaatName}/participants")]
+        public Boolean Join(string dictaatName )
+        {
+            string userId = _userManager.GetUserId(HttpContext.User);
+            return _dictaatRepo.Join(dictaatName, userId);
         }
 
     }
