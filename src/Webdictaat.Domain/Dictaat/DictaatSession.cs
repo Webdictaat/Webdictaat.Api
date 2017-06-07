@@ -10,9 +10,9 @@ namespace Webdictaat.Domain
         [Key]
         public int Id { get; set; }
 
-        public DateTime StartedOn { get; set; }
+        public DateTime? StartedOn { get; set; }
 
-        public DateTime EndedOn { get; set; }
+        public DateTime? EndedOn { get; set; }
 
         [ForeignKey("DictaatDetailsId")]
         public virtual DictaatDetails DictaatDetails { get; set; }

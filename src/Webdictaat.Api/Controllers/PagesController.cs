@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Webdictaat.Domain;
-using Webdictaat.CMS.Models;
+using Webdictaat.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Webdictaat.Api.Services;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Webdictaat.CMS.Controllers
+namespace Webdictaat.Api.Controllers
 {
     /// <summary>
     /// Authorized (Requires the user to be logged in.)

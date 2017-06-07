@@ -16,8 +16,8 @@ namespace Webdictaat.Api.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DictaatDetailsId = table.Column<string>(nullable: true),
-                    EndedOn = table.Column<DateTime>(nullable: false),
-                    StartedOn = table.Column<DateTime>(nullable: false)
+                    EndedOn = table.Column<DateTime>(nullable: true),
+                    StartedOn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

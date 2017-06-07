@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Webdictaat.CMS.ViewModels;
+using Webdictaat.Api.ViewModels;
 using Webdictaat.Core;
 
-namespace Webdictaat.CMS.Models
+namespace Webdictaat.Api.Models
 {
     public interface IMenuRepository
     {

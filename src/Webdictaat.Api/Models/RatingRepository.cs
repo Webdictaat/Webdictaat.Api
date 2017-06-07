@@ -6,14 +6,14 @@ using Webdictaat.Core;
 using Microsoft.Extensions.Options;
 using Webdictaat.Domain;
 using Microsoft.EntityFrameworkCore;
-using Webdictaat.CMS.ViewModels;
+using Webdictaat.Api.ViewModels;
 using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain.User;
 using Microsoft.AspNet.Http;
 using Webdictaat.Data;
 
-namespace Webdictaat.CMS.Models
+namespace Webdictaat.Api.Models
 {
     public interface IRatingRepository
     {

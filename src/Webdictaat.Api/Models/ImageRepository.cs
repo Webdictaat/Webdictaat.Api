@@ -8,7 +8,7 @@ using Webdictaat.Core.Helper;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 
-namespace Webdictaat.CMS.Models
+namespace Webdictaat.Api.Models
 {
     public interface IImageRepository
     {

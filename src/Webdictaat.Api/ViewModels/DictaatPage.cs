@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Webdictaat.Domain;
 
-namespace Webdictaat.CMS.ViewModels
+namespace Webdictaat.Api.ViewModels
 {
     public class DictaatPage : DictaatPageSummary
     {

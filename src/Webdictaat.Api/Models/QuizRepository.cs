@@ -4,14 +4,14 @@ using System.Linq;
 using System.Collections.Generic;
 using Webdictaat.Core;
 using Microsoft.Extensions.Options;
-using Webdictaat.CMS.ViewModels;
+using Webdictaat.Api.ViewModels;
 using Webdictaat.Domain;
 using Microsoft.EntityFrameworkCore;
 using Webdictaat.Data;
 using Webdictaat.Api.ViewModels;
 using System.Threading.Tasks;
 
-namespace Webdictaat.CMS.Models
+namespace Webdictaat.Api.Models
 {
     public interface IQuizRepository
     {

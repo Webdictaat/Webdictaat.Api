@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Webdictaat.CMS.Models;
-using Webdictaat.CMS.ViewModels;
+using Webdictaat.Api.Models;
+using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Webdictaat.CMS.Controllers
+namespace Webdictaat.Api.Controllers
 {
     /// <summary>
     /// Sub route of quiz
