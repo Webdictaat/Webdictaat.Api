@@ -8,9 +8,10 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    partial class WebdictaatContextModelSnapshot : ModelSnapshot
+    [Migration("20170526101048_Achievements")]
+    partial class Achievements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -176,8 +177,6 @@ namespace Webdictaat.Api.Migrations
                     b.Property<string>("DictaatDetailsName")
                         .IsRequired();
 
-                    b.Property<int>("Level");
-
                     b.Property<string>("Metadata");
 
                     b.Property<int>("Points");
@@ -247,37 +246,6 @@ namespace Webdictaat.Api.Migrations
                     b.HasIndex("DictaatOwnerId");
 
                     b.ToTable("DictaatDetails");
-                });
-
-            modelBuilder.Entity("Webdictaat.Domain.DictaatSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("DictaatDetailsId");
-
-                    b.Property<DateTime>("EndedOn");
-
-                    b.Property<DateTime>("StartedOn");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DictaatDetailsId");
-
-                    b.ToTable("DictaatSession");
-                });
-
-            modelBuilder.Entity("Webdictaat.Domain.DictaatSessionUser", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<int>("DictaatSessionId");
-
-                    b.HasKey("UserId", "DictaatSessionId");
-
-                    b.HasIndex("DictaatSessionId");
-
-                    b.ToTable("DictaatSessionUser");
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.Question", b =>
@@ -523,26 +491,6 @@ namespace Webdictaat.Api.Migrations
                     b.HasOne("Webdictaat.Domain.User.ApplicationUser", "DictaatOwner")
                         .WithMany("OwnedDictaten")
                         .HasForeignKey("DictaatOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Webdictaat.Domain.DictaatSession", b =>
-                {
-                    b.HasOne("Webdictaat.Domain.DictaatDetails", "DictaatDetails")
-                        .WithMany("Sessions")
-                        .HasForeignKey("DictaatDetailsId");
-                });
-
-            modelBuilder.Entity("Webdictaat.Domain.DictaatSessionUser", b =>
-                {
-                    b.HasOne("Webdictaat.Domain.DictaatSession", "DictaatSession")
-                        .WithMany("Participants")
-                        .HasForeignKey("DictaatSessionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Webdictaat.Domain.User.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
