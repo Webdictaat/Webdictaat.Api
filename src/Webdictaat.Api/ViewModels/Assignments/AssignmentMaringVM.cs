@@ -6,18 +6,28 @@ using System.Linq;
 
 namespace Webdictaat.Api.ViewModels
 {
-    public class AssignmentMaringVM : AssignmentVM
+    public class AssignmentMaringVM 
     {
-        public Dictionary<string, AssignmentSubmission> Submissions { get; set; }
+        public int Id { get; set; }
 
-        public AssignmentMaringVM(IEnumerable<ApplicationUser> participants, Assignment assignment) : base(assignment)
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string Metadata { get; set; }
+
+        public int Points { get; set; }
+
+        public IEnumerable<string> SubmittedBy { get; set; }
+
+        public AssignmentMaringVM(IEnumerable<ApplicationUser> participants, Assignment assignment) 
         {
-            this.Submissions = new Dictionary<string, AssignmentSubmission>();
-
-            foreach(var p in participants)
-            {
-                this.Submissions.Add(p.Id, assignment.Attempts.FirstOrDefault(a => a.UserId == p.Id));
-            }
+            this.Id = assignment.Id;
+            this.Title = assignment.Title;
+            this.Description = assignment.Description;
+            this.Metadata = assignment.Metadata;
+            this.Points = assignment.Points;
+            this.SubmittedBy = assignment.Attempts.Select(a => a.UserId);
         }
 
         //if(submissions[userId]
