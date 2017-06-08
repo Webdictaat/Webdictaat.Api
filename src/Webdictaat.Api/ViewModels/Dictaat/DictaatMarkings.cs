@@ -15,7 +15,7 @@ namespace Webdictaat.Api.ViewModels
     public class DictaatMarkings
     {
         public List<UserVM> Participants { get; set; }
-        public List<AssignmentMaringVM> Assignments { get; internal set; }
+        public List<AssignmentMaringVM> Assignments { get; set; }
 
         public DictaatMarkings()
         {
