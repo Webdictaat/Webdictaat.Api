@@ -26,6 +26,7 @@ namespace Webdictaat.Api.Models
         void DeleteRepo(string name);
         bool Join(string dictaatName, string userId);
         ViewModels.DictaatMarkings getMarkings(string name);
+        IEnumerable<UserVM> GetParticipants(string dictaatName);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -192,6 +193,15 @@ namespace Webdictaat.Api.Models
 
             return new DictaatMarkings(assignments, participants);
 
+        }
+
+        public IEnumerable<UserVM> GetParticipants(string dictaatName)
+        {
+            return _context.DictaatSession
+             .Include("Participants.User.AssignmentSubmissions")
+             .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null)
+             .Participants.OrderByDescending(p => p.User.Points)
+             .Select(p => new UserVM(p.User));
         }
     }
 }

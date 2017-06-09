@@ -10,6 +10,7 @@ using Webdictaat.Domain;
 using Webdictaat.Data;
 using Webdictaat.Api.Services;
 using Webdictaat.Domain.User;
+using Webdictaat.Api.ViewModels;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -81,7 +82,8 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public ViewModels.DictaatMarkings GetMarkings(string name)
         {
-            return _dictaatRepo.getMarkings(name);
+            var response = _dictaatRepo.getMarkings(name);
+            return response;
         }
 
 
@@ -126,6 +128,17 @@ namespace Webdictaat.Api.Controllers
             string userId = _userManager.GetUserId(HttpContext.User);
             return _dictaatRepo.Join(dictaatName, userId);
         }
+
+        /// <summary>
+        /// A route to join a dictaat by posting on it's participants list 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{dictaatName}/participants")]
+        public IEnumerable<UserVM> GetParticipants(string dictaatName)
+        {
+            return _dictaatRepo.GetParticipants(dictaatName);
+        }
+
 
     }
 }
