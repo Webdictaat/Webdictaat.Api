@@ -18,7 +18,6 @@ namespace Webdictaat.Domain
 
         public virtual DictaatDetails Dictaat { get; set; }
 
-
         [Required]
         public string GroupName { get; set; }
 
@@ -34,19 +33,23 @@ namespace Webdictaat.Domain
 
     public class UserAchievement
     {
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
 
-        public string UserId { get; set; }
-
+        [Required]
         public int AchievementId { get; set; }
 
+        [Required]
         [ForeignKey("AchievementId")]
-
         public virtual Achievement Achievement { get; set; }
 
         public DateTime Timestamp { get; set; }
 
+        [Required]
         public bool Completed { get; set; }
 
     }
