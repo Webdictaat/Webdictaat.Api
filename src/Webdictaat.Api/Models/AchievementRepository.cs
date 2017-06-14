@@ -13,11 +13,6 @@ namespace Webdictaat.Api.Models
     {
         AchievementVM GetAchievement(int achievementId, string dictaatName);
         List<AchievementVM> GetAllAchievements(string dictaatName);
-        void CheckAchievement(string dictaatName, int AchievementId, Boolean check, string userId);
-        void AddAchievement(string dictaatName, Achievement achieve);
-        void DeleteAchievement(string dictaatName, int achievementId);
-        void UpdateAchievement(string dictaatName, int achievementId, Achievement achieve);
-
         List<AchievementGroupVM> GetAchievementGroups(string dictaatName);
         AchievementGroupVM GetAchievementGroup(string dictaatName, string groupName);
     }
@@ -29,21 +24,6 @@ namespace Webdictaat.Api.Models
         public AchievementRepository(WebdictaatContext context)
         {
             _context = context;
-        }
-
-        public void AddAchievement(string dictaatName, Achievement achieve)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CheckAchievement(string dictaatName, int AchievementId, bool check, string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteAchievement(string dictaatName, int achievementId)
-        {
-            throw new NotImplementedException();
         }
 
         public AchievementVM GetAchievement(int achievementId, string dictaatName)
@@ -64,11 +44,6 @@ namespace Webdictaat.Api.Models
             List<Achievement> achievlist = _context.Achievements.ToList();
 
             return achievlist.Select(q => new AchievementVM(q)).ToList();
-        }
-
-        public void UpdateAchievement(string dictaatName, int achievementId, Achievement achieve)
-        {
-            throw new NotImplementedException();
         }
 
         public List<AchievementGroupVM> GetAchievementGroups(string dictaatName)
