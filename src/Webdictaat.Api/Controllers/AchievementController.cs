@@ -35,5 +35,13 @@ namespace Webdictaat.Api.Controllers
             AchievementGroupVM result = _achievementRepo.GetAchievementGroup(dictaatName, achievementGroupName);
             return result;
         }
+
+        [HttpGet("{userId}")]
+        //[Authorize]
+        public string GetUserAchievements(string dictaatName)
+        {
+            var result = "result";
+            return result;
+        }
     }
 }

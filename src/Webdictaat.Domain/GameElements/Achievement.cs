@@ -48,10 +48,6 @@ namespace Webdictaat.Domain
         public virtual Achievement Achievement { get; set; }
 
         public DateTime Timestamp { get; set; }
-
-        [Required]
-        public bool Completed { get; set; }
-
     }
     
     public class Achievement
