@@ -15,6 +15,7 @@ namespace Webdictaat.Api.Models
         List<AchievementVM> GetAllAchievements(string dictaatName);
         List<AchievementGroupVM> GetAchievementGroups(string dictaatName);
         AchievementGroupVM GetAchievementGroup(string dictaatName, string groupName);
+        List<UserAchievementVM> GetUserAchievements(string userid, string dictaatname);
     }
 
     public class AchievementRepository : IAchievementRepository
@@ -99,6 +100,17 @@ namespace Webdictaat.Api.Models
 
             AchievementGroupVM result = new AchievementGroupVM(dictaatName, groupName, dictaatAchievements[0].GroupOrder, achievements);
 
+            return result;
+        }
+
+        public List<UserAchievementVM> GetUserAchievements(string userid, string dictaatname)
+        {
+            List <UserAchievementVM> result = new List<UserAchievementVM>();
+            /*
+            List<UserAchievementVM> result = _context.UserAchievement
+                .Include("Achievements.Achievement")
+                .Include("Users.user")
+                */
             return result;
         }
     }

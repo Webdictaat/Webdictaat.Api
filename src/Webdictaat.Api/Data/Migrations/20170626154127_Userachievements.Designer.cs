@@ -8,8 +8,8 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20170626121649_UserAchievements")]
-    partial class UserAchievements
+    [Migration("20170626154127_Userachievements")]
+    partial class Userachievements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -471,7 +471,7 @@ namespace Webdictaat.Api.Migrations
 
                     b.HasIndex("AchievementId");
 
-                    b.ToTable("UserAchievement");
+                    b.ToTable("UserAchievements");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

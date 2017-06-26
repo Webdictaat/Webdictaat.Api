@@ -38,9 +38,9 @@ namespace Webdictaat.Api.Controllers
 
         [HttpGet("{userId}")]
         //[Authorize]
-        public string GetUserAchievements(string dictaatName)
+        public List<UserAchievementVM> GetUserAchievements(string userId, string dictaatName)
         {
-            var result = "result";
+            List<UserAchievementVM> result = _achievementRepo.GetUserAchievements(userId, dictaatName);
             return result;
         }
     }

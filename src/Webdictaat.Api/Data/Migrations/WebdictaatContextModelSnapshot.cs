@@ -470,7 +470,7 @@ namespace Webdictaat.Api.Migrations
 
                     b.HasIndex("AchievementId");
 
-                    b.ToTable("UserAchievement");
+                    b.ToTable("UserAchievements");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
