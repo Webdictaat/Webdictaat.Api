@@ -8,7 +8,7 @@ using Webdictaat.Data;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20170619090750_UserAchievements")]
+    [Migration("20170626121649_UserAchievements")]
     partial class UserAchievements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -464,8 +464,6 @@ namespace Webdictaat.Api.Migrations
                     b.Property<string>("UserId");
 
                     b.Property<int>("AchievementId");
-
-                    b.Property<bool>("Completed");
 
                     b.Property<DateTime>("Timestamp");
 

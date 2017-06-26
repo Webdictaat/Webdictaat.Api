@@ -464,8 +464,6 @@ namespace Webdictaat.Api.Migrations
 
                     b.Property<int>("AchievementId");
 
-                    b.Property<bool>("Completed");
-
                     b.Property<DateTime>("Timestamp");
 
                     b.HasKey("UserId", "AchievementId");
