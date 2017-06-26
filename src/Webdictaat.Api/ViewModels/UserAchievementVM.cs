@@ -18,5 +18,30 @@ namespace Webdictaat.Api.ViewModels
         public virtual Achievement Achievement { get; set; }
 
         public DateTime Timestamp { get; set; }
+
+        public UserAchievementVM()
+        {
+
+        }
+
+        public UserAchievementVM(string userid, ApplicationUser user, int achievementid, Achievement achievement, DateTime timestamp)
+        {
+            UserId = userid;
+            User = user;
+            AchievementId = achievementid;
+            Achievement = achievement;
+            Timestamp = timestamp;
+        }
+
+        public UserAchievementVM(UserAchievementVM userachievement)
+        {
+            UserId = userachievement.UserId;
+            User = userachievement.User;
+            AchievementId = userachievement.AchievementId;
+            Achievement = userachievement.Achievement;
+            Timestamp = userachievement.Timestamp;
+        }
+
+
     }
 }
