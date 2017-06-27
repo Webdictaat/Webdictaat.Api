@@ -27,7 +27,7 @@ namespace Webdictaat.Api.Controllers
             List<AchievementGroupVM> result = _achievementRepo.GetAchievementGroups(dictaatName);
             return result;
         }
-
+        /*
         [HttpGet("{achievementGroupName}")]
         //[Authorize]
         public AchievementGroupVM Get(string achievementGroupName, string dictaatName)
@@ -35,7 +35,7 @@ namespace Webdictaat.Api.Controllers
             AchievementGroupVM result = _achievementRepo.GetAchievementGroup(dictaatName, achievementGroupName);
             return result;
         }
-
+        */
         [HttpGet("{userId}")]
         //[Authorize]
         public List<UserAchievementVM> GetUserAchievements(string userId, string dictaatName)

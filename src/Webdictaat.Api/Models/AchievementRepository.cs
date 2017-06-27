@@ -105,12 +105,19 @@ namespace Webdictaat.Api.Models
 
         public List<UserAchievementVM> GetUserAchievements(string userid, string dictaatname)
         {
-            List <UserAchievementVM> result = new List<UserAchievementVM>();
-            /*
-            List<UserAchievementVM> result = _context.UserAchievement
-                .Include("Achievements.Achievement")
-                .Include("Users.user")
-                */
+            var re = _context.UserAchievements
+                .Where(x => x.UserId == userid && x.Achievement.DictaatName == dictaatname)
+                .Include(a => a.Achievement)
+                .Include(a => a.User)
+                .ToList();
+
+            List<UserAchievementVM> result = new List<UserAchievementVM>();
+
+            foreach(var a in re)
+            {
+                result.Add(new UserAchievementVM(a.UserId, a.User, a.AchievementId, a.Achievement, a.Timestamp));
+            }
+
             return result;
         }
     }
