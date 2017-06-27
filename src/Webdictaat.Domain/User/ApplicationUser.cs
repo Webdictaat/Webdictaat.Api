@@ -19,7 +19,7 @@ namespace Webdictaat.Domain.User
         {
             get
             {
-                return this.AssignmentSubmissions.Sum(a => a.PointsRecieved);
+                return this.AssignmentSubmissions != null ? this.AssignmentSubmissions.Sum(a => a.PointsRecieved) : 0;
             }
         }
 
