@@ -33,7 +33,7 @@ namespace Webdictaat.Api.ViewModels
             Timestamp = timestamp;
         }
 
-        public UserAchievementVM(UserAchievementVM userachievement)
+        public UserAchievementVM(UserAchievement userachievement)
         {
             UserId = userachievement.UserId;
             User = userachievement.User;

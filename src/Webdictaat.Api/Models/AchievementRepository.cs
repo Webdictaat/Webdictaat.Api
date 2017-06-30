@@ -15,7 +15,10 @@ namespace Webdictaat.Api.Models
         List<AchievementVM> GetAllAchievements(string dictaatName);
         List<AchievementGroupVM> GetAchievementGroups(string dictaatName);
         AchievementGroupVM GetAchievementGroup(string dictaatName, string groupName);
+
         List<UserAchievementVM> GetUserAchievements(string userid, string dictaatname);
+        UserAchievement AddUserAchievement(int achievementid, string userid);
+        bool RemoveUserAchievement(int achievementid, string userid);
     }
 
     public class AchievementRepository : IAchievementRepository
@@ -119,6 +122,40 @@ namespace Webdictaat.Api.Models
             }
 
             return result;
+        }
+
+        public UserAchievement AddUserAchievement(int achievementid, string userid)
+        {
+            var user = _context.Users.FirstOrDefault(a => a.Id == userid);
+            var achievement = _context.Achievements.FirstOrDefault(a => a.Id == achievementid);
+            var date = DateTime.Now;
+
+            var userachievement = new UserAchievement();
+            userachievement.User = user;
+            userachievement.UserId = user.Id;
+            userachievement.Achievement = achievement;
+            userachievement.AchievementId = achievement.Id;
+            userachievement.Timestamp = date;
+
+            _context.UserAchievements.Add(userachievement);
+            _context.SaveChanges();
+
+            return userachievement;
+        }
+
+        public bool RemoveUserAchievement(int achievementid, string userid)
+        {
+            var achiev = _context.UserAchievements
+                .FirstOrDefault(a => a.AchievementId == achievementid && a.UserId == userid);
+
+            if (achiev == null)
+            {
+                return false;
+            }
+
+            _context.Remove(achiev);
+            _context.SaveChanges();
+            return true;
         }
     }
 }
