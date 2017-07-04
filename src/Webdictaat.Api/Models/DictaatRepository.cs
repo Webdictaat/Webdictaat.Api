@@ -107,6 +107,13 @@ namespace Webdictaat.Api.Models
                 DictaatOwnerId = user.Id,
             };
 
+            var dictaatSession = new DictaatSession()
+            {
+                DictaatDetailsId = name,
+                StartedOn = DateTime.Now,
+            };
+
+            _context.DictaatSession.Add(dictaatSession);
             _context.DictaatDetails.Add(dictaatDetails);
             _context.SaveChanges();
 
@@ -132,7 +139,7 @@ namespace Webdictaat.Api.Models
 
             var currentSession = _context.DictaatSession
                 .Include(s => s.Participants)
-                .FirstOrDefault(s => s.EndedOn == null && dictaatName == dictaatName);
+                .FirstOrDefault(s => s.EndedOn == null && s.DictaatDetailsId == dictaatName);
 
             if(currentSession.Participants.Any(p => p.UserId == userId))
             {
