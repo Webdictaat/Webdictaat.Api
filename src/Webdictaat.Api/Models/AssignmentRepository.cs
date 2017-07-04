@@ -104,7 +104,8 @@ namespace Webdictaat.Api.Models
                 DictaatDetailsId = dictaatName,
                 Description = form.Description,
                 Metadata = form.Metadata,
-                Points = form.Points
+                Points = form.Points,
+                Level = (AssignmentLevel) Enum.Parse(typeof(AssignmentLevel), form.Level)
             };
 
             _context.Assignments.Add(a);
@@ -145,6 +146,7 @@ namespace Webdictaat.Api.Models
                 return null;
 
             assignment.Title = form.Title;
+            assignment.Level = (AssignmentLevel)Enum.Parse(typeof(AssignmentLevel), form.Level);
             assignment.Points = form.Points;
             assignment.Metadata = form.Metadata;
             assignment.Description = form.Description;
