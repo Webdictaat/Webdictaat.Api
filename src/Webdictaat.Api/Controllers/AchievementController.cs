@@ -4,7 +4,9 @@ using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain.User;
-
+using System.Threading.Tasks;
+using Webdictaat.Domain;
+using System;
 
 namespace Webdictaat.Api.Controllers
 {
@@ -28,12 +30,26 @@ namespace Webdictaat.Api.Controllers
             return result;
         }
 
-        [HttpGet("{achievementGroupName}")]
+        [HttpGet("{userId}")]
         //[Authorize]
-        public AchievementGroupVM Get(string achievementGroupName, string dictaatName)
+        public List<UserAchievementVM> GetUserAchievements(string userId, string dictaatName)
         {
-            AchievementGroupVM result = _achievementRepo.GetAchievementGroup(dictaatName, achievementGroupName);
+            List<UserAchievementVM> result = _achievementRepo.GetUserAchievements(userId, dictaatName);
             return result;
+        }
+
+        [HttpPost("{achievementid}/user/{userid}")]
+        public async Task<UserAchievementVM> PostUserAchievement(string userId, int achievementid)
+        {
+            UserAchievement userachiev = _achievementRepo.AddUserAchievement(achievementid, userId);
+            UserAchievementVM result = new UserAchievementVM(userachiev);
+            return result;
+        }
+
+        [HttpDelete("{achievementid}/user/{userid}")]
+        public async Task<Boolean> DeleteUserAchievement(string userId, int achievementid)
+        {
+            return _achievementRepo.RemoveUserAchievement(achievementid, userId);
         }
     }
 }

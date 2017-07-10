@@ -27,6 +27,8 @@ namespace Webdictaat.Data
         
         public DbSet<DictaatAchievement> DictaatAchievements { get; set; }
 
+        public DbSet<UserAchievement> UserAchievements { get; set; }
+
         /** Quizes **/
 
         public DbSet<Quiz> Quizes { get; set; }
@@ -55,6 +57,7 @@ namespace Webdictaat.Data
             builder.Entity<AssignmentSubmission>().HasKey(t => new { t.AssignmentId, t.UserId });
             builder.Entity<DictaatContributer>().HasKey(t => new { t.UserId, t.DictaatDetailsId });
             builder.Entity<DictaatAchievement>().HasKey(t => new { t.DictaatName, t.AchievementId });
+            builder.Entity<UserAchievement>().HasKey(t => new { t.UserId, t.AchievementId });
             builder.Entity<DictaatSessionUser>().HasKey(t => new { t.UserId, t.DictaatSessionId });
         }
 

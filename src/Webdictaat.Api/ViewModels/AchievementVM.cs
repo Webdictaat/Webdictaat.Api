@@ -37,7 +37,7 @@ namespace Webdictaat.Api.ViewModels
             this.Id = achiev.Id;
             this.Name = achiev.Name;
             this.Hidden = achiev.Hidden;
-            this.Completed = true;
+            this.Completed = false;
             this.Image = achiev.Image;
         }
     }

@@ -13,13 +13,12 @@ namespace Webdictaat.Api.Models
     {
         AchievementVM GetAchievement(int achievementId, string dictaatName);
         List<AchievementVM> GetAllAchievements(string dictaatName);
-        void CheckAchievement(string dictaatName, int AchievementId, Boolean check, string userId);
-        void AddAchievement(string dictaatName, Achievement achieve);
-        void DeleteAchievement(string dictaatName, int achievementId);
-        void UpdateAchievement(string dictaatName, int achievementId, Achievement achieve);
-
         List<AchievementGroupVM> GetAchievementGroups(string dictaatName);
         AchievementGroupVM GetAchievementGroup(string dictaatName, string groupName);
+
+        List<UserAchievementVM> GetUserAchievements(string userid, string dictaatname);
+        UserAchievement AddUserAchievement(int achievementid, string userid);
+        bool RemoveUserAchievement(int achievementid, string userid);
     }
 
     public class AchievementRepository : IAchievementRepository
@@ -29,21 +28,6 @@ namespace Webdictaat.Api.Models
         public AchievementRepository(WebdictaatContext context)
         {
             _context = context;
-        }
-
-        public void AddAchievement(string dictaatName, Achievement achieve)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CheckAchievement(string dictaatName, int AchievementId, bool check, string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteAchievement(string dictaatName, int achievementId)
-        {
-            throw new NotImplementedException();
         }
 
         public AchievementVM GetAchievement(int achievementId, string dictaatName)
@@ -64,11 +48,6 @@ namespace Webdictaat.Api.Models
             List<Achievement> achievlist = _context.Achievements.ToList();
 
             return achievlist.Select(q => new AchievementVM(q)).ToList();
-        }
-
-        public void UpdateAchievement(string dictaatName, int achievementId, Achievement achieve)
-        {
-            throw new NotImplementedException();
         }
 
         public List<AchievementGroupVM> GetAchievementGroups(string dictaatName)
@@ -125,6 +104,58 @@ namespace Webdictaat.Api.Models
             AchievementGroupVM result = new AchievementGroupVM(dictaatName, groupName, dictaatAchievements[0].GroupOrder, achievements);
 
             return result;
+        }
+
+        public List<UserAchievementVM> GetUserAchievements(string userid, string dictaatname)
+        {
+            var re = _context.UserAchievements
+                .Where(x => x.UserId == userid && x.Achievement.DictaatName == dictaatname)
+                .Include(a => a.Achievement)
+                .Include(a => a.User)
+                .ToList();
+
+            List<UserAchievementVM> result = new List<UserAchievementVM>();
+
+            foreach(var a in re)
+            {
+                result.Add(new UserAchievementVM(a.UserId, a.User, a.AchievementId, a.Achievement, a.Timestamp));
+            }
+
+            return result;
+        }
+
+        public UserAchievement AddUserAchievement(int achievementid, string userid)
+        {
+            var user = _context.Users.FirstOrDefault(a => a.Id == userid);
+            var achievement = _context.Achievements.FirstOrDefault(a => a.Id == achievementid);
+            var date = DateTime.Now;
+
+            var userachievement = new UserAchievement();
+            userachievement.User = user;
+            userachievement.UserId = user.Id;
+            userachievement.Achievement = achievement;
+            userachievement.AchievementId = achievement.Id;
+            userachievement.Timestamp = date;
+
+            _context.UserAchievements.Add(userachievement);
+            _context.SaveChanges();
+
+            return userachievement;
+        }
+
+        public bool RemoveUserAchievement(int achievementid, string userid)
+        {
+            var achiev = _context.UserAchievements
+                .FirstOrDefault(a => a.AchievementId == achievementid && a.UserId == userid);
+
+            if (achiev == null)
+            {
+                return false;
+            }
+
+            _context.Remove(achiev);
+            _context.SaveChanges();
+            return true;
         }
     }
 }
