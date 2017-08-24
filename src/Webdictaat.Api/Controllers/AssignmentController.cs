@@ -100,7 +100,7 @@ namespace Webdictaat.Api.Controllers
             if (form.Token != null)
             {
                 //use the user identy name (email)
-                return _assignmentRepo.CompleteAssignment(assignmentId, User.Identity.Name, form.Token);
+                return _assignmentRepo.CompleteAssignment(assignmentId, User.Identity.Name, form.Token, userId);
             }
             else
             {

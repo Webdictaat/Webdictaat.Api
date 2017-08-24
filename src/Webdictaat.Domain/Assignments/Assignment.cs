@@ -35,6 +35,11 @@ namespace Webdictaat.Domain.Assignments
 
         public string AssignmentSecret { get; set; }
 
+        /// <summary>
+        /// A refrence to an external assignmnet or resource linked to this assignment.
+        /// </summary>
+        public string ExternalId { get; set; }
+
         public AssignmentLevel Level { get; set; }
 
         public int Points { get; set; }

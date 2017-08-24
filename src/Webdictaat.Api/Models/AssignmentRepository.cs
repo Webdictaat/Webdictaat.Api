@@ -25,11 +25,12 @@ namespace Webdictaat.Api.Models
         /// <param name="secret"></param>
         /// <returns></returns>
         AssignmentVM CompleteAssignment(int assignmentId, string userId);
-        AssignmentVM CompleteAssignment(int assignmentId, string userId, string token);
+        AssignmentVM CompleteAssignment(int assignmentId, string email, string token, string userId);
         IEnumerable<AssignmentVM> GetAllAssignments(string dictaatName, string userId);
         AssignmentVM UpdateAssignment(string dictaatName, int assignmentId, AssignmentFormVM form);
         AssignmentVM DeleteAssignment(string dictaatName, int assignmentId);
         bool UndoCompleteAssignment(int assignmentId, string userId);
+        
     }
 
     public class AssignmentRepository : IAssignmentRepository
@@ -55,13 +56,13 @@ namespace Webdictaat.Api.Models
             return GetAssignment(assignmentId, userId);
         }
 
-        public AssignmentVM CompleteAssignment(int assignmentId, string userId, string token)
+        public AssignmentVM CompleteAssignment(int assignmentId, string email, string token, string userId)
         {
             Assignment assignment = _context.Assignments.FirstOrDefault(a => a.Id == assignmentId);
 
             if (assignment != null)
             {
-                var assignmentToken = _secretService.GetAssignmentToken(userId, assignmentId, assignment.AssignmentSecret);
+                var assignmentToken = _secretService.GetAssignmentToken(email, assignment.ExternalId, assignment.AssignmentSecret);
                 if(token == assignmentToken)
                 {
                     completeAssignment(assignment, userId);

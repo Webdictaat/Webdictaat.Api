@@ -25,6 +25,11 @@ namespace Webdictaat.Api.ViewModels.Assignments
         public int SubmissionCount { get; set; }
         public string Level { get; private set; }
 
+        /// <summary>
+        /// An ID that can point to a external resource or assignment
+        /// </summary>
+        public string ExternalId { get; set; }
+
         public AssignmentVM()
         {
 
@@ -39,6 +44,7 @@ namespace Webdictaat.Api.ViewModels.Assignments
             this.Points = assignment.Points;
             this.Submissions = assignment.Attempts;
             this.Level = assignment.Level.ToString();
+            this.ExternalId = assignment.ExternalId;
 
             if (this.Submissions != null)
             {
