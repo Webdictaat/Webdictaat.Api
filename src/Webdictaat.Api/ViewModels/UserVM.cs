@@ -8,14 +8,25 @@ namespace Webdictaat.Api.ViewModels
 {
     public class UserVM
     {
-       
+        private IQueryable<int> assignmentIds;
 
         public UserVM(ApplicationUser p)
         {
             this.Id = p.Id;
             this.Email = p.Email;
             this.UserName = p.UserName;
-            this.Points = p.Points;
+        }
+
+        /// <summary>
+        /// Constructor with list of assignments to calculate total points;
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="assignmentIds"></param>
+        public UserVM(ApplicationUser p, int[] assignmentIds) : this(p)
+        {
+            this.Points = p.AssignmentSubmissions
+                .Where(a => assignmentIds.Contains(a.AssignmentId))
+                .Sum(a => a.PointsRecieved);
         }
 
         public string Email { get; set; }

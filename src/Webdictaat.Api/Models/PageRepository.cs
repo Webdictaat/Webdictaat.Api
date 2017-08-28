@@ -94,6 +94,11 @@ namespace Webdictaat.Api.Models
         {
             string path = _pathHelper.PagePath(dictaatName, page.Name);
 
+            //escape angular2 characters
+            page.Source = page.Source.Replace("{", "&#123;");
+            page.Source = page.Source.Replace("}", "&#125;");
+            
+
             if (!_file.TryEditFile(path, page.Source))
             {
                 //wellicht in de toekomst 404 terug sturen? File not found?

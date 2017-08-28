@@ -204,11 +204,19 @@ namespace Webdictaat.Api.Models
 
         public IEnumerable<UserVM> GetParticipants(string dictaatName)
         {
-            return _context.DictaatSession
+            //assignments used to calculate total points
+            var assignmentIds = _context.Assignments
+                .Where(a => a.DictaatDetailsId == dictaatName)
+                .Select(a => a.Id).ToArray();
+
+            var participants =  _context.DictaatSession
              .Include("Participants.User.AssignmentSubmissions")
              .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null)
-             .Participants.OrderByDescending(p => p.User.Points)
-             .Select(p => new UserVM(p.User));
+             .Participants.Select(p => new UserVM(p.User, assignmentIds)).ToList();
+
+          
+
+            return participants.OrderByDescending(p => p.Points);
         }
     }
 }

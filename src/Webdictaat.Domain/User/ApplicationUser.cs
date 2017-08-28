@@ -15,13 +15,5 @@ namespace Webdictaat.Domain.User
 
         public ICollection<AssignmentSubmission> AssignmentSubmissions { get; set; }
 
-        public virtual double Points
-        {
-            get
-            {
-                return this.AssignmentSubmissions != null ? this.AssignmentSubmissions.Sum(a => a.PointsRecieved) : 0;
-            }
-        }
-
     }
 }
