@@ -24,9 +24,9 @@ namespace Webdictaat.Api.Models
         ViewModels.Session GetCurrentSession(string dictaatName, string userId = null);
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
-        bool Join(string dictaatName, string userId);
         ViewModels.DictaatMarkings getMarkings(string name);
         IEnumerable<UserVM> GetParticipants(string dictaatName);
+        bool Join(string dictaatName, string group, string userId);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -134,7 +134,14 @@ namespace Webdictaat.Api.Models
             _context.SaveChanges();
         }
 
-        public bool Join(string dictaatName, string userId)
+        /// <summary>
+        /// Join the current session of a dictaat
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="group"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool Join(string dictaatName, string group, string userId)
         {
 
             var currentSession = _context.DictaatSession
@@ -149,7 +156,8 @@ namespace Webdictaat.Api.Models
             {
                 currentSession.Participants.Add(new DictaatSessionUser()
                 {
-                    UserId = userId
+                    UserId = userId,
+                    Group = group,
                 });
                 _context.SaveChanges();
                 return true; //Joined this ditaat :D
@@ -194,9 +202,10 @@ namespace Webdictaat.Api.Models
                 .ToList();
 
             var participants = _context.DictaatSession
-                .Include("Participants.User")
+                .Include("Participants.User.AssignmentSubmissions")
                 .FirstOrDefault(s => s.DictaatDetailsId == name && s.EndedOn == null)
-                .Participants.Select(p => p.User);
+                .Participants.OrderBy(p => p.Group)
+                .Select(p => p);
 
             return new DictaatMarkings(assignments, participants);
 

@@ -14,6 +14,9 @@ namespace Webdictaat.Api.ViewModels
     /// </summary>
     public class DictaatMarkings
     {
+        private List<Assignment> assignments;
+        private IEnumerable<DictaatSessionUser> participants;
+
         public List<UserVM> Participants { get; set; }
         public List<AssignmentMaringVM> Assignments { get; set; }
 
@@ -22,12 +25,11 @@ namespace Webdictaat.Api.ViewModels
 
         }
 
-        public DictaatMarkings(List<Assignment> assignments, IEnumerable<ApplicationUser> participants)
+        public DictaatMarkings(List<Assignment> assignments, IEnumerable<DictaatSessionUser> participants)
         {
-            this.Participants = participants.Select(p => new ViewModels.UserVM(p)).ToList();
-            this.Assignments = assignments.Select(a => new ViewModels.AssignmentMaringVM(participants, a)).ToList();
+            var assignmentIds = assignments.Select(a => a.Id).ToArray();
+            this.Participants = participants.Select(p => new ViewModels.UserVM(p.User, assignmentIds, p.Group)).ToList();
+            this.Assignments = assignments.Select(a => new ViewModels.AssignmentMaringVM(a)).ToList();
         }
-
-
     }
 }

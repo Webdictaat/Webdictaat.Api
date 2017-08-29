@@ -20,7 +20,7 @@ namespace Webdictaat.Api.ViewModels
 
         public IEnumerable<string> SubmittedBy { get; set; }
 
-        public AssignmentMaringVM(IEnumerable<ApplicationUser> participants, Assignment assignment) 
+        public AssignmentMaringVM(Assignment assignment) 
         {
             this.Id = assignment.Id;
             this.Title = assignment.Title;

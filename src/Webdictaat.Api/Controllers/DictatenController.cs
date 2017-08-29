@@ -122,11 +122,11 @@ namespace Webdictaat.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("{dictaatName}/participants")]
-        public Boolean Join(string dictaatName )
+        [HttpPost("{dictaatName}/participants/{group}")]
+        public Boolean Join(string dictaatName, string group)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            return _dictaatRepo.Join(dictaatName, userId);
+            return _dictaatRepo.Join(dictaatName, group, userId);
         }
 
         /// <summary>

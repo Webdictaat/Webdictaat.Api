@@ -13,6 +13,8 @@ namespace Webdictaat.Domain
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
 
+        public string Group { get; set; }
+
         public string UserId { get; set; }
     }
 }
