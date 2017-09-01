@@ -1,24 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{681E112E-374E-4D52-BA0F-F32BD5897768}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F6AA2EF-CB46-4C6B-9A18-1D4FF9821683}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Api", "src\Webdictaat.Api\Webdictaat.Api.xproj", "{BF129114-F27F-4912-896B-66530AE61641}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Api", "src\Webdictaat.Api\Webdictaat.Api.csproj", "{BF129114-F27F-4912-896B-66530AE61641}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Core", "src\Webdictaat.Core\Webdictaat.Core.xproj", "{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Core", "src\Webdictaat.Core\Webdictaat.Core.csproj", "{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Domain", "src\Webdictaat.Domain\Webdictaat.Domain.xproj", "{403147F9-7049-46DB-9241-40DEB290FE77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Domain", "src\Webdictaat.Domain\Webdictaat.Domain.csproj", "{403147F9-7049-46DB-9241-40DEB290FE77}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Core.Test", "src\Webdictaat.Core.Test\Webdictaat.Core.Test.xproj", "{5CED3615-CDFD-456A-931B-7F64E32673FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Core.Test", "src\Webdictaat.Core.Test\Webdictaat.Core.Test.csproj", "{5CED3615-CDFD-456A-931B-7F64E32673FD}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Webdictaat.Api.Test", "src\Webdictaat.Api.Test\Webdictaat.Api.Test.xproj", "{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Api.Test", "src\Webdictaat.Api.Test\Webdictaat.Api.Test.csproj", "{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,5 +53,8 @@ Global
 		{403147F9-7049-46DB-9241-40DEB290FE77} = {681E112E-374E-4D52-BA0F-F32BD5897768}
 		{5CED3615-CDFD-456A-931B-7F64E32673FD} = {681E112E-374E-4D52-BA0F-F32BD5897768}
 		{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD} = {681E112E-374E-4D52-BA0F-F32BD5897768}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {34BFE5D4-25A1-487A-9E7E-5E6D2A510450}
 	EndGlobalSection
 EndGlobal
