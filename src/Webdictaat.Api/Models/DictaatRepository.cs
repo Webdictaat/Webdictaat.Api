@@ -27,6 +27,7 @@ namespace Webdictaat.Api.Models
         ViewModels.DictaatMarkings getMarkings(string name);
         IEnumerable<UserVM> GetParticipants(string dictaatName);
         bool Join(string dictaatName, string group, string userId);
+        IEnumerable<GroupVM> GetGroups(string dictaatName);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -221,11 +222,27 @@ namespace Webdictaat.Api.Models
             var participants =  _context.DictaatSession
              .Include("Participants.User.AssignmentSubmissions")
              .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null)
-             .Participants.Select(p => new UserVM(p.User, assignmentIds)).ToList();
+             .Participants.Select(p => new UserVM(p.User, assignmentIds, p.Group)).ToList();
 
           
 
             return participants.OrderByDescending(p => p.Points);
+        }
+
+        public IEnumerable<GroupVM> GetGroups(string dictaatName)
+        {
+            //assignments used to calculate total points
+            var assignmentIds = _context.Assignments
+                .Where(a => a.DictaatDetailsId == dictaatName)
+                .Select(a => a.Id).ToArray();
+
+            var groups = _context.DictaatSession
+              .Include("Participants.User.AssignmentSubmissions")
+              .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null)
+              .Participants.Select(p => new UserVM(p.User, assignmentIds))
+              .GroupBy(u => u.Group).Select(g => new GroupVM(g.Key, g.ToList()));
+
+            return groups;
         }
     }
 }

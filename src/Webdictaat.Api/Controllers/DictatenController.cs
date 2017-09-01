@@ -130,7 +130,7 @@ namespace Webdictaat.Api.Controllers
         }
 
         /// <summary>
-        /// A route to join a dictaat by posting on it's participants list 
+        /// Returns a list of participants with points gained from this dictaat
         /// </summary>
         /// <returns></returns>
         [HttpGet("{dictaatName}/participants")]
@@ -140,5 +140,15 @@ namespace Webdictaat.Api.Controllers
         }
 
 
-    }
+        /// <summary>
+        /// A Route to get a list of groups
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{dictaatName}/groups")]
+        public IEnumerable<GroupVM> GetGroups(string dictaatName)  {
+            return _dictaatRepo.GetGroups(dictaatName);
+        }
+
+
+}
 }
