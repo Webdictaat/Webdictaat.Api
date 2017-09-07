@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace Webdictaat.Api.Test.Controller
         public QuestionControllerTest()
         {
             _repo = new QuestionRepository(_context);
-            _userManager = new UserManager<ApplicationUser>(_store.Object, null, null, null, null, null, null, null, null);
+            //_userManager = new UserManager<ApplicationUser>(_store.Object, null, null, null, null, null, null, null, null);
             _controller = new QuestionsController(_repo);
         }
 
