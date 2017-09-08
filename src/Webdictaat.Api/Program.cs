@@ -19,14 +19,23 @@ namespace Webdictaat.Api
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
+            var host = BuildWebHost(args);
+            host.Run();
+        }
+
+        /// <summary>
+        /// Upgraded EF core from 1.* to 2.0
+        /// https://github.com/aspnet/Announcements/issues/258
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        // Tools will use this to get application services
+        public static IWebHost BuildWebHost(string[] args) =>
+            new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
-
-            host.Run();
-        }
     }
 }

@@ -17,6 +17,7 @@ namespace Webdictaat.Api.ViewModels
         public DateTime LastChange { get; set; }
         public String Owner { get; private set; }
         public ICollection<String> Contributers { get; set; }
+        public bool IsEnabled { get; }
         public bool CanEdit { get; set; }
 
         public DictaatSummary(Domain.DirectorySummary directorySummary)
@@ -31,6 +32,7 @@ namespace Webdictaat.Api.ViewModels
             this.Name = dd.Name;
             this.Owner = dd.DictaatOwner.UserName;
             this.Contributers = dd.Contributers.Select(c => c.User.UserName).ToList();
+            this.IsEnabled = dd.IsEnabled;
 
             if (userId != null)
             {

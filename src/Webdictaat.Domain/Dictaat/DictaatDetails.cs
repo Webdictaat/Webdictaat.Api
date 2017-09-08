@@ -18,6 +18,8 @@ namespace Webdictaat.Domain
 
         public ApplicationUser DictaatOwner { get; set; }
 
+        public bool IsEnabled { get; set; }
+
         public virtual ICollection<DictaatContributer> Contributers { get; set; }
 
         public virtual ICollection<DictaatAchievement> Achievements { get; set; }

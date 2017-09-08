@@ -106,6 +106,7 @@ namespace Webdictaat.Api.Models
             {
                 Name = name,
                 DictaatOwnerId = user.Id,
+                IsEnabled = false, //by default we don't show the dictaten
             };
 
             var dictaatSession = new DictaatSession()

@@ -25,7 +25,8 @@
         ]
     },
     {
-        "Name": "Contact",
-        "Url": "contact"
+      "Name": "Contact",
+      "Url": "contact",
+      "Enabled":  "true"
     }
 ]

@@ -39,6 +39,10 @@ namespace Webdictaat.Data
 
         public DbSet<DictaatSession> DictaatSession { get; set; }
 
+        /// <summary>
+        /// Start context with options
+        /// </summary>
+        /// <param name="options"></param>
         public WebdictaatContext(DbContextOptions<WebdictaatContext> options)
             : base(options)
         {

@@ -46,8 +46,6 @@ namespace Webdictaat.Api
 
             _hostingEnv = env;
 
-
-
             if (env.IsDevelopment())
             {
                 //As a best practice, it is not recommended to store the secrets in a configuration file in the 
@@ -56,7 +54,7 @@ namespace Webdictaat.Api
                 //machine. These settings are then seamlessly merged with settings from all other
                 //sources during application startup.
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();

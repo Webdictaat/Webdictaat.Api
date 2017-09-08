@@ -12,5 +12,6 @@ namespace Webdictaat.Domain
         public string Url { get; set; }
 
         public IEnumerable<MenuItem> MenuItems { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }
