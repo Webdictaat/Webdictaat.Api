@@ -17,39 +17,61 @@ namespace Webdictaat.Api.Controllers
     /// </summary>
     [Route("api/dictaten/{dictaatName}/[controller]")]
     [Authorize]
-    public class PagesController : Controller
+    public class PagesController :BaseController
     {
         private IPageRepository _pageRepo;
         private IMenuRepository _menuRepo;
         private IAuthorizeService _authorizeService;
 
+        
         public PagesController(
             IPageRepository pageRepo, 
             IMenuRepository menuRepo,
-            IAuthorizeService authorizeService)
+            IAuthorizeService authorizeService) : base(authorizeService)
         {
             _pageRepo = pageRepo;
             _menuRepo = menuRepo;
             _authorizeService = authorizeService;
         }
 
+        /// <summary>
+        /// Get List
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="pageName"></param>
+        /// <returns></returns>
         [HttpGet("{pageName}")]
         public ViewModels.DictaatPage Get(string dictaatName, string pageName)
         {
             return _pageRepo.GetDictaatPage(dictaatName, pageName);
         }
 
-        // GET: api/values
+        /// <summary>
+        /// Get List
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <returns></returns>
         [HttpGet]
-        public IEnumerable<ViewModels.DictaatPageSummary> Get(string dictaatName)
+        public async Task<IEnumerable<ViewModels.DictaatPageSummary>> Get(string dictaatName)
         {
+            if (!AuthorizeResrouce(dictaatName))    
+                return null;
+
             return _pageRepo.GetDictaatPages(dictaatName);
         }
 
-        // POST api/values
+        /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
-        public List<ViewModels.MenuItem> Post(string dictaatName, [FromBody]ViewModels.DictaatPageForm form)
+        public async Task<List<ViewModels.MenuItem>> Post(string dictaatName, [FromBody]ViewModels.DictaatPageForm form)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             var MenuItem = new ViewModels.MenuItem()
             {
                 Name = form.Page.Name,
@@ -62,30 +84,35 @@ namespace Webdictaat.Api.Controllers
         }
 
 
-        // POST api/values
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="pageName"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         [HttpPut("{pageName}")]
         public async Task<ViewModels.DictaatPage> Put(string dictaatName, string pageName, [FromBody]ViewModels.DictaatPage page)
         {
-            if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
-            {
-                HttpContext.Response.StatusCode = 403;
+            if (!AuthorizeResrouce(dictaatName))
                 return null;
-            }
 
             return _pageRepo.EditDictaatPage(dictaatName, page);
         }
 
 
 
-        // POST api/values
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="pageName"></param>
+        /// <returns></returns>
         [HttpDelete("{pageName}")]
         public async Task<List<ViewModels.MenuItem>> Delete(string dictaatName, string pageName)
         {
-            if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
-            {
-                HttpContext.Response.StatusCode = 403;
+            if (!AuthorizeResrouce(dictaatName))
                 return null;
-            }
 
             var menu = _menuRepo.RemoveMenuItem(dictaatName, pageName);
             _pageRepo.DeleteDictaatPage(dictaatName, pageName);

@@ -9,8 +9,8 @@ using Webdictaat.Domain.Assignments;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20170907131900_page availibility")]
-    partial class pageavailibility
+    [Migration("20170909124919_disabledictaat")]
+    partial class disabledictaat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

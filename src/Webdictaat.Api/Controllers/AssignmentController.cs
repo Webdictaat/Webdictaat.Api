@@ -13,7 +13,7 @@ using Webdictaat.Domain.User;
 namespace Webdictaat.Api.Controllers
 {
     [Route("api/dictaten/{dictaatName}/[controller]")]
-    public class AssignmentController : Controller
+    public class AssignmentController :BaseController
     {
         private IAssignmentRepository _assignmentRepo;
         private IAuthorizeService _authorizeService;
@@ -23,13 +23,19 @@ namespace Webdictaat.Api.Controllers
         public AssignmentController(
             IAuthorizeService authorizeService,
             IAssignmentRepository assignmentRepo,
-            UserManager<Domain.User.ApplicationUser> userManager)
+            UserManager<Domain.User.ApplicationUser> userManager) : base(authorizeService)
         {
             _assignmentRepo = assignmentRepo;
             _userManager = userManager;
             _authorizeService = authorizeService;
         }
 
+        /// <summary>
+        /// Get One
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="assignmentId"></param>
+        /// <returns></returns>
         [HttpGet("{assignmentId}")]
         public AssignmentVM Get(string dictaatName, int assignmentId)
         {
@@ -42,7 +48,11 @@ namespace Webdictaat.Api.Controllers
             return _assignmentRepo.GetAssignment(assignmentId, userId);
         }
 
-
+        /// <summary>
+        /// Get List
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<AssignmentVM> Get(string dictaatName)
         {
@@ -55,39 +65,67 @@ namespace Webdictaat.Api.Controllers
             return _assignmentRepo.GetAllAssignments(dictaatName, userId);
         }
 
+        /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost]
         public AssignmentVM Post(string dictaatName, [FromBody] AssignmentFormVM form)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             return _assignmentRepo.CreateAssignment(dictaatName, form);
         }
 
-
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="assignmentId"></param>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPut("{assignmentId}")]
         public AssignmentVM Put(string dictaatName, int assignmentId, [FromBody] AssignmentFormVM form)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             return _assignmentRepo.UpdateAssignment(dictaatName, assignmentId, form);
         }
 
+        /// <summary>
+        /// Delete assignment
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="assignmentId"></param>
+        /// <returns></returns>
         [HttpDelete("{assignmentId}")]
         public AssignmentVM Delete(string dictaatName, int assignmentId)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             return _assignmentRepo.DeleteAssignment(dictaatName, assignmentId);
         }
 
+        /// <summary>
+        /// Delete submission
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="assignmentId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpDelete("{assignmentId}/submissions/{userId}")]
         [Authorize]
-        public async Task<Boolean> DeleteSubmission(string dictaatName, int assignmentId, string userId)
+        public Boolean DeleteSubmission(string dictaatName, int assignmentId, string userId)
         {
-            if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
-            {
-                HttpContext.Response.StatusCode = 403;
+            if (!AuthorizeResrouce(dictaatName))
                 return false;
-            }
-            else
-            {
-                return _assignmentRepo.UndoCompleteAssignment(assignmentId, userId);
-            }
 
+            return _assignmentRepo.UndoCompleteAssignment(assignmentId, userId);
             
         }
 

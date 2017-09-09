@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain.User;
+using Webdictaat.Api.Services;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,19 +20,15 @@ namespace Webdictaat.Api.Controllers
     /// Rating controller has all the routes for managing ratings
     /// </summary>
     [Route("api/dictaten/{dictaatName}/[controller]")]
-    public class RatingController : Controller
+    public class RatingController :BaseController
     {
         private IRatingRepository _ratingRepo;
         private UserManager<ApplicationUser> _userManager;
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="ratingRepo"></param>
-        /// <param name="userManager"></param>
         public RatingController(
             IRatingRepository ratingRepo,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IAuthorizeService authorizeService) : base(authorizeService)
         {
             _ratingRepo = ratingRepo;
             _userManager = userManager;
@@ -67,6 +64,9 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public RatingVM Post(string dictaatName, [FromBody]RatingVM rating)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             RatingVM result = _ratingRepo.CreateRating(dictaatName, rating);
             return result;
         }

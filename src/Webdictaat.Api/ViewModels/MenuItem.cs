@@ -29,7 +29,7 @@ namespace Webdictaat.Api.ViewModels
         public string Name { get; set; }
 
         public string Url { get; set; }
-        public bool IsEnabled { get; }
+        public bool IsEnabled { get; set; }
         public List<MenuItem> MenuItems { get; set; }
 
         internal Domain.MenuItem ToPoco()

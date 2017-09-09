@@ -14,14 +14,14 @@ namespace Webdictaat.Api.Controllers
     /// </summary>
     [Route("api/dictaten/{dictaatName}/[controller]")]
     [Authorize]
-    public class MenuController : Controller
+    public class MenuController :BaseController
     {
         private IMenuRepository _menuRepo;
         private IAuthorizeService _authorizeService;
 
         public MenuController(
             IMenuRepository menuRepo,
-            IAuthorizeService authorizeService)
+            IAuthorizeService authorizeService) : base(authorizeService)
         {
             _menuRepo = menuRepo;
             _authorizeService = authorizeService;
@@ -38,6 +38,9 @@ namespace Webdictaat.Api.Controllers
         [HttpPut]
         public List<ViewModels.MenuItem> Put(string dictaatName, [FromBody]List<ViewModels.MenuItem> menuItems)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             return _menuRepo.EditMenu(dictaatName, menuItems);
         }
     }

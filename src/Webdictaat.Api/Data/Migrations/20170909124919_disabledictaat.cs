@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Webdictaat.Api.Migrations
 {
-    public partial class dictaatavailibility : Migration
+    public partial class disabledictaat : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -17,7 +17,7 @@ using Webdictaat.Api.ViewModels;
 namespace Webdictaat.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class DictatenController : Controller
+    public class DictatenController : BaseController
     {
         private IDictaatRepository _dictaatRepo;
         IAuthorizeService _authorizationService;
@@ -27,7 +27,7 @@ namespace Webdictaat.Api.Controllers
             IDictaatRepository dictaatRepo,
             UserManager<Domain.User.ApplicationUser> userManager,
             IAuthorizeService authorizationService,
-            WebdictaatContext context)
+            WebdictaatContext context) : base(authorizationService)
         {
             _authorizationService = authorizationService;
             _dictaatRepo = dictaatRepo;
@@ -35,7 +35,7 @@ namespace Webdictaat.Api.Controllers
         }
 
         /// <summary>
-        /// Returns a list of small summaries of webdictaten 
+        /// Create Dictaat
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -60,16 +60,20 @@ namespace Webdictaat.Api.Controllers
         }
 
         /// <summary>
+        /// Get One
         /// Authorized (Requires the user to be logged in.)
         /// Returns a detailed summary of 1 webdictaat
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpGet("{name}")]
+        [HttpGet("{dictaatName}")]
         [Authorize]
-        public ViewModels.Dictaat Get(string name)
+        public ViewModels.Dictaat Get(string dictaatName)
         {
-            return _dictaatRepo.getDictaat(name);
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
+            return _dictaatRepo.getDictaat(dictaatName);
         }
 
         /// <summary>
@@ -93,21 +97,18 @@ namespace Webdictaat.Api.Controllers
         /// </summary>
         /// <param name="name">Name of the dictaat to be deleted</param>
         /// <returns>Returns success or fail (true of false)</returns>
-        [HttpDelete("{name}")]
+        [HttpDelete("{dictaatName}")]
         [Authorize]
-        public async Task<bool> Delete(string name)
+        public bool Delete(string dictaatName)
         {
-            if (!await _authorizationService.IsDictaatContributer(User.Identity.Name, name))
-            {
-                HttpContext.Response.StatusCode = 403;
+            if (!AuthorizeResrouce(dictaatName))
                 return false;
-            }
 
             //Nog niet goed nagedacht over wat er fout kan gaan bij het deleten.
             //Dus nu maar even op een vieze manier goed of fout checken
             try
             {
-                _dictaatRepo.DeleteRepo(name);
+                _dictaatRepo.DeleteRepo(dictaatName);
                 return true;
             }
             catch (Exception e)

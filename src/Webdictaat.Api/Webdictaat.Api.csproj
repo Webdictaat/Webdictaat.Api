@@ -13,6 +13,10 @@
     <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Remove="appsettings.dev.json" />
   </ItemGroup>
@@ -28,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Webdictaat.Core\Webdictaat.Core.csproj" />
+    <ProjectReference Include="..\Webdictaat.Domain\Webdictaat.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +69,10 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\templates\dictaten\default\images\" />
   </ItemGroup>
 
 </Project>

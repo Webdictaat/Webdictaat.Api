@@ -7,24 +7,25 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Webdictaat.Api.Models;
+using Webdictaat.Api.Services;
 
 namespace Webdictaat.Api.Controllers
 {
     [Route("api/dictaten/{dictaatName}/[controller]")]
-    public class UploadController
+    public class UploadController :BaseController
     {
         private IImageRepository _imageRepo;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="imageRepo"></param>
-        public UploadController(IImageRepository imageRepo)
+
+        public UploadController(
+            IImageRepository imageRepo,
+            IAuthorizeService authorizeService) : base(authorizeService)
         {
             this._imageRepo = imageRepo;
         }
 
         /// <summary>
+        /// Create File
         /// Authorized (Requires the user to be logged in.)
         /// </summary>
         /// <param name="dictaatName"></param>
@@ -34,6 +35,8 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public string Post(string dictaatName, IFormFile file)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
 
             if (file?.Length > 0)
             {

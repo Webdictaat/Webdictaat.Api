@@ -10,6 +10,7 @@ using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain.User;
 using Webdictaat.Domain;
+using Webdictaat.Api.Services;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,19 +18,27 @@ namespace Webdictaat.Api.Controllers
 {
 
     [Route("api/dictaten/{dictaatName}/[controller]")]
-    public class QuizController : Controller
+    public class QuizController : BaseController
     {
         private IQuizRepository _quizRepo;
+        private IAuthorizeService _authorizeService;
         private UserManager<ApplicationUser> _userManager;
+
         /// <summary>
-        /// 
+        /// Default constructor
         /// </summary>
-        /// <param name="questionRepo"></param>
-        public QuizController(IQuizRepository quizRepo, UserManager<ApplicationUser> userManager)
+        /// <param name="quizRepo"></param>
+        /// <param name="userManager"></param>
+        /// <param name="authorizeService"></param>
+        public QuizController(
+            IQuizRepository quizRepo, 
+            UserManager<ApplicationUser> userManager,
+            IAuthorizeService authorizeService) : base(authorizeService)
         {
             _userManager = userManager;
             _quizRepo = quizRepo;
-        }
+            _authorizeService = authorizeService;
+    }
 
         /// <summary>
         /// Returns a list of quizes 
@@ -61,8 +70,11 @@ namespace Webdictaat.Api.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost] 
-        public QuizVM Post(string dictaatName, [FromBody]QuizVM quiz)
+        public async Task<QuizVM> Post(string dictaatName, [FromBody]QuizVM quiz)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             QuizVM result = _quizRepo.CreateQuiz(dictaatName, quiz);
             return result;
         }
@@ -75,8 +87,11 @@ namespace Webdictaat.Api.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPut("{quizId}")]
-        public QuizVM Put(string dictaatName, [FromBody]QuizVM quiz)
+        public async Task<QuizVM> Put(string dictaatName, [FromBody]QuizVM quiz)
         {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
             QuizVM result = _quizRepo.UpdateQuiz(dictaatName, quiz);
             return result;
         }
