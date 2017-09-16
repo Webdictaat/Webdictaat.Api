@@ -1,32 +1,37 @@
 [
-    {
-        "Name": "Home",
-        "Url": "home"
-    },
+  {
+    "Name": "Home",
+    "Url": "home",
+    "IsEnabled": true
+  },
     {
         "Name": "Opdrachten",
         "MenuItems": [
-            {
-                "Name": "week 1",
-                "Url": "week1"
-            },
-            {
-                "Name": "week 2",
-                "Url": "week2"
-            },
-            {
-                "Name": "week 3",
-                "Url": "week3"
-            },
-            {
-                "Name": "week 4",
-                "Url": "week4"
-            }
+          {
+            "Name": "week 1",
+            "Url": "week1",
+            "IsEnabled": true
+          },
+          {
+            "Name": "week 2",
+            "Url": "week2",
+            "IsEnabled": true
+          },
+          {
+            "Name": "week 3",
+            "Url": "week3",
+            "IsEnabled": true
+          },
+          {
+            "Name": "week 4",
+            "Url": "week4",
+            "IsEnabled": true
+          }
         ]
     },
-    {
-      "Name": "Contact",
-      "Url": "contact",
-      "Enabled":  "true"
-    }
+  {
+    "Name": "Contact",
+    "Url": "contact",
+    "IsEnabled": true
+  }
 ]

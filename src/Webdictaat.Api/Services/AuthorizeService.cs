@@ -15,6 +15,7 @@ namespace Webdictaat.Api.Services
     public interface IAuthorizeService
     {
         Task<bool> IsDictaatContributer(string userName, string dictaatName);
+        Task<bool> isDictaatOwner(string userName, string dictaatName);
     }
 
     public class AuthorizeService : IAuthorizeService
@@ -38,12 +39,16 @@ namespace Webdictaat.Api.Services
         /// <returns></returns>
         public async Task<bool> IsDictaatContributer(string userName, string dictaatName)
         {
-            
             IResource details = _context.DictaatDetails.Include(dd => dd.Contributers).FirstOrDefault(dd => dd.Name == dictaatName);
             var user = await _userManager.FindByNameAsync(userName);
-
             return details.GetContributersIds().Contains(user.Id);
+        }
 
+        public async Task<bool> isDictaatOwner(string userName, string dictaatName)
+        {
+            DictaatDetails details = _context.DictaatDetails.FirstOrDefault(dd => dd.Name == dictaatName);
+            var user = await _userManager.FindByNameAsync(userName);
+            return details.DictaatOwnerId == user.Email;
         }
     }
 }

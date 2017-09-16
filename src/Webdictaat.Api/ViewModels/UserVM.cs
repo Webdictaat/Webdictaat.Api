@@ -19,6 +19,11 @@ namespace Webdictaat.Api.ViewModels
 
         public double Points { get; set; }
 
+        public UserVM()
+        {
+
+        }
+
         public UserVM(ApplicationUser p)
         {
             this.Id = p.Id;

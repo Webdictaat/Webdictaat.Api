@@ -28,15 +28,19 @@ namespace Webdictaat.Api
         /// Returns if the user can access the resource
         /// </summary>
         /// <param name="dictaatName"></param>
-        protected bool AuthorizeResrouce(string dictaatName)
+        protected bool AuthorizeResrouce(string dictaatName, bool isOwner = false)
         {
-            if (!_authService.IsDictaatContributer(User.Identity.Name, dictaatName).Result)
-            {
-                HttpContext.Response.StatusCode = 403;
-                return false;
-            }
+            var authorize = false;
 
-            return true;    
+            if (isOwner)
+                authorize = _authService.isDictaatOwner(User.Identity.Name, dictaatName).Result;
+            else
+                authorize = _authService.IsDictaatContributer(User.Identity.Name, dictaatName).Result;
+            
+            if (!authorize)
+                HttpContext.Response.StatusCode = 403;
+            
+            return authorize;    
         }
     }
 }

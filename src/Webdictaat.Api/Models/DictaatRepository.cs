@@ -14,6 +14,7 @@ using Webdictaat.Data;
 using Microsoft.EntityFrameworkCore;
 using Webdictaat.Api;
 using Webdictaat.Api.ViewModels;
+using Webdictaat.Domain.Assignments;
 
 namespace Webdictaat.Api.Models
 {
@@ -28,6 +29,8 @@ namespace Webdictaat.Api.Models
         IEnumerable<UserVM> GetParticipants(string dictaatName);
         bool Join(string dictaatName, string group, string userId);
         IEnumerable<GroupVM> GetGroups(string dictaatName);
+        IEnumerable<UserVM> GetContributers(string dictaatName);
+        IEnumerable<UserVM> AddContributer(string dictaatName, string contributerEmail);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -244,6 +247,38 @@ namespace Webdictaat.Api.Models
               .GroupBy(u => u.Group).Select(g => new GroupVM(g.Key, g.ToList()));
 
             return groups;
+        }
+
+        public IEnumerable<UserVM> GetContributers(string dictaatName)
+        {
+            var dictaat = _context.DictaatDetails
+                 .Include("Contributers.User")
+                 .Include("DictaatOwner")
+                 .FirstOrDefault(d => d.Name == dictaatName);
+
+            var contributers = dictaat.Contributers.Select(c => new UserVM(c.User)).ToList();
+            contributers.Add(new UserVM(dictaat.DictaatOwner));
+
+            return contributers;
+        }
+
+        public IEnumerable<UserVM> AddContributer(string dictaatName, string contributerEmail)
+        {
+            var dictaat = _context.DictaatDetails
+                .Include("Contributers")
+                .FirstOrDefault(d => d.Name == dictaatName);
+
+            var user = _context.Users
+                .FirstOrDefault(u => u.Email == contributerEmail);
+
+            dictaat.Contributers.Add(new DictaatContributer()
+            {
+                User = user
+            });
+
+            _context.SaveChanges();
+
+            return this.GetContributers(dictaatName);
         }
     }
 }

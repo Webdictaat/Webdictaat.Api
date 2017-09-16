@@ -101,7 +101,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public bool Delete(string dictaatName)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResrouce(dictaatName, true))
                 return false;
 
             //Nog niet goed nagedacht over wat er fout kan gaan bij het deleten.
@@ -140,6 +140,25 @@ namespace Webdictaat.Api.Controllers
             return _dictaatRepo.GetParticipants(dictaatName);
         }
 
+        [Authorize]
+        [HttpGet("{dictaatName}/contributers")]
+        public IEnumerable<UserVM> GetContributers(string dictaatName)
+        {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
+            return _dictaatRepo.GetContributers(dictaatName);
+        }
+
+        [Authorize]
+        [HttpPost("{dictaatName}/contributers")]
+        public IEnumerable<UserVM> AddContributer(string dictaatName, [FromBody]UserVM contributer)
+        {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
+            return _dictaatRepo.AddContributer(dictaatName, contributer.Email);
+        }
 
         /// <summary>
         /// A Route to get a list of groups
