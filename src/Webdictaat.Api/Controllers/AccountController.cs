@@ -17,7 +17,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Webdictaat.Domain.User;
 
-
 namespace MVCWithAuth.Controllers
 {
     /// <summary>
