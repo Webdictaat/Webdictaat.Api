@@ -91,9 +91,13 @@ namespace Webdictaat.Api.Models
 
         public ViewModels.Dictaat getDictaat(string name)
         {
-            string pagesPath = name + _pagesDirectory;
+            var details = _context.DictaatDetails
+                .Include("DictaatOwner")
+                .FirstOrDefault(d => d.Name == name);
+
             Domain.Dictaat dictaat = _dictaatFactory.GetDictaat(name);
-            return new ViewModels.Dictaat(dictaat);
+
+            return new ViewModels.Dictaat(dictaat, details);
                 
         }
 
@@ -228,23 +232,13 @@ namespace Webdictaat.Api.Models
              .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null)
              .Participants.Select(p => new UserVM(p.User, assignmentIds, p.Group)).ToList();
 
-          
-
             return participants.OrderByDescending(p => p.Points);
         }
 
         public IEnumerable<GroupVM> GetGroups(string dictaatName)
         {
-            //assignments used to calculate total points
-            var assignmentIds = _context.Assignments
-                .Where(a => a.DictaatDetailsId == dictaatName)
-                .Select(a => a.Id).ToArray();
-
-            var groups = _context.DictaatSession
-              .Include("Participants.User.AssignmentSubmissions")
-              .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null)
-              .Participants.Select(p => new UserVM(p.User, assignmentIds))
-              .GroupBy(u => u.Group).Select(g => new GroupVM(g.Key, g.ToList()));
+            var participants = this.GetParticipants(dictaatName);
+            var groups = participants.GroupBy(u => u.Group).Select(g => new GroupVM(g.Key, g.ToList()));
 
             return groups;
         }

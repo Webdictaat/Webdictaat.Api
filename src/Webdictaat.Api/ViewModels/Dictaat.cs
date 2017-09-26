@@ -15,12 +15,14 @@ namespace Webdictaat.Api.ViewModels
         public IEnumerable<FileSummary> Pages { get; set; }
 
         public List<ViewModels.MenuItem> MenuItems { get; set; }
+        public UserVM Owner { get; }
 
-        public Dictaat(Domain.Dictaat dictaat)
+        public Dictaat(Domain.Dictaat dictaat, DictaatDetails details)
         {
             this.Name = dictaat.Name;
             this.Pages = dictaat.Pages;
             this.MenuItems = dictaat.MenuItems.Select(mi => new ViewModels.MenuItem(mi)).ToList();
+            this.Owner = new UserVM(details.DictaatOwner);
         }
     }
 }

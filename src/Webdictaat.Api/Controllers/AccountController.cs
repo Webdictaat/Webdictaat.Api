@@ -108,6 +108,7 @@ namespace MVCWithAuth.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
+                UpdateUserName(info);
                 return Redirect(returnUrl);
             }
             if (result.IsLockedOut)
@@ -116,8 +117,14 @@ namespace MVCWithAuth.Controllers
             }
             else
             {
+
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 //Get the information about the user from the external login provider
-                var user = new ApplicationUser { UserName = info.Principal.FindFirstValue(ClaimTypes.Email), Email = info.Principal.FindFirstValue(ClaimTypes.Email) };
+                var user = new ApplicationUser {
+                    UserName = email.Split('@')[0],
+                    Email = email,
+                    FullName = info.Principal.FindFirstValue(ClaimTypes.Name)
+                };
 
                 var createUserResult = await _userManager.CreateAsync(user);
                 if (createUserResult.Succeeded)
@@ -133,6 +140,21 @@ namespace MVCWithAuth.Controllers
 
                 return Redirect(returnUrl);
             }
+        }
+
+        private async void UpdateUserName(ExternalLoginInfo info)
+        {
+           var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+           var user = _userManager.FindByEmailAsync(email).Result;
+
+            if(user.FullName == null)
+            {
+                user.FullName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                user.UserName = email.Split('@')[0];
+                user.NormalizedUserName = user.UserName.ToUpper();
+            }
+
+            var updateUserResult = _userManager.UpdateAsync(user).Result;
         }
 
         /// <summary>
