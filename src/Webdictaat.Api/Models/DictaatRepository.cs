@@ -26,9 +26,6 @@ namespace Webdictaat.Api.Models
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
         ViewModels.DictaatMarkings getMarkings(string name);
-        IEnumerable<UserVM> GetParticipants(string dictaatName);
-        bool Join(string dictaatName, string group, string userId);
-        IEnumerable<GroupVM> GetGroups(string dictaatName);
         IEnumerable<UserVM> GetContributers(string dictaatName);
         IEnumerable<UserVM> AddContributer(string dictaatName, string contributerEmail);
     }
@@ -143,38 +140,6 @@ namespace Webdictaat.Api.Models
             _context.SaveChanges();
         }
 
-        /// <summary>
-        /// Join the current session of a dictaat
-        /// </summary>
-        /// <param name="dictaatName"></param>
-        /// <param name="group"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public bool Join(string dictaatName, string group, string userId)
-        {
-
-            var currentSession = _context.DictaatSession
-                .Include(s => s.Participants)
-                .FirstOrDefault(s => s.EndedOn == null && s.DictaatDetailsId == dictaatName);
-
-            if(currentSession.Participants.Any(p => p.UserId == userId))
-            {
-                return false; //already in the partcipant list
-            }
-            else
-            {
-                currentSession.Participants.Add(new DictaatSessionUser()
-                {
-                    UserId = userId,
-                    Group = group,
-                });
-                _context.SaveChanges();
-                return true; //Joined this ditaat :D
-            }
-
-
-        }
-
         public ViewModels.Session GetCurrentSession(string dictaatName, string userId = null)
         {
             var count = this._context.DictaatSession
@@ -220,28 +185,7 @@ namespace Webdictaat.Api.Models
 
         }
 
-        public IEnumerable<UserVM> GetParticipants(string dictaatName)
-        {
-            //assignments used to calculate total points
-            var assignmentIds = _context.Assignments
-                .Where(a => a.DictaatDetailsId == dictaatName)
-                .Select(a => a.Id).ToArray();
 
-            var participants =  _context.DictaatSession
-             .Include("Participants.User.AssignmentSubmissions")
-             .FirstOrDefault(s => s.DictaatDetailsId == dictaatName && s.EndedOn == null)
-             .Participants.Select(p => new UserVM(p.User, assignmentIds, p.Group)).ToList();
-
-            return participants.OrderByDescending(p => p.Points);
-        }
-
-        public IEnumerable<GroupVM> GetGroups(string dictaatName)
-        {
-            var participants = this.GetParticipants(dictaatName);
-            var groups = participants.GroupBy(u => u.Group).Select(g => new GroupVM(g.Key, g.ToList()));
-
-            return groups;
-        }
 
         public IEnumerable<UserVM> GetContributers(string dictaatName)
         {

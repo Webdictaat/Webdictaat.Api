@@ -12,12 +12,15 @@ namespace Webdictaat.Api.ViewModels
         {
             this.GroupName = key;
             this.Members = list;
-            this.TotalPoints = this.Members.Sum(m => m.Points);
+            this.TotalPoints = (int) this.Members.Sum(m => m.Points);
+            this.Points = this.TotalPoints / this.Members.Count();
         }
 
         public string GroupName { get; set; }
 
-        public double TotalPoints { get; set; }
+        public int TotalPoints { get; set; }
+
+        public int Points { get; set; }
 
         public IEnumerable<UserVM> Members { get; set; }
 

@@ -39,6 +39,8 @@ namespace Webdictaat.Data
 
         public DbSet<DictaatSession> DictaatSession { get; set; }
 
+        public DbSet<DictaatSessionUser> DictaatSessionUser { get; set; }
+
         /// <summary>
         /// Start context with options
         /// </summary>

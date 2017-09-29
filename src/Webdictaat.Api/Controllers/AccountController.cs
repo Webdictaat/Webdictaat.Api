@@ -164,10 +164,10 @@ namespace MVCWithAuth.Controllers
         [HttpGet]
         [Authorize]
         [Route("Current")]
-        public async Task<Webdictaat.Api.ViewModels.User> Current()
+        public async Task<Webdictaat.Api.ViewModels.UserVM> Current()
         {
             ApplicationUser user = await this.GetCurrentUserAsync();
-            return new Webdictaat.Api.ViewModels.User(user);
+            return new Webdictaat.Api.ViewModels.UserVM(user);
         }
 
         /// <summary>

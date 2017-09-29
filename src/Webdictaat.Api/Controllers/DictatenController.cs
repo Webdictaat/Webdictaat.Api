@@ -118,27 +118,6 @@ namespace Webdictaat.Api.Controllers
             }
         }
 
-        /// <summary>
-        /// A route to join a dictaat by posting on it's participants list 
-        /// </summary>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPost("{dictaatName}/participants/{group}")]
-        public Boolean Join(string dictaatName, string group)
-        {
-            string userId = _userManager.GetUserId(HttpContext.User);
-            return _dictaatRepo.Join(dictaatName, group, userId);
-        }
-
-        /// <summary>
-        /// Returns a list of participants with points gained from this dictaat
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("{dictaatName}/participants")]
-        public IEnumerable<UserVM> GetParticipants(string dictaatName)
-        {
-            return _dictaatRepo.GetParticipants(dictaatName);
-        }
 
         [Authorize]
         [HttpGet("{dictaatName}/contributers")]
@@ -159,16 +138,5 @@ namespace Webdictaat.Api.Controllers
 
             return _dictaatRepo.AddContributer(dictaatName, contributer.Email);
         }
-
-        /// <summary>
-        /// A Route to get a list of groups
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("{dictaatName}/groups")]
-        public IEnumerable<GroupVM> GetGroups(string dictaatName)  {
-            return _dictaatRepo.GetGroups(dictaatName);
-        }
-
-
-}
+    }
 }
