@@ -14,8 +14,6 @@ namespace Webdictaat.Api.ViewModels
         {
             this.QuizId = qa.QuizId;
             this.Timestamp = qa.Timestamp;
-            this.CorrectAnswers = qa.Answers.Where(a => a.Answer.IsCorrect).Count();
-            this.AnswerIs = qa.Answers.Select(a => a.AnswerId).ToList();
         }
 
         public int QuizId { get; set; }

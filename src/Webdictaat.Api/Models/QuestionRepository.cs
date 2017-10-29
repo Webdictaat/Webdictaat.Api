@@ -30,18 +30,9 @@ namespace Webdictaat.Api.Models
 
         public QuestionVM CreateQuestion(QuestionVM question)
         {
-            var q = new Question()
-            {
-                Text = question.Text,
-                Answers = question.Answers.Select(a =>
-                    new Answer() { Text = a.Text, IsCorrect = a.IsCorrect }).ToList()
-            };
-
-            _context.Questions.Add(q);
+            _context.Questions.Add(question.ToPoco());
             _context.SaveChanges();
-            question.Id = q.Id;
             return question;
-                
         }
 
         public QuestionVM DeleteQuestion(int questionId)
@@ -65,7 +56,7 @@ namespace Webdictaat.Api.Models
         /// <returns></returns>
         public QuestionVM GetQuestion(int questionId)
         {
-            Question question = _context.Questions.Include(q => q.Answers).FirstOrDefault(q => q.Id == questionId);
+            Question question = _context.Questions.FirstOrDefault(q => q.Id == questionId);
 
             if (question == null)
                 return null;
@@ -75,39 +66,8 @@ namespace Webdictaat.Api.Models
 
         public QuestionVM UpdateQuestion(QuestionVM form)
         {
-            Question question = _context.Questions.Include(q => q.Answers).FirstOrDefault(q => q.Id == form.Id);
-
-            if (question == null)
-                return null;
-
-            question.Text = form.Text;
-           
-            //eerst zoeken naar bestaande answers
-            foreach(var answer in question.Answers)
-            {
-                var answerForm = form.Answers.FirstOrDefault(a => a.Id == answer.Id);
-
-                if (answerForm != null){ //mag blijven
-                    answer.IsCorrect = answerForm.IsCorrect;
-                    form.Answers.Remove(answerForm); // al gehad
-                }
-                else
-                {
-                    answer.IsDeleted = true;
-                }
-            }
-
-            //overgebleven answers zijn nieuw
-            foreach (var answer in form.Answers)
-            {
-                question.Answers.Add(new Answer()
-                {
-                    IsCorrect = answer.IsCorrect,
-                    Text = answer.Text
-                });
-            }
-
-            //klaar
+            Question question = form.ToPoco();
+            _context.Questions.Attach(question);
             _context.SaveChanges();
             return new QuestionVM(question);
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
 using Webdictaat.Core;
@@ -10,13 +11,19 @@ namespace Webdictaat.Api.Test.Controller
 {
     public class BaseTestController
     {
-        public ParticipantRepository participantRepository { get; set; }
-        public UserManager<ApplicationUser> userManager { get; set; }
+        protected Mock<ParticipantRepository> prm { get; set; }
+        protected Mock<UserManager<ApplicationUser>> umm { get; set; }
+        protected Mock<IAuthorizeService> am { get; set; }
+
+        protected WebdictaatContext _context;
 
         public BaseTestController()
         {
+            am = new Mock<IAuthorizeService>();
+            prm = new Mock<ParticipantRepository>();
+            umm = new Mock<UserManager<ApplicationUser>>();
 
-            //participantRepository = new ParticipantRepository(um);
+            _context = new WebdictaatContext(new DbContextOptions<WebdictaatContext>());
         }
     }
 }

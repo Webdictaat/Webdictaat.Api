@@ -96,8 +96,10 @@ namespace Webdictaat.Api.Models
                 .Where(a => assignmentIds.Contains(a.AssignmentId) && a.UserId == user.Id)
                 .ToList();
 
-            var myCompletion = myAssignments.Count();
-            var myPoints = myAssignments.Sum(a => a.PointsRecieved);
+            var myCompletion = myAssignments.Where(a => a.Accepted).Count();
+            var myPending = myAssignments.Where(a => !a.Accepted).Count();
+
+            var myPoints = myAssignments.Where(a => a.Accepted).Sum(a => a.PointsRecieved);
 
             //count sumbissions
             double submissionCount = _context.AssignmentSubmissions
@@ -122,6 +124,7 @@ namespace Webdictaat.Api.Models
                 AssignmentIds = assignmentIds,
                 RecievedPoints = myPoints,
                 CompletedAssignments = myCompletion,
+                PendingAssignments = myPending,
                 AverageCompletion = averageCompletion,
                 ComparedToAverage = ((myCompletion - averageCompletion) / averageCompletion) * 100
             };

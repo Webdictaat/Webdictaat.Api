@@ -11,13 +11,7 @@ namespace Webdictaat.Api.Test.Controller
         [Fact]
         public void Should_Get_Participant()
         {
-            //arrange
-            var ctrl = new ParticipantController(participantRepository, userManager, null);
-            //act
-
-
-
-            //assert
+            
 
         }
     }

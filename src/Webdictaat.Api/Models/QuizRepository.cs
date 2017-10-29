@@ -17,7 +17,7 @@ namespace Webdictaat.Api.Models
     {
         QuizVM CreateQuiz(string dictaatName, QuizVM quiz);
         QuizVM GetQuiz(int quizId, string userId);
-        QuizAttemptVM AddAttempt(int quizId, string userId, ICollection<int> givenAnswers);
+        QuizAttemptVM AddAttempt(int quizId, string userId, object something);
         ICollection<QuizSummaryVM> GetQuizes(string dictaatName, string userId);
         QuizVM UpdateQuiz(string dictaatName, QuizVM quiz);
     }
@@ -33,23 +33,19 @@ namespace Webdictaat.Api.Models
             _questionRepo = questionRepo;
         }
 
-        public QuizAttemptVM AddAttempt(int quizId, string userId, ICollection<int> givenAnswers)
+        public QuizAttemptVM AddAttempt(int quizId, string userId, object something)
         {
             QuizAttempt qa = new QuizAttempt()
             {
                 QuizId = quizId,
                 UserId = userId,
-                Answers = givenAnswers.Select(answerId => new QuizAttemptAnswer() { AnswerId = answerId }).ToList(),
                 Timestamp = DateTime.Now,
             };
 
             _context.QuizAttempts.Add(qa);
             _context.SaveChanges();
 
-            //retrieve fresh attempt from database, so we can include the full answer objects
-            qa = _context.QuizAttempts.OrderByDescending(mqa => mqa.Timestamp).Include("Answers.Answer").FirstOrDefault(attempt => attempt.Id == qa.Id);
-
-            return new QuizAttemptVM(qa);
+            return null;
         }
 
         public ICollection<QuizSummaryVM> GetQuizes(string dictaatId, string userId)
@@ -120,12 +116,7 @@ namespace Webdictaat.Api.Models
                 {
                     quiz.Questions.Add(new QuestionQuiz()
                     {
-                        Question = new Question()
-                        {
-                            Text = qForm.Text,
-                            Answers = qForm.Answers.Select(a =>
-                                new Answer() { Text = a.Text, IsCorrect = a.IsCorrect }).ToList()
-                        }
+                        Question = qForm.ToPoco()
                     });
                 }
             }

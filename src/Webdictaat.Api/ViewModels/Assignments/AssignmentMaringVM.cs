@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Webdictaat.Api.ViewModels
 {
-    public class AssignmentMaringVM 
+    public class AssignmentMarkingVM 
     {
         public int Id { get; set; }
 
@@ -18,16 +18,16 @@ namespace Webdictaat.Api.ViewModels
 
         public int Points { get; set; }
 
-        public IEnumerable<string> SubmittedBy { get; set; }
+        public IEnumerable<AssignmentSubmissionVM> Submissions { get; }
 
-        public AssignmentMaringVM(Assignment assignment) 
+        public AssignmentMarkingVM(Assignment assignment) 
         {
             this.Id = assignment.Id;
             this.Title = assignment.Title;
             this.Description = assignment.Description;
             this.Metadata = assignment.Metadata;
             this.Points = assignment.Points;
-            this.SubmittedBy = assignment.Attempts.Select(a => a.UserId);
+            this.Submissions = assignment.Attempts.ToList().Select(s => new AssignmentSubmissionVM(s));
         }
 
         //if(submissions[userId]

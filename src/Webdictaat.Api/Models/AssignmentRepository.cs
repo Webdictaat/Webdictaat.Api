@@ -24,7 +24,7 @@ namespace Webdictaat.Api.Models
         /// <param name="assignmentId"></param>
         /// <param name="secret"></param>
         /// <returns></returns>
-        AssignmentVM CompleteAssignment(int assignmentId, string userId);
+        AssignmentSubmissionVM CompleteAssignment(int assignmentId, string userId, bool accepted);
         AssignmentVM CompleteAssignment(int assignmentId, string email, string token, string userId);
         IEnumerable<AssignmentVM> GetAllAssignments(string dictaatName, string userId);
         AssignmentVM UpdateAssignment(string dictaatName, int assignmentId, AssignmentFormVM form);
@@ -44,16 +44,11 @@ namespace Webdictaat.Api.Models
             _secretService = secretService;
         }
 
-        public AssignmentVM CompleteAssignment(int assignmentId, string userId)
+        public AssignmentSubmissionVM CompleteAssignment(int assignmentId, string userId, bool accepted)
         {
             var assignment = _context.Assignments.FirstOrDefault(a => a.Id == assignmentId);
-
-            if(assignment != null)
-            {
-                completeAssignment(assignment, userId);
-            }
-
-            return GetAssignment(assignmentId, userId);
+            return new AssignmentSubmissionVM(completeAssignment(assignment, userId, accepted));
+ 
         }
 
         public AssignmentVM CompleteAssignment(int assignmentId, string email, string token, string userId)
@@ -65,7 +60,7 @@ namespace Webdictaat.Api.Models
                 var assignmentToken = _secretService.GetAssignmentToken(email, assignment.ExternalId, assignment.AssignmentSecret);
                 if(token == assignmentToken)
                 {
-                    completeAssignment(assignment, userId);
+                    completeAssignment(assignment, userId, true);
                 }
           
                 return GetAssignment(assignmentId, userId);
@@ -74,26 +69,31 @@ namespace Webdictaat.Api.Models
             return null;
         }
 
-        private AssignmentSubmission completeAssignment(Assignment assignment, string userId) {
+        private AssignmentSubmission completeAssignment(Assignment assignment, string userId, bool accepted) {
+
             var mySubmission = _context.AssignmentSubmissions.FirstOrDefault(a => a.UserId == userId && a.AssignmentId == assignment.Id);
 
             if (mySubmission != null)
             {
-                return mySubmission;
+                mySubmission.Accepted = accepted;
+            }
+            else
+            {
+                var submission = new AssignmentSubmission()
+                {
+                    AssignmentId = assignment.Id,
+                    UserId = userId,
+                    Timestamp = DateTime.Now,
+                    PointsRecieved = assignment.Points,
+                    Accepted = accepted
+                };
+
+                _context.AssignmentSubmissions.Add(submission);
+                mySubmission = submission;
             }
 
-            var submission = new AssignmentSubmission()
-            {
-                AssignmentId = assignment.Id,
-                UserId = userId,
-                Timestamp = DateTime.Now,
-                PointsRecieved = assignment.Points,
-            };
-
-            _context.AssignmentSubmissions.Add(submission);
             _context.SaveChanges();
-            return submission;
-
+            return mySubmission;
         }
 
       
@@ -122,7 +122,10 @@ namespace Webdictaat.Api.Models
 
             if(userId != null)
             {
-                response.MySubmission = _context.AssignmentSubmissions.FirstOrDefault(a => a.UserId == userId && a.AssignmentId == assignmentId);
+                var submission = _context.AssignmentSubmissions.FirstOrDefault(a => a.UserId == userId && a.AssignmentId == assignmentId);
+
+                if(submission != null)
+                    response.MySubmission = new AssignmentSubmissionVM(submission); 
             }
 
             return response;

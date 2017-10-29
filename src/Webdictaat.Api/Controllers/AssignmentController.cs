@@ -131,26 +131,21 @@ namespace Webdictaat.Api.Controllers
 
         [HttpPost("{assignmentId}/submissions")]
         [Authorize]
-        public async Task<AssignmentVM> PostSubmission(string dictaatName, int assignmentId, [FromBody] AssignmentSubmissionFormVM form)
+        public async Task<object> PostSubmission(string dictaatName, int assignmentId, [FromBody] AssignmentSubmissionFormVM form)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (form.Token != null)
             {
                 //use the user identy name (email)
-                return _assignmentRepo.CompleteAssignment(assignmentId, User.Identity.Name, form.Token, userId);
+                return _assignmentRepo.CompleteAssignment(assignmentId, user.Email, form.Token, userId);
             }
             else
             {
-                if (!await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName))
-                {
-                    HttpContext.Response.StatusCode = 403;
-                    return null;
-                }
-                else
-                {
-                    return _assignmentRepo.CompleteAssignment(assignmentId, form.UserId);
-                }
+                var isContributer = await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName);
+                return _assignmentRepo.CompleteAssignment(assignmentId, form.UserId, isContributer);
+                
             }
         }
 

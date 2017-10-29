@@ -20,6 +20,8 @@ namespace Webdictaat.Domain
         public string DictaatDetailsName { get; set; }
 
         public DateTime Timestamp { get; set; }
+        
+        public Boolean Shuffle { get; set; }
 
         public virtual ICollection<QuestionQuiz> Questions { get; set; }
 

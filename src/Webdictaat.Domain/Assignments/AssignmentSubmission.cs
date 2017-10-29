@@ -22,5 +22,7 @@ namespace Webdictaat.Domain.Assignments
         public DateTime Timestamp { get; set; }
 
         public int PointsRecieved { get; set; }
+
+        public bool Accepted {get; set;}
     }
 }

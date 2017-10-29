@@ -18,6 +18,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Webdictaat\**" />
+    <Content Remove="Webdictaat\**" />
+    <EmbeddedResource Remove="Webdictaat\**" />
+    <None Remove="Webdictaat\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="appsettings.dev.json" />
   </ItemGroup>
 
@@ -38,6 +45,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="1.1.1" />
     <PackageReference Include="AutoMapper" Version="5.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="Microsoft.AspNet.Http.Abstractions" Version="1.0.0-rc1-final" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
@@ -72,7 +80,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Webdictaat\Api\ViewModels\" />
     <Folder Include="wwwroot\templates\dictaten\default\images\" />
   </ItemGroup>
 

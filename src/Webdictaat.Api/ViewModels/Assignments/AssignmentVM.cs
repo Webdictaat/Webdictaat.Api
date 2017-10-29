@@ -20,7 +20,7 @@ namespace Webdictaat.Api.ViewModels.Assignments
 
         public ICollection<AssignmentSubmission> Submissions { get; set; }
  
-        public AssignmentSubmission MySubmission { get; set; }
+        public AssignmentSubmissionVM MySubmission { get; set; }
 
         public int SubmissionCount { get; set; }
         public string Level { get; private set; }

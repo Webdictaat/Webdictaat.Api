@@ -8,19 +8,21 @@ using System.Threading.Tasks;
 namespace Webdictaat.Domain
 {
     //koppeltabel
-    public class QuizAttemptAnswer
+    public class QuizAttemptQuestion
     {
         [ForeignKey("QuizAttemptId")]
         public virtual QuizAttempt QuizAttempt { get; set; }
 
         public int QuizAttemptId { get; set; }
 
-        [ForeignKey("AnswerId")]
-        public virtual Answer Answer {get; set; }
+        [ForeignKey("QuestionId")]
+        public virtual Question Question {get; set; }
 
-        public int AnswerId { get; set; }
+        public int QuestionId { get; set; }
 
-        public QuizAttemptAnswer()
+        public Boolean IsCorrect { get; set; }
+
+        public QuizAttemptQuestion()
         {
 
         }
@@ -35,13 +37,13 @@ namespace Webdictaat.Domain
 
         public DateTime Timestamp { get; set; }
 
-        public virtual ICollection<QuizAttemptAnswer> Answers { get; set; }
+        public virtual ICollection<QuizAttemptQuestion> QquestionsAnswered { get; set; }
 
         public int QuizId { get; set; }
 
         public QuizAttempt()
         {
-            this.Answers = new List<QuizAttemptAnswer>();
+            this.QquestionsAnswered = new List<QuizAttemptQuestion>();
         }
     }
 }

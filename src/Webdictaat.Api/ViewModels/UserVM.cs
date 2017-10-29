@@ -42,7 +42,7 @@ namespace Webdictaat.Api.ViewModels
             : this(user)
         {
             this.Points = user.AssignmentSubmissions
-                .Where(a => assignmentIds.Contains(a.AssignmentId))
+                .Where(a => assignmentIds.Contains(a.AssignmentId) && a.Accepted == true)
                 .Sum(a => a.PointsRecieved);
         }
 

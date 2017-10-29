@@ -39,12 +39,21 @@ namespace Webdictaat.Domain
         public virtual ICollection<QuestionQuiz> Quizes { get; set; }
 
         public string Text { get; set; }
-        public virtual ICollection<Answer> Answers { get; set; }
         public bool IsDeleted { get; set; }
+
+        public string QuestionType { get; set; }
+
+        /// <summary>
+        /// A JSON string
+        /// </summary>
+        public string Body { get; set; }
+
+        public virtual ICollection<QuizAttemptQuestion> Attempts { get; set; }
+
 
         public Question()
         {
-            Answers = new List<Answer>();
+
         }
     }
 }

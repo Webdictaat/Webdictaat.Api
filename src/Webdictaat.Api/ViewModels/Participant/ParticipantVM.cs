@@ -15,5 +15,6 @@ namespace Webdictaat.Api.ViewModels.Participant
 
         public double CompletedAssignments { get; set; }
         public int RecievedPoints { get; internal set; }
+        public int PendingAssignments { get; internal set; }
     }
 }

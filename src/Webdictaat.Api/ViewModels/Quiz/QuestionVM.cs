@@ -13,11 +13,15 @@ namespace Webdictaat.Api.ViewModels
         public int Id { get; set; }
         public string Text { get; set; }
 
-        public IList<AnswerVM> Answers { get; set; }
+        /// <summary>
+        /// Json based string
+        /// </summary>
+        public string Body { get; set; }
+
 
         public QuestionVM()
         {
-            this.Answers = new List<AnswerVM>();
+           
         }
 
         public QuestionVM(Question question)
@@ -25,7 +29,6 @@ namespace Webdictaat.Api.ViewModels
             this.Id = question.Id;
             this.Text = question.Text;
             this.IsDeleted = question.IsDeleted;
-            this.Answers = question.Answers.Where(a => !a.IsDeleted).Select(a => new AnswerVM(a)).ToList();
         }
 
         internal Question ToPoco()
@@ -34,7 +37,7 @@ namespace Webdictaat.Api.ViewModels
             {
                 Id = this.Id,
                 Text = this.Text,
-                Answers = this.Answers.Select(a => a.ToPoco()).ToList(),
+                Body = this.Body
             };
         }
     }
