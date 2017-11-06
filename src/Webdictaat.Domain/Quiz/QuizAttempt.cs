@@ -37,13 +37,13 @@ namespace Webdictaat.Domain
 
         public DateTime Timestamp { get; set; }
 
-        public virtual ICollection<QuizAttemptQuestion> QquestionsAnswered { get; set; }
+        public virtual ICollection<QuizAttemptQuestion> QuestionsAnswered { get; set; }
 
         public int QuizId { get; set; }
 
         public QuizAttempt()
         {
-            this.QquestionsAnswered = new List<QuizAttemptQuestion>();
+            this.QuestionsAnswered = new List<QuizAttemptQuestion>();
         }
     }
 }

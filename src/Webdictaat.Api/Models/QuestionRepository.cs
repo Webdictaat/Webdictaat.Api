@@ -68,6 +68,7 @@ namespace Webdictaat.Api.Models
         {
             Question question = form.ToPoco();
             _context.Questions.Attach(question);
+            _context.Entry(question).State = EntityState.Modified;
             _context.SaveChanges();
             return new QuestionVM(question);
         }

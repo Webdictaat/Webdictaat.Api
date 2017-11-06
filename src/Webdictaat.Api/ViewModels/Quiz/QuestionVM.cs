@@ -13,10 +13,12 @@ namespace Webdictaat.Api.ViewModels
         public int Id { get; set; }
         public string Text { get; set; }
 
+        public string Type { get; set; }
+
         /// <summary>
         /// Json based string
         /// </summary>
-        public string Body { get; set; }
+        public dynamic Body { get; set; }
 
 
         public QuestionVM()
@@ -28,6 +30,8 @@ namespace Webdictaat.Api.ViewModels
         {
             this.Id = question.Id;
             this.Text = question.Text;
+            this.Type = question.QuestionType;
+            this.Body = Newtonsoft.Json.Linq.JObject.Parse(question.Body);
             this.IsDeleted = question.IsDeleted;
         }
 
@@ -37,7 +41,8 @@ namespace Webdictaat.Api.ViewModels
             {
                 Id = this.Id,
                 Text = this.Text,
-                Body = this.Body
+                QuestionType = this.Type,
+                Body = Newtonsoft.Json.JsonConvert.SerializeObject(this.Body)
             };
         }
     }

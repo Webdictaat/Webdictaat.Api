@@ -6,14 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Webdictaat.Api.Models;
 using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Webdictaat.Api.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Webdictaat.Domain.User;
 using Webdictaat.Domain;
 using Webdictaat.Api.Services;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Webdictaat.Api.Controllers
 {
 
@@ -97,18 +95,18 @@ namespace Webdictaat.Api.Controllers
         }
 
         /// <summary>
-        /// Authorized (Requires the user to be logged in.)
+        /// Publish an attempt from a user for a quiz
         /// </summary>
         /// <param name="dictaatName"></param>
         /// <param name="quizId"></param>
-        /// <param name="quizAttempt"></param>
+        /// <param name="attempt"></param>
         /// <returns></returns>
         [Authorize]
         [HttpPost("{quizId}/Attempts")]
-        public Api.ViewModels.QuizAttemptVM Post(string dictaatName, int quizId, [FromBody]QuizAttemptForm quiz)
+        public Api.ViewModels.QuizAttemptVM Post(string dictaatName, int quizId, [FromBody]IEnumerable<QuestionAttemptVM> attempt)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            Api.ViewModels.QuizAttemptVM result = _quizRepo.AddAttempt(quizId, userId, quiz.GivenAnswers);
+            Api.ViewModels.QuizAttemptVM result = _quizRepo.AddAttempt(quizId, userId, attempt);
             return result;
         }
     }

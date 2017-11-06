@@ -8,7 +8,6 @@ using Webdictaat.Api.ViewModels;
 using Webdictaat.Domain;
 using Microsoft.EntityFrameworkCore;
 using Webdictaat.Data;
-using Webdictaat.Api.ViewModels;
 using System.Threading.Tasks;
 
 namespace Webdictaat.Api.Models
@@ -17,7 +16,7 @@ namespace Webdictaat.Api.Models
     {
         QuizVM CreateQuiz(string dictaatName, QuizVM quiz);
         QuizVM GetQuiz(int quizId, string userId);
-        QuizAttemptVM AddAttempt(int quizId, string userId, object something);
+        QuizAttemptVM AddAttempt(int quizId, string userId, IEnumerable<QuestionAttemptVM> attempt);
         ICollection<QuizSummaryVM> GetQuizes(string dictaatName, string userId);
         QuizVM UpdateQuiz(string dictaatName, QuizVM quiz);
     }
@@ -33,19 +32,20 @@ namespace Webdictaat.Api.Models
             _questionRepo = questionRepo;
         }
 
-        public QuizAttemptVM AddAttempt(int quizId, string userId, object something)
+        public QuizAttemptVM AddAttempt(int quizId, string userId, IEnumerable<QuestionAttemptVM> attempt)
         {
             QuizAttempt qa = new QuizAttempt()
             {
                 QuizId = quizId,
                 UserId = userId,
                 Timestamp = DateTime.Now,
+                QuestionsAnswered = attempt.ToList().Select(a => a.ToPoco()).ToList()
             };
 
             _context.QuizAttempts.Add(qa);
             _context.SaveChanges();
 
-            return null;
+            return new QuizAttemptVM(qa);
         }
 
         public ICollection<QuizSummaryVM> GetQuizes(string dictaatId, string userId)
@@ -78,7 +78,7 @@ namespace Webdictaat.Api.Models
         public QuizVM GetQuiz(int quizId, string userId = null)
         {
             Quiz quiz = _context.Quizes
-                .Include("Questions.Question.Answers.QuizAttempts")          
+                .Include("Questions.Question")          
                 .FirstOrDefault(q => q.Id == quizId);
 
             if (quiz == null)
@@ -89,6 +89,7 @@ namespace Webdictaat.Api.Models
             if (userId != null)
             {
                 vm.MyAttempts = _context.QuizAttempts
+                        .Include(q => q.QuestionsAnswered)
                         .Where(qa => qa.UserId == userId && qa.QuizId == quizId)
                         .OrderByDescending(qa => qa.Timestamp)
                         .ToList()
