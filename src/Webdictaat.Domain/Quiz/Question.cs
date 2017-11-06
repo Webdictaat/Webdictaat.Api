@@ -48,6 +48,8 @@ namespace Webdictaat.Domain
 
         public string QuestionType { get; set; }
 
+        public string Explanation { get; set; }
+
         /// <summary>
         /// A JSON string
         /// </summary>

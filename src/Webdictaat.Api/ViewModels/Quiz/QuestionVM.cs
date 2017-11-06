@@ -12,6 +12,7 @@ namespace Webdictaat.Api.ViewModels
 
         public int Id { get; set; }
         public string Text { get; set; }
+        public string Explanation { get; set; }
 
         public string Type { get; set; }
 
@@ -31,7 +32,7 @@ namespace Webdictaat.Api.ViewModels
             this.Id = question.Id;
             this.Text = question.Text;
             this.Type = question.QuestionType;
-
+            this.Explanation = question.Explanation;
 
             //check if question contains old scool answers
             if (question.Body == null)
@@ -58,6 +59,7 @@ namespace Webdictaat.Api.ViewModels
                 Id = this.Id,
                 Text = this.Text,
                 QuestionType = this.Type,
+                Explanation = this.Explanation,
                 Body = Newtonsoft.Json.JsonConvert.SerializeObject(this.Body)
             };
         }
