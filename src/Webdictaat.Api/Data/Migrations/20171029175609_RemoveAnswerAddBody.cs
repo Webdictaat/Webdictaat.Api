@@ -12,9 +12,6 @@ namespace Webdictaat.Api.Migrations
             migrationBuilder.DropTable(
                 name: "QuizAttemptAnswer");
 
-            migrationBuilder.DropTable(
-                name: "Answer");
-
             migrationBuilder.AddColumn<bool>(
                 name: "Shuffle",
                 table: "Quizes",
@@ -80,28 +77,6 @@ namespace Webdictaat.Api.Migrations
                 table: "Questions");
 
             migrationBuilder.CreateTable(
-                name: "Answer",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    IsCorrect = table.Column<bool>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    QuestionId = table.Column<int>(nullable: false),
-                    Text = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Answer", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Answer_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "QuizAttemptAnswer",
                 columns: table => new
                 {
@@ -124,11 +99,6 @@ namespace Webdictaat.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Answer_QuestionId",
-                table: "Answer",
-                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuizAttemptAnswer_AnswerId",

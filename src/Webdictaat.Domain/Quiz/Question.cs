@@ -9,12 +9,6 @@ namespace Webdictaat.Domain
 {
     public class QuestionQuiz
     {
-  
-        public QuestionQuiz(Question question)
-        {
-            this.Question = question;
-        }
-
         [ForeignKey("QuestionId")]
         public Question Question { get; set; }
 
@@ -25,9 +19,15 @@ namespace Webdictaat.Domain
 
         public int QuizId { get; set; }
 
+
         public QuestionQuiz()
         {
 
+        }
+
+        public QuestionQuiz(Question question)
+        {
+            this.Question = question;
         }
     }
 
@@ -37,6 +37,11 @@ namespace Webdictaat.Domain
         public int Id { get; set; }
 
         public virtual ICollection<QuestionQuiz> Quizes { get; set; }
+
+        /// <summary>
+        /// DEPRECATED - Replaced by Body
+        /// </summary>
+        public virtual ICollection<Answer> Answers { get; set; }
 
         public string Text { get; set; }
         public bool IsDeleted { get; set; }

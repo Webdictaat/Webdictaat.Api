@@ -31,7 +31,23 @@ namespace Webdictaat.Api.ViewModels
             this.Id = question.Id;
             this.Text = question.Text;
             this.Type = question.QuestionType;
-            this.Body = Newtonsoft.Json.Linq.JObject.Parse(question.Body);
+
+
+            //check if question contains old scool answers
+            if (question.Body == null)
+            {
+                this.Body = new
+                {
+                    answers = question.Answers.Select(a => new { text = a.Text, isCorrect = a.IsCorrect })
+                };
+                this.Type = "mc";
+            }
+            else
+            {
+                this.Body = Newtonsoft.Json.Linq.JObject.Parse(question.Body);
+
+            }
+
             this.IsDeleted = question.IsDeleted;
         }
 

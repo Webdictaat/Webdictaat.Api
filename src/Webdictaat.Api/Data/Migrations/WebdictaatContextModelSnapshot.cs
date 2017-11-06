@@ -143,6 +143,27 @@ namespace Webdictaat.Api.Migrations
                     b.ToTable("Achievements");
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsCorrect");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("QuestionId");
+
+                    b.Property<string>("Text")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Answer");
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.Assignments.Assignment", b =>
                 {
                     b.Property<int>("Id")
@@ -508,6 +529,14 @@ namespace Webdictaat.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.Answer", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.Question")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.Assignments.Assignment", b =>
                 {
                     b.HasOne("Webdictaat.Domain.DictaatDetails", "DictaatDetails")
@@ -612,7 +641,7 @@ namespace Webdictaat.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Webdictaat.Domain.QuizAttempt", "QuizAttempt")
-                        .WithMany("QquestionsAnswered")
+                        .WithMany("QuestionsAnswered")
                         .HasForeignKey("QuizAttemptId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

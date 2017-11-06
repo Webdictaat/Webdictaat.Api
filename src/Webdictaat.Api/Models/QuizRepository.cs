@@ -78,7 +78,7 @@ namespace Webdictaat.Api.Models
         public QuizVM GetQuiz(int quizId, string userId = null)
         {
             Quiz quiz = _context.Quizes
-                .Include("Questions.Question")          
+                .Include("Questions.Question.Answers")          
                 .FirstOrDefault(q => q.Id == quizId);
 
             if (quiz == null)

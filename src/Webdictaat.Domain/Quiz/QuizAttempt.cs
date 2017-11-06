@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Webdictaat.Domain
 {
-    //koppeltabel
+    
     public class QuizAttemptQuestion
     {
         [ForeignKey("QuizAttemptId")]
@@ -28,7 +28,6 @@ namespace Webdictaat.Domain
         }
     }
 
-
     public class QuizAttempt
     {
         public int Id { get; set; }
@@ -38,6 +37,7 @@ namespace Webdictaat.Domain
         public DateTime Timestamp { get; set; }
 
         public virtual ICollection<QuizAttemptQuestion> QuestionsAnswered { get; set; }
+
 
         public int QuizId { get; set; }
 
