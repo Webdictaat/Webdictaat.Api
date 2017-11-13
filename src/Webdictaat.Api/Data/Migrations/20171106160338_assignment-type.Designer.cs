@@ -9,9 +9,10 @@ using Webdictaat.Domain.Assignments;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    partial class WebdictaatContextModelSnapshot : ModelSnapshot
+    [Migration("20171106160338_assignment-type")]
+    partial class assignmenttype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -171,7 +172,7 @@ namespace Webdictaat.Api.Migrations
 
                     b.Property<string>("AssignmentSecret");
 
-                    b.Property<int?>("AssignmentType");
+                    b.Property<int>("AssignmentType");
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -337,7 +338,8 @@ namespace Webdictaat.Api.Migrations
 
                     b.Property<int?>("AssignmentId");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
                     b.Property<string>("DictaatDetailsName")
                         .IsRequired();

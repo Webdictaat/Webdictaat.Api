@@ -19,6 +19,7 @@ namespace Webdictaat.Api.ViewModels
             this.QuizId = qa.QuizId;
             this.Timestamp = qa.Timestamp;
             this.QuestionsAnswered = qa.QuestionsAnswered.Select(a => new QuestionAttemptVM(a));
+            this.CorrectAnswers = this.QuestionsAnswered.Count(q => q.IsCorrect);
         }
 
         public int QuizId { get; set; }

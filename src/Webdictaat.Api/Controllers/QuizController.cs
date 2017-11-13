@@ -44,10 +44,10 @@ namespace Webdictaat.Api.Controllers
         /// <param name="dictaatName"></param> 
         /// <returns></returns>
         [HttpGet]
-        public ICollection<QuizSummaryVM> Get(string dictaatName)
+        public ICollection<QuizVM> Get(string dictaatName)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            ICollection<QuizSummaryVM> result = _quizRepo.GetQuizes(dictaatName, userId);
+            ICollection<QuizVM> result = _quizRepo.GetQuizes(dictaatName, userId);
             return result;
         }
 
@@ -103,10 +103,10 @@ namespace Webdictaat.Api.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{quizId}/Attempts")]
-        public Api.ViewModels.QuizAttemptVM Post(string dictaatName, int quizId, [FromBody]IEnumerable<QuestionAttemptVM> attempt)
+        public Api.ViewModels.QuizVM Post(string dictaatName, int quizId, [FromBody]IEnumerable<QuestionAttemptVM> attempt)
         {
             string userId = _userManager.GetUserId(HttpContext.User);
-            Api.ViewModels.QuizAttemptVM result = _quizRepo.AddAttempt(quizId, userId, attempt);
+            Api.ViewModels.QuizVM result = _quizRepo.AddAttempt(quizId, userId, attempt);
             return result;
         }
     }

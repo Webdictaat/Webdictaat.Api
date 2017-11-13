@@ -99,20 +99,12 @@ namespace Webdictaat.Api.Models
       
         public AssignmentVM CreateAssignment(string dictaatName, AssignmentFormVM form)
         {
-            var a = new Assignment()
-            {
-                Title = form.Title,
-                DictaatDetailsId = dictaatName,
-                Description = form.Description,
-                Metadata = form.Metadata,
-                Points = form.Points,
-                Level = (AssignmentLevel) Enum.Parse(typeof(AssignmentLevel), form.Level)
-            };
-
-            _context.Assignments.Add(a);
+            var assignment = form.ToPoco();
+            assignment.DictaatDetailsId = dictaatName;
+            _context.Assignments.Add(assignment);
             _context.SaveChanges();
 
-            return new AssignmentVM(a);
+            return new AssignmentVM(assignment);
         }
 
         public AssignmentVM GetAssignment(int assignmentId, string userId = null)

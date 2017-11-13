@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Webdictaat.Domain.Assignments
 {
+    public enum AssignmentType
+    {
+        Open = 0, Quiz = 1, External = 2
+    }
+
     public enum AssignmentLevel
     {
         Bronze = 0, Silver = 1, Gold = 2
@@ -34,6 +39,8 @@ namespace Webdictaat.Domain.Assignments
         public string Metadata { get; set; }
 
         public string AssignmentSecret { get; set; }
+
+        public AssignmentType? AssignmentType { get; set; }
 
         /// <summary>
         /// A refrence to an external assignmnet or resource linked to this assignment.
