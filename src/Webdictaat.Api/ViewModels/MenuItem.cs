@@ -18,7 +18,7 @@ namespace Webdictaat.Api.ViewModels
         {
             this.Name = item.Name;
             this.Url = item.Url;
-            this.IsEnabled = item.IsEnabled;
+            this.IsDisabled = item.IsDisabled;
             this.MenuItems = new List<MenuItem>();
 
             if (item.MenuItems != null)
@@ -29,7 +29,7 @@ namespace Webdictaat.Api.ViewModels
         public string Name { get; set; }
 
         public string Url { get; set; }
-        public bool IsEnabled { get; set; }
+        public bool IsDisabled { get; set; }
         public List<MenuItem> MenuItems { get; set; }
 
         internal Domain.MenuItem ToPoco()
@@ -38,7 +38,7 @@ namespace Webdictaat.Api.ViewModels
             {
                 Name = this.Name,
                 Url = this.Url,
-                IsEnabled = this.IsEnabled,
+                IsDisabled = this.IsDisabled,
                 MenuItems = this.MenuItems != null ? this.MenuItems.Select(mi => mi.ToPoco()) : null
             }; 
         }

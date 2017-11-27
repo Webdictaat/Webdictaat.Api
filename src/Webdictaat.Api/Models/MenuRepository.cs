@@ -70,6 +70,7 @@ namespace Webdictaat.Api.Models
 
         public List<ViewModels.MenuItem> EditMenu(string dictaat, List<ViewModels.MenuItem> menuItems)
         {
+            //edit the json menu config
             var newMenuItems = _menuFactory.EditMenu(dictaat, menuItems.Select(mi => mi.ToPoco()));
             if(newMenuItems == null)
             {
