@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Webdictaat.Api.Test.Controller
 {
-    class ParticipantControllerTest : BaseTestController
+    public class ParticipantControllerTest : BaseTestController
     {
         [Fact]
         public void Should_Get_Participant()

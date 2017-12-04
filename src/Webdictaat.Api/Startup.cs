@@ -1,28 +1,24 @@
 ﻿
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.IdentityModel.Tokens;
 using MVCWithAuth.Services;
-using Newtonsoft.Json.Serialization;
 using Swashbuckle.Swagger.Model;
+using System;
 using System.IO;
-using System.Net;
-using System.Threading.Tasks;
+using System.Text;
 using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
-using Webdictaat.Api.Models;
 using Webdictaat.Core;
 using Webdictaat.Data;
-using Webdictaat.Domain;
 using Webdictaat.Domain.User;
-
 
 namespace Webdictaat.Api
 {
@@ -31,40 +27,20 @@ namespace Webdictaat.Api
     /// </summary>
     public class Startup
     {
-        private readonly IHostingEnvironment _hostingEnv;
-
-        /// <summary>
-        /// default constructor
-        /// </summary>
-        /// <param name="env"></param>
-        public Startup(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            _hostingEnv = env;
-
-            if (env.IsDevelopment())
-            {
-                //As a best practice, it is not recommended to store the secrets in a configuration file in the 
-                //application since they can be checked into source control which may be publicly accessible.+
-                //The SecretManager tool stores sensitive application settings in the user profile folder on the local 
-                //machine. These settings are then seamlessly merged with settings from all other
-                //sources during application startup.
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets<Startup>();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
 
         /// <summary>
         /// 
         /// </summary>
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
@@ -72,36 +48,42 @@ namespace Webdictaat.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+            //services.AddCors();
+            services.AddMvc();
+
             services.AddDbContext<WebdictaatContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            //GOOGLE LOGIN
+            services.AddAuthentication().AddGoogle(options =>
             {
-                options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents
+                options.ClientId = Configuration.GetSection("IdentityProviders:Google:ClientId").Value;
+                options.ClientSecret = Configuration.GetSection("IdentityProviders:Google:ClientSecret").Value;
+            });
+
+            //CORS & MVC
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<WebdictaatContext>();
+
+            //JSON WEB TOKEN
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Jwt";
+                options.DefaultChallengeScheme = "Jwt";
+            }).AddJwtBearer("Jwt", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    OnRedirectToLogin = ctx =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") &&
-                            ctx.Response.StatusCode == (int)HttpStatusCode.OK)
-                        {
-                            ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        }
-                        else
-                        {
-                            ctx.Response.Redirect(ctx.RedirectUri);
-                        }
-                        return Task.FromResult(0);
-                    }
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("the secret that needs to be at least 16 characeters long for HmacSha256")),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(5)
                 };
-            })
-                .AddEntityFrameworkStores<WebdictaatContext>()
-                .AddDefaultTokenProviders();
+            });
 
-            services.AddCors();
-            services.AddOptions();
-            services.AddMvc();
-
+     
 
             //Swagger
             services.AddSwaggerGen();
@@ -135,12 +117,11 @@ namespace Webdictaat.Api
             services.AddScoped<Core.IJson, Core.Json>();
 
             IConfigurationSection config = Configuration.GetSection("ConfigVariables");
-            config["DictaatRoot"] = _hostingEnv.WebRootPath;
             services.Configure<ConfigVariables>(config);
             #endregion
 
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            //services.AddTransient<IEmailSender, AuthMessageSender>();
+            //services.AddTransient<ISmsSender, AuthMessageSender>();
         }
 
         /// <summary>
@@ -153,40 +134,34 @@ namespace Webdictaat.Api
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, WebdictaatContext db)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-            app.UseCors(b => b
-                .AllowAnyOrigin()
-                .AllowCredentials()
-                .AllowAnyHeader()
-                .AllowAnyMethod());
-
-            app.UseIdentity();
-
-            //// Add external authentication middleware below. 
-            //To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-            //The client Id and ClientSecret are stored in the secret manager. 
-            app.UseGoogleAuthentication(new GoogleOptions
+            if (env.IsDevelopment())
             {
-                ClientId = Configuration.GetSection("IdentityProviders:Google:ClientId").Value,
-                ClientSecret = Configuration.GetSection("IdentityProviders:Google:ClientSecret").Value,
-            });
+                app.UseDeveloperExceptionPage();
+            }
 
-            app.UseMvc();
+            app.UseAuthentication();
+            app.UseMvcWithDefaultRoute();
+            //app.UseDefaultFiles();
+            //app.UseStaticFiles();
+            //app.UseCors(b => b
+            //    .AllowAnyOrigin()
+            //    .AllowCredentials()
+            //    .AllowAnyHeader()
+            //    .AllowAnyMethod());
+
             app.UseSwagger();
             app.UseSwaggerUi();
 
-            //finnaly, update db if needed
-            db.Database.Migrate();
+            app.Run(async (context) =>
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync("Page not found");
+            });
 
-        }
+            //migrate db
+            //db.Database.Migrate();
 
-        private string GetXmlCommentsPath(ApplicationEnvironment appEnvironment)
-        {
-            return Path.Combine(appEnvironment.ApplicationBasePath, "Webdictaat.Api.xml");
         }
     }
 }

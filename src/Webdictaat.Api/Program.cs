@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore;
 
 namespace Webdictaat.Api
 {
@@ -19,8 +20,7 @@ namespace Webdictaat.Api
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
-            host.Run();
+            BuildWebHost(args).Run();
         }
 
         /// <summary>
@@ -31,11 +31,8 @@ namespace Webdictaat.Api
         /// <returns></returns>
         // Tools will use this to get application services
         public static IWebHost BuildWebHost(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+                   WebHost.CreateDefaultBuilder(args)
+                       .UseStartup<Startup>()
+                       .Build();
     }
 }

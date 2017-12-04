@@ -16,6 +16,10 @@ using Webdictaat.Api.ViewModels;
 
 namespace Webdictaat.Api.Controllers
 {
+    /// <summary>
+    /// CRUD Dictaat
+    /// </summary>
+    [Controller]
     [Route("api/[controller]")]
     public class DictatenController : BaseController
     {
@@ -64,7 +68,7 @@ namespace Webdictaat.Api.Controllers
         /// Authorized (Requires the user to be logged in.)
         /// Returns a detailed summary of 1 webdictaat
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="dictaatName"></param>
         /// <returns></returns>
         [HttpGet("{dictaatName}")]
         [Authorize]
@@ -111,7 +115,7 @@ namespace Webdictaat.Api.Controllers
                 _dictaatRepo.DeleteRepo(dictaatName);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 HttpContext.Response.StatusCode = 500;
                 return false;
@@ -129,6 +133,12 @@ namespace Webdictaat.Api.Controllers
             return _dictaatRepo.GetContributers(dictaatName);
         }
 
+        /// <summary>
+        /// Give a user editing rights for a given dictaat
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="contributer"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("{dictaatName}/contributers")]
         public IEnumerable<UserVM> AddContributer(string dictaatName, [FromBody]UserVM contributer)

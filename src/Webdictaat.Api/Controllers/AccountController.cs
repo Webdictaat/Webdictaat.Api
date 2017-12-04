@@ -6,16 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using MVCWithAuth.Services;
-using Webdictaat.Domain;
-using Webdictaat.Api.Models.AccountViewModels;
-using System.Security.Principal;
-using Webdictaat.Core.JWT;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Webdictaat.Domain.User;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Webdictaat.Data;
 
 namespace MVCWithAuth.Controllers
 {
@@ -29,6 +26,7 @@ namespace MVCWithAuth.Controllers
         private readonly JsonSerializerSettings _serializerSettings;
 
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly WebdictaatContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
         /// <summary>
@@ -36,17 +34,14 @@ namespace MVCWithAuth.Controllers
         /// </summary>
         /// <param name="loggerFactory"></param>
         /// <param name="userManager"></param>
-        /// <param name="signInManager"></param>
-        /// <param name="emailSender"></param>
-        /// <param name="smsSender"></param>
         public AccountController(
-              ILoggerFactory loggerFactory,
+            WebdictaatContext context,
+            ILoggerFactory loggerFactory,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
-            ISmsSender smsSender)
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _context = context;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
 
@@ -102,25 +97,14 @@ namespace MVCWithAuth.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            var user = _context.Users.FirstOrDefault(u => u.Email == info.Principal.FindFirstValue(ClaimTypes.Email));
 
-
-            if (result.Succeeded)
-            {
-                _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
-                UpdateUserName(info);
-                return Redirect(returnUrl);
-            }
-            if (result.IsLockedOut)
-            {
-                return null;
-            }
-            else
-            {
-
+            //Not yet a user
+            if (user == null)
+            { 
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 //Get the information about the user from the external login provider
-                var user = new ApplicationUser {
+                user = new ApplicationUser {
                     UserName = email.Split('@')[0],
                     Email = email,
                     FullName = info.Principal.FindFirstValue(ClaimTypes.Name)
@@ -130,16 +114,30 @@ namespace MVCWithAuth.Controllers
                 if (createUserResult.Succeeded)
                 {
                     createUserResult = await _userManager.AddLoginAsync(user, info);
-                    if (createUserResult.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);              
-                    }
                 }
                 AddErrors(createUserResult);
-
-                return Redirect(returnUrl);
             }
+
+            var token = GenerateToken(user.UserName);
+            return Redirect(returnUrl + "?token=" + token);
+        }
+
+        private string GenerateToken(string username)
+        {
+            var claims = new Claim[]
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
+            };
+
+            var token = new JwtSecurityToken(
+                new JwtHeader(new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("the secret that needs to be at least 16 characeters long for HmacSha256")),
+                                             SecurityAlgorithms.HmacSha256)),
+                new JwtPayload(claims));
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private async void UpdateUserName(ExternalLoginInfo info)
