@@ -39,6 +39,12 @@ namespace Webdictaat.Core.Helper
                _configVariables.DictaatRoot, _configVariables.TemplatesDirectory, templateName);
         }
 
+        public string StylePath(string dictaatName, string fileName)
+        {
+            return String.Format("{0}\\{1}\\{2}.css",
+                 DictaatPath(dictaatName), _configVariables.StyleDirectory, fileName);
+        }
+
         public string PageTemplatePath(string templateName, string extension = ".html")
         {
             return String.Format("{0}\\{1}\\pages\\{2}{3}",

@@ -48,7 +48,7 @@ namespace Webdictaat.Api.Services
         {
             DictaatDetails details = _context.DictaatDetails.FirstOrDefault(dd => dd.Name == dictaatName);
             var user = await _userManager.FindByNameAsync(userName);
-            return details.DictaatOwnerId == user.Email;
+            return details.DictaatOwnerId == user.Id;
         }
     }
 }

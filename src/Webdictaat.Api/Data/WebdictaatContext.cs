@@ -65,6 +65,11 @@ namespace Webdictaat.Data
             builder.Entity<DictaatAchievement>().HasKey(t => new { t.DictaatName, t.AchievementId });
             builder.Entity<UserAchievement>().HasKey(t => new { t.UserId, t.AchievementId });
             builder.Entity<DictaatSessionUser>().HasKey(t => new { t.UserId, t.DictaatSessionId });
+
+            //builder.Entity<DictaatDetails>().HasMany(a => a.Assignments).WithOne().OnDelete(DeleteBehavior.Cascade);
+            //builder.Entity<DictaatDetails>().HasMany(a => a.Contributers).WithOne().OnDelete(DeleteBehavior.Cascade);
+            //builder.Entity<DictaatDetails>().HasMany(a => a.Achievements).WithOne().OnDelete(DeleteBehavior.Cascade);
+            //builder.Entity<DictaatDetails>().HasMany(a => a.Sessions).WithOne().OnDelete(DeleteBehavior.Cascade);
         }
 
     }

@@ -32,14 +32,16 @@ namespace Webdictaat.Api
         /// 
         /// </summary>
         public IConfiguration Configuration { get; }
+        private IHostingEnvironment _hostingEnv;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="config"></param>
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnv)
         {
             Configuration = configuration;
+            _hostingEnv = hostingEnv;
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace Webdictaat.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors();
+            services.AddCors();
             services.AddMvc();
 
             services.AddDbContext<WebdictaatContext>(options =>
@@ -61,7 +63,7 @@ namespace Webdictaat.Api
                 options.ClientSecret = Configuration.GetSection("IdentityProviders:Google:ClientSecret").Value;
             });
 
-            //CORS & MVC
+            //CORS & MVC  - Volgorde is belangrijk!
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<WebdictaatContext>();
 
@@ -83,8 +85,6 @@ namespace Webdictaat.Api
                 };
             });
 
-     
-
             //Swagger
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options =>
@@ -102,7 +102,8 @@ namespace Webdictaat.Api
             #region custom services
             services.AddScoped<IAuthorizeService, AuthorizeService>();
             services.AddScoped<IDictaatRepository, DictaatRepository>();
-            services.AddScoped<IPageRepository, PageRepository>();
+            services.AddScoped<IPageRepository, PageRepository>();     
+            services.AddScoped<IStyleRepository, StyleRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IRatingRepository, RatingRepository>();
@@ -118,6 +119,7 @@ namespace Webdictaat.Api
 
             IConfigurationSection config = Configuration.GetSection("ConfigVariables");
             services.Configure<ConfigVariables>(config);
+            config["DictaatRoot"] = _hostingEnv.WebRootPath;
             #endregion
 
             //services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -140,15 +142,17 @@ namespace Webdictaat.Api
                 app.UseDeveloperExceptionPage();
             }
 
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseCors(b => b
+                .AllowAnyOrigin()
+                .AllowCredentials()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
-            //app.UseDefaultFiles();
-            //app.UseStaticFiles();
-            //app.UseCors(b => b
-            //    .AllowAnyOrigin()
-            //    .AllowCredentials()
-            //    .AllowAnyHeader()
-            //    .AllowAnyMethod());
 
             app.UseSwagger();
             app.UseSwaggerUi();
@@ -160,7 +164,7 @@ namespace Webdictaat.Api
             });
 
             //migrate db
-            //db.Database.Migrate();
+            db.Database.Migrate();
 
         }
     }

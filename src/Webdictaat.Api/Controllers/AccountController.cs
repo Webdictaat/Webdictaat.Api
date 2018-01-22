@@ -118,17 +118,19 @@ namespace MVCWithAuth.Controllers
                 AddErrors(createUserResult);
             }
 
-            var token = GenerateToken(user.UserName);
-            return Redirect(returnUrl + "?token=" + token);
+            var token = GenerateToken(user);
+            var url = returnUrl + "#/process-token?token=" + token;
+            return Redirect(url);
         }
 
-        private string GenerateToken(string username)
+        private string GenerateToken(ApplicationUser user)
         {
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
+                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(180)).ToUnixTimeSeconds().ToString()),
             };
 
             var token = new JwtSecurityToken(
