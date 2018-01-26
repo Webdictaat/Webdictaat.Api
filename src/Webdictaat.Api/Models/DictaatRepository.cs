@@ -175,11 +175,11 @@ namespace Webdictaat.Api.Models
                 .Where(a => a.DictaatDetailsId == name)
                 .ToList();
 
-            var participants = _context.DictaatSession
+            var session = _context.DictaatSession
                 .Include("Participants.User.AssignmentSubmissions")
-                .FirstOrDefault(s => s.DictaatDetailsId == name && s.EndedOn == null)
-                .Participants.OrderBy(p => p.Group)
-                .Select(p => p);
+                .FirstOrDefault(s => s.DictaatDetailsId == name && s.EndedOn == null);
+
+            var participants = session.Participants.OrderBy(p => p.Group).ToList();
 
             return new DictaatMarkings(assignments, participants);
 
@@ -208,6 +208,9 @@ namespace Webdictaat.Api.Models
 
             var user = _context.Users
                 .FirstOrDefault(u => u.Email == contributerEmail);
+
+            if(user == null)
+                return null;
 
             dictaat.Contributers.Add(new DictaatContributer()
             {

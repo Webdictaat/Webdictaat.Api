@@ -37,6 +37,10 @@ namespace Webdictaat.Api.Models
         public String GetDictaatStyling(string dictaatName, string fileName = null)
         {
             string path = _pathHelper.StylePath(dictaatName, fileName);
+
+            if (!_file.Exists(path))
+                _file.TryCreateFile(path);
+
             string content = _file.TryReadFile(path);
 
             if (content == null)

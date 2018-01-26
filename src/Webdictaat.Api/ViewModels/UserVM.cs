@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webdictaat.Domain;
 using Webdictaat.Domain.User;
 
 namespace Webdictaat.Api.ViewModels
@@ -10,6 +11,7 @@ namespace Webdictaat.Api.ViewModels
     {
         private IQueryable<int> assignmentIds;
         private ApplicationUser user;
+
         public string Group { get; set; }
 
 
@@ -32,6 +34,8 @@ namespace Webdictaat.Api.ViewModels
             this.UserName = p.UserName;
             this.Name = p.FullName;
         }
+
+        public UserVM(DictaatSessionUser p) : this(p.User) { }
 
         /// <summary>
         /// Constructor with list of assignments to calculate total points;
@@ -57,6 +61,20 @@ namespace Webdictaat.Api.ViewModels
         {
             this.Group = group;
         }
+
+        /// <summary>
+        /// Constructor with a list of assignmetns and a group the user belongs to
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="assignmentIds"></param>
+        /// <param name="group"></param>
+        public UserVM(ApplicationUser user, int[] assignmentIds, DictaatGroup group)
+            : this(user, assignmentIds)
+        {
+            this.Group = group != null ? group.Name : null;
+        }
+
+
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Extensions.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,10 @@ namespace Webdictaat.Api.Models
         IEnumerable<GroupVM> GetGroups(string dictaatName);
         bool Join(string dictaatName, string group, string userId);
         ParticipantVM GetParticipant(string dictaatName, string email);
+        IEnumerable<GroupVM> CreateGroup(string dictaatName, GroupVM group);
+        IEnumerable<GroupVM> CreateGroups(string dictaatName, IEnumerable<GroupVM> groups);
+
+        IEnumerable<GroupVM> RemoveGroup(string dictaatName, string group);
     }
 
     public class ParticipantRepository : IParticipantRepository
@@ -49,7 +54,13 @@ namespace Webdictaat.Api.Models
         public IEnumerable<GroupVM> GetGroups(string dictaatName)
         {
             var participants = this.GetParticipants(dictaatName);
-            var groups = participants.GroupBy(u => u.Group).Select(g => new GroupVM(g.Key, g.ToList()))
+
+            var groups = _context.DictaatGroup
+                .Include(dg => dg.Participants)
+                .Where(d => d.DictaatName == dictaatName)
+                .Select(d => new GroupVM(d.Name, 
+                    //get all the users from the full participant list
+                    participants.Where(p => d.Participants.Any(gp => gp.UserId == p.Id)).ToList()))
                 .OrderByDescending(g => g.Points);
 
             return groups;
@@ -59,16 +70,18 @@ namespace Webdictaat.Api.Models
         /// Join the current session of a dictaat
         /// </summary>
         /// <param name="dictaatName"></param>
-        /// <param name="group"></param>
+        /// <param name="groupName"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public bool Join(string dictaatName, string group, string userId)
+        public bool Join(string dictaatName, string groupName, string userId)
         {
 
             var currentSession = _context.DictaatSession
                 .Include(s => s.Participants)
                 .FirstOrDefault(s => s.EndedOn == null && s.DictaatDetailsId == dictaatName);
 
+            var group = _context.DictaatGroup.FirstOrDefault(dg => dg.DictaatName == dictaatName && dg.Name == groupName);
+                            
             if (currentSession.Participants.Any(p => p.UserId == userId))
             {
                 return false; //already in the partcipant list
@@ -78,7 +91,8 @@ namespace Webdictaat.Api.Models
                 currentSession.Participants.Add(new DictaatSessionUser()
                 {
                     UserId = userId,
-                    Group = group,
+                    Group = group != null ? group.Name : null,
+                    DictaatName = group != null ? currentSession.DictaatDetailsId : null
                 });
                 _context.SaveChanges();
                 return true; //Joined this ditaat :D
@@ -139,6 +153,40 @@ namespace Webdictaat.Api.Models
             return _context.Assignments
                  .Where(a => a.DictaatDetailsId == dictaatName)
                  .Select(a => a.Id).ToArray(); 
+        }
+
+        public IEnumerable<GroupVM> CreateGroup(string dictaatName, GroupVM group)
+        {
+            _context.DictaatGroup.Add(new DictaatGroup { DictaatName = dictaatName, Name = group.GroupName });
+            _context.SaveChanges();
+            return this.GetGroups(dictaatName);
+        }
+
+        public IEnumerable<GroupVM> RemoveGroup(string dictaatName, string groupName)
+        {
+            var group = _context.DictaatGroup
+                .Include(dg => dg.Participants)
+                .FirstOrDefault(dg => dg.DictaatName == dictaatName && dg.Name == groupName);
+
+            //remove all participants
+            group.Participants.ToList().ForEach(p => _context.DictaatSessionUser.Remove(p));
+
+            //remove the group itself
+            _context.DictaatGroup.Remove(group);
+
+            _context.SaveChanges();
+
+            return this.GetGroups(dictaatName);
+        }
+
+        public IEnumerable<GroupVM> CreateGroups(string dictaatName, IEnumerable<GroupVM> groups)
+        {
+            groups.ToList().ForEach(g =>
+            {
+                _context.DictaatGroup.Add(new DictaatGroup { DictaatName = dictaatName, Name = g.GroupName });
+            });
+            _context.SaveChanges();
+            return this.GetGroups(dictaatName);
         }
     }
 }

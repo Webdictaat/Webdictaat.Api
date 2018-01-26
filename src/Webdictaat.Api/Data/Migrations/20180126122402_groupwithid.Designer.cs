@@ -12,9 +12,10 @@ using Webdictaat.Domain.Assignments;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    partial class WebdictaatContextModelSnapshot : ModelSnapshot
+    [Migration("20180126122402_groupwithid")]
+    partial class groupwithid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

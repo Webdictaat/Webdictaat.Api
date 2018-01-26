@@ -17,6 +17,7 @@ namespace Webdictaat.Domain
 
         public IEnumerable<MenuItem> MenuItems { get; set; }
 
+
         public Dictaat()
         {
             Pages = new List<FileSummary>();

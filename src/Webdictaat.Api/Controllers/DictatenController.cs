@@ -146,7 +146,12 @@ namespace Webdictaat.Api.Controllers
             if (!AuthorizeResrouce(dictaatName))
                 return null;
 
-            return _dictaatRepo.AddContributer(dictaatName, contributer.Email);
+            var response = _dictaatRepo.AddContributer(dictaatName, contributer.Email);
+
+            if (response == null)
+                Response.StatusCode = 404;
+
+            return response;
         }
     }
 }

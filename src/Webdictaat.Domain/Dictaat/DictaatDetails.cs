@@ -28,6 +28,9 @@ namespace Webdictaat.Domain
 
         public virtual ICollection<Assignment> Assignments { get; set; }
 
+        public virtual ICollection<DictaatGroup> Groups { get; set; }
+
+
         public ICollection<string> GetContributersIds()
         {
             var result = new List<string>{ this.DictaatOwnerId };

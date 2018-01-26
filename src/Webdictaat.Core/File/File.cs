@@ -12,6 +12,8 @@ namespace Webdictaat.Core
         bool TryDeleteFile(string path);
         bool TryEditFile(string path, string content);
         bool TryCopyFile(string path, string templatePath);
+
+        bool Exists(string path);
     }
 
     public class File : IFile
@@ -49,6 +51,11 @@ namespace Webdictaat.Core
             System.IO.File.Delete(path);
             return true;
 
+        }
+
+        public bool Exists(string path)
+        {
+            return System.IO.File.Exists(path);
         }
 
         public bool TryEditFile(string path, string content)

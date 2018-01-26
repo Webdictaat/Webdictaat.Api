@@ -34,6 +34,7 @@ namespace Webdictaat.Api.Controllers
             _userManager = userManager;
         }
 
+
         /// <summary>
         /// Returns a list of participants with points gained from this dictaat
         /// </summary>
@@ -74,6 +75,32 @@ namespace Webdictaat.Api.Controllers
         public IEnumerable<GroupVM> GetGroups(string dictaatName)
         {
             return _participantRepository.GetGroups(dictaatName);
+        }
+
+        /// <summary>
+        /// A route to join a dictaat by posting on it's participants list 
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("groups")]
+        public IEnumerable<GroupVM> Create(string dictaatName, [FromBody] IEnumerable<GroupVM> groups)
+        {
+            if (!AuthorizeResrouce(dictaatName))
+                return null;
+
+            return _participantRepository.CreateGroups(dictaatName, groups);
+        }
+
+        /// <summary>
+        /// A route to join a dictaat by posting on it's participants list 
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("groups/{group}")]
+        public IEnumerable<GroupVM> Remove(string dictaatName, string group)
+        {
+            return _participantRepository.RemoveGroup(dictaatName, group);
+
         }
     }
 }

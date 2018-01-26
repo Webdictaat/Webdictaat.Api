@@ -40,6 +40,7 @@ namespace Webdictaat.Data
         public DbSet<DictaatSession> DictaatSession { get; set; }
 
         public DbSet<DictaatSessionUser> DictaatSessionUser { get; set; }
+        public DbSet<DictaatGroup> DictaatGroup { get; set; }
 
         /// <summary>
         /// Start context with options
@@ -65,7 +66,7 @@ namespace Webdictaat.Data
             builder.Entity<DictaatAchievement>().HasKey(t => new { t.DictaatName, t.AchievementId });
             builder.Entity<UserAchievement>().HasKey(t => new { t.UserId, t.AchievementId });
             builder.Entity<DictaatSessionUser>().HasKey(t => new { t.UserId, t.DictaatSessionId });
-
+            builder.Entity<DictaatGroup>().HasKey(t => new { t.Name, t.DictaatName });
             //builder.Entity<DictaatDetails>().HasMany(a => a.Assignments).WithOne().OnDelete(DeleteBehavior.Cascade);
             //builder.Entity<DictaatDetails>().HasMany(a => a.Contributers).WithOne().OnDelete(DeleteBehavior.Cascade);
             //builder.Entity<DictaatDetails>().HasMany(a => a.Achievements).WithOne().OnDelete(DeleteBehavior.Cascade);
