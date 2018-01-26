@@ -18,7 +18,7 @@ namespace Webdictaat.Api.ViewModels
         public string Email { get; set; }
         public string Id { get; private set; }
         public string UserName { get; set; }
-        public string Name { get; }
+        public string Name { get; set; }
 
         public double Points { get; set; }
 

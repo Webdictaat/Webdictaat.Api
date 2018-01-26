@@ -68,6 +68,19 @@ namespace Webdictaat.Api.Controllers
         }
 
         /// <summary>
+        /// A route to join a dictaat by posting on it's participants list 
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("groups/{group}")]
+        public Boolean Switch(string dictaatName, string group)
+        {
+            string userId = _userManager.GetUserId(HttpContext.User);
+            return _participantRepository.Join(dictaatName, group, userId);
+        }
+
+
+        /// <summary>
         /// A Route to get a list of groups
         /// </summary>
         /// <returns></returns>

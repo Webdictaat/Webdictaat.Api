@@ -81,31 +81,34 @@ namespace Webdictaat.Api.Models
                 .FirstOrDefault(s => s.EndedOn == null && s.DictaatDetailsId == dictaatName);
 
             var group = _context.DictaatGroup.FirstOrDefault(dg => dg.DictaatName == dictaatName && dg.Name == groupName);
-                            
-            if (currentSession.Participants.Any(p => p.UserId == userId))
+
+            var participant = currentSession.Participants.FirstOrDefault(p => p.UserId == userId);
+
+            if (participant == null)
             {
-                return false; //already in the partcipant list
+                participant = new DictaatSessionUser(){UserId = userId};
+                currentSession.Participants.Add(participant);
             }
-            else
-            {
-                currentSession.Participants.Add(new DictaatSessionUser()
-                {
-                    UserId = userId,
-                    Group = group != null ? group.Name : null,
-                    DictaatName = group != null ? currentSession.DictaatDetailsId : null
-                });
-                _context.SaveChanges();
-                return true; //Joined this ditaat :D
-            }
+
+            participant.Group = group != null ? group.Name : null;
+            participant.DictaatName = group != null ? currentSession.DictaatDetailsId : null;
+            _context.SaveChanges();
+            return true; //Joined this ditaat :D
         }
 
         public ParticipantVM GetParticipant(string dictaatName, string email)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
+            var session = _context.DictaatSession
+                .FirstOrDefault(d => d.DictaatDetailsId == dictaatName && d.EndedOn == null);
+
             var assignmentIds = getAssignmentIds(dictaatName);
 
-            //completed assignmetnns
+            DictaatSessionUser participant = _context.DictaatSessionUser
+                .FirstOrDefault(p => p.DictaatSessionId == session.Id && p.UserId == user.Id);
+
+            //completed assignments
             var myAssignments = _context.AssignmentSubmissions
                 .Where(a => assignmentIds.Contains(a.AssignmentId) && a.UserId == user.Id)
                 .ToList();
@@ -133,8 +136,9 @@ namespace Webdictaat.Api.Models
             //completed quizes
             //not yet added, we first need to rework quizes
 
-            return new ParticipantVM()
+            return new ParticipantVM(user)
             {
+                Group = participant.Group,
                 AssignmentIds = assignmentIds,
                 RecievedPoints = myPoints,
                 CompletedAssignments = myCompletion,
