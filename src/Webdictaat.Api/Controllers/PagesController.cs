@@ -72,6 +72,12 @@ namespace Webdictaat.Api.Controllers
             if (!AuthorizeResrouce(dictaatName))
                 return null;
 
+            if(!ModelState.IsValid)
+            {
+                HttpContext.Response.StatusCode = 400;
+                return null;
+            }
+
             var MenuItem = new ViewModels.MenuItem()
             {
                 Name = form.Page.Name,
