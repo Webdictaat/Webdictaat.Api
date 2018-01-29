@@ -6,4 +6,4 @@ install:
 - dotnet restore
 script:
 - dotnet build
-- dotnet test ./src/Webdictaat.Api.Test/Core.Shogi.Tests.csproj
+- dotnet test ./src/Webdictaat.Api.Test/Webdictaat.Api.Test.csproj
