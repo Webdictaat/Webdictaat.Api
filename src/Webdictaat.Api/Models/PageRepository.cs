@@ -48,7 +48,7 @@ namespace Webdictaat.Api.Models
 
         public ViewModels.DictaatPage GetDictaatPage(string dictaatName, string fileName)
         {
-            string path = _pathHelper.StylePath(dictaatName, fileName);
+            string path = _pathHelper.PagePath(dictaatName, fileName);
             string content = _file.TryReadFile(path);
 
             if (content == null)
