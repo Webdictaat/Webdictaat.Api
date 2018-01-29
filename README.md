@@ -1,5 +1,7 @@
 # Webdictaat.Api
 
+https://travis-ci.org/Webdictaat/Webdictaat.Api.svg?branch=master
+
 The Webdictaat API is an interface for managing the contect of a webdictaat. It's an ASP.NET Core MVC web api project, with a generated swagger documentation page. The current production enviroment can be found at http://webdictaat.aii.avans.nl/swagger/ui/index.html.
 
 ## Getting started
