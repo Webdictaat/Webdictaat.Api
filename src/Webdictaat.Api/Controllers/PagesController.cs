@@ -57,7 +57,7 @@ namespace Webdictaat.Api.Controllers
             if (!AuthorizeResrouce(dictaatName))    
                 return null;
 
-            return await _pageRepo.GetDictaatPages(dictaatName);
+            return _pageRepo.GetDictaatPages(dictaatName);
         }
 
         /// <summary>
