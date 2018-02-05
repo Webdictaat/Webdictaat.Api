@@ -7,17 +7,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Tokens;
-using MVCWithAuth.Services;
 using Swashbuckle.Swagger.Model;
 using System;
-using System.IO;
 using System.Text;
 using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
 using Webdictaat.Core;
 using Webdictaat.Data;
+using Webdictaat.Domain.Google;
 using Webdictaat.Domain.User;
 
 namespace Webdictaat.Api
@@ -99,6 +97,10 @@ namespace Webdictaat.Api
                 options.DescribeAllEnumsAsStrings();
             });
 
+            //prepare
+            var gooleServiceAccountConfig = Configuration.GetSection("IdentityProviders:GoogleServiceAccount").Value;
+  
+
             #region custom services
             services.AddScoped<IAuthorizeService, AuthorizeService>();
             services.AddScoped<IDictaatRepository, DictaatRepository>();
@@ -111,6 +113,7 @@ namespace Webdictaat.Api
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<Core.IDirectory, Core.Directory>();
             services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+            services.AddScoped<IGoogleAnalytics, GoogleAnalytics>((sp) => new GoogleAnalytics(gooleServiceAccountConfig));
             services.AddScoped<ISecretService, SecretService>();
             services.AddScoped<Core.IFile, Core.File>();
             services.AddScoped<IAchievementRepository, AchievementRepository>();

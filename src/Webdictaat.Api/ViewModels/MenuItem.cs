@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webdictaat.Domain;
+using Webdictaat.Domain.Google;
 
 namespace Webdictaat.Api.ViewModels
 {
     public class MenuItem
     {
+        /// <summary>
+        /// emtpy constructor required for mapping in ASP
+        /// </summary>
+        public MenuItem(){}
 
-        public MenuItem()
-        {
-
-        }
-
-        public MenuItem(Domain.MenuItem item)
+        public MenuItem(Domain.MenuItem item, IList<PageView> analytics = null)
         {
             this.Name = item.Name;
             this.Url = item.Url;
@@ -22,9 +22,15 @@ namespace Webdictaat.Api.ViewModels
             this.MenuItems = new List<MenuItem>();
 
             if (item.MenuItems != null)
-                this.MenuItems = item.MenuItems.Select(mi => new ViewModels.MenuItem(mi)).ToList();
-            
+                this.MenuItems = item.MenuItems.Select(mi => new ViewModels.MenuItem(mi, analytics)).ToList();
+
+            if (analytics != null && analytics.Any(a => a.PageUri == this.Url))
+                this.PageViews = analytics.FirstOrDefault(a => a.PageUri == this.Url);
+
         }
+
+        public PageView PageViews { get; set; }
+
 
         public string Name { get; set; }
 

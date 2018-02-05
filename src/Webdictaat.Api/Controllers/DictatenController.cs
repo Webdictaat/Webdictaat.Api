@@ -72,7 +72,7 @@ namespace Webdictaat.Api.Controllers
         /// <returns></returns>
         [HttpGet("{dictaatName}")]
         [Authorize]
-        public ViewModels.Dictaat Get(string dictaatName)
+        public Task<ViewModels.Dictaat> Get(string dictaatName)
         {
             if (!AuthorizeResrouce(dictaatName))
                 return null;

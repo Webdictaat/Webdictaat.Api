@@ -23,6 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\AnalyticsRepository.cs" />
+    <Compile Remove="ViewModels\Pages\PageView.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="appsettings.dev.json" />
   </ItemGroup>
 
@@ -47,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.AnalyticsReporting.v4" Version="1.32.1.1119" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
@@ -64,6 +70,12 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\templates\dictaten\default\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Webdictaat-e3eb8d1c053d.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

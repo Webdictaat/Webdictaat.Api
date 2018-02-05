@@ -15,13 +15,14 @@ using Microsoft.EntityFrameworkCore;
 using Webdictaat.Api;
 using Webdictaat.Api.ViewModels;
 using Webdictaat.Domain.Assignments;
+using Webdictaat.Domain.Google;
 
 namespace Webdictaat.Api.Models
 {
     public interface IDictaatRepository
     {
         IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null);
-        ViewModels.Dictaat getDictaat(string name);
+        Task<ViewModels.Dictaat> getDictaat(string name);
         ViewModels.Session GetCurrentSession(string dictaatName, string userId = null);
         void CreateDictaat(string name, ApplicationUser user, string template);
         void DeleteRepo(string name);
@@ -36,7 +37,7 @@ namespace Webdictaat.Api.Models
         private string _pagesDirectory;
         private string _templatesDirectory;
         private string _dictatenDirectory;
-
+        private IGoogleAnalytics _analyticsRepo;
         private IDirectory _directory;
         private IDictaatFactory _dictaatFactory;
 
@@ -54,7 +55,8 @@ namespace Webdictaat.Api.Models
         /// <param name="dictaatFactory"></param>
         /// <param name="context"></param>
         public DictaatRepository(
-            IOptions<ConfigVariables> appSettings, 
+            IOptions<ConfigVariables> appSettings,
+            IGoogleAnalytics analyticsRepo,
             IDirectory directory,
             IFile file,
             Core.IJson json,
@@ -65,6 +67,7 @@ namespace Webdictaat.Api.Models
             _dictatenDirectory = appSettings.Value.DictatenDirectory;
             _templatesDirectory = appSettings.Value.TemplatesDirectory;
             var menuConfigName = appSettings.Value.MenuConfigName;
+            _analyticsRepo = analyticsRepo;
             _directory = directory;
             _context = context;
 
@@ -86,15 +89,20 @@ namespace Webdictaat.Api.Models
             return dictaatDetails.Select(dd => new ViewModels.DictaatSummary(dd, userId)).ToList();
         }
 
-        public ViewModels.Dictaat getDictaat(string name)
+        public async Task<ViewModels.Dictaat> getDictaat(string dictaatName)
         {
+            //from DB
             var details = _context.DictaatDetails
                 .Include("DictaatOwner")
-                .FirstOrDefault(d => d.Name == name);
+                .FirstOrDefault(d => d.Name == dictaatName);
 
-            Domain.Dictaat dictaat = _dictaatFactory.GetDictaat(name);
+            //from file system
+            Domain.Dictaat dictaat = _dictaatFactory.GetDictaat(dictaatName);
 
-            return new ViewModels.Dictaat(dictaat, details);
+            //analytics
+            var analytics = await _analyticsRepo.GetPageViews(dictaatName);
+
+            return new ViewModels.Dictaat(dictaat, details, analytics);
                 
         }
 

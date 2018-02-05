@@ -34,6 +34,7 @@ namespace Webdictaat.Api.Models
             var extension = System.IO.Path.GetExtension(file.FileName);
             var myUniqueFileName = string.Format(@"{0}{1}", Guid.NewGuid(), extension);
 
+
             using (var fileStream = new FileStream(Path.Combine(path, myUniqueFileName), FileMode.Create))
             {
                 file.CopyTo(fileStream);
