@@ -11,12 +11,23 @@ Instead of storing sensetive information in the web.config, these veriables are 
 
 https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets
 
-There are 3 secrets that need to be stored: 
-* IdentityProviders:Google:ClientId
-* IdentityProviders:Google:ClientSecret
-* ConnectionStrings:DefaultConnection
+There are 4 secrets that need to be stored in a configuration file: 
+* IdentityProviders:Google:ClientId - google OAUTH
+* IdentityProviders:Google:ClientSecret - google OAUTH
+* ConnectionStrings:DefaultConnection - The connection string to the remote SQL server database
+* IdentityProviders:GoogleServiceAccount - google Analytics - the location of the service account configuration file
 
 To recieve the values of these secrets, please contact Stijn Smulders (ssmulder@avans.nl). 
 
 ## Databases
 The web api is connected to a single database. You can setup your own MS SQL server or use an online database from azure. 
+
+##wwwroot
+
+The root folder contains all the files related to dictaten. 
+* Pages
+* Images
+* Configuration files
+* Templates
+
+Be carefull when adding files to this folder to exclude them from any publish activities to the server.
