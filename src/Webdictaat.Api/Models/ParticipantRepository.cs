@@ -137,8 +137,8 @@ namespace Webdictaat.Api.Models
             //not yet added, we first need to rework quizes
 
             return new ParticipantVM(user)
-            {
-                Group = participant.Group,
+            { 
+                Group = participant != null ? participant.Group : null,
                 AssignmentIds = assignmentIds,
                 RecievedPoints = myPoints,
                 CompletedAssignments = myCompletion,
