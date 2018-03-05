@@ -33,6 +33,8 @@ namespace Webdictaat.Data
 
         public DbSet<Quiz> Quizes { get; set; }
 
+        public DbSet<Poll> Polls{ get; set; }
+
         public DbSet<Question> Questions { get; set; }
 
         public DbSet<QuizAttempt> QuizAttempts { get; set; }
@@ -67,6 +69,8 @@ namespace Webdictaat.Data
             builder.Entity<UserAchievement>().HasKey(t => new { t.UserId, t.AchievementId });
             builder.Entity<DictaatSessionUser>().HasKey(t => new { t.UserId, t.DictaatSessionId });
             builder.Entity<DictaatGroup>().HasKey(t => new { t.Name, t.DictaatName });
+            builder.Entity<PollVote>().HasKey(t => new { t.PollId, t.UserId });
+
             //builder.Entity<DictaatDetails>().HasMany(a => a.Assignments).WithOne().OnDelete(DeleteBehavior.Cascade);
             //builder.Entity<DictaatDetails>().HasMany(a => a.Contributers).WithOne().OnDelete(DeleteBehavior.Cascade);
             //builder.Entity<DictaatDetails>().HasMany(a => a.Achievements).WithOne().OnDelete(DeleteBehavior.Cascade);
