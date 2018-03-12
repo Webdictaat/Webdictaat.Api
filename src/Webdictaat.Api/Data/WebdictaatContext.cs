@@ -34,6 +34,8 @@ namespace Webdictaat.Data
         public DbSet<Quiz> Quizes { get; set; }
 
         public DbSet<Poll> Polls{ get; set; }
+        public DbSet<DictaatSession> Sessions{ get; set; }
+
 
         public DbSet<Question> Questions { get; set; }
 

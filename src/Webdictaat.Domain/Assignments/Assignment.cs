@@ -52,5 +52,21 @@ namespace Webdictaat.Domain.Assignments
         public int Points { get; set; }
 
         public virtual ICollection<AssignmentSubmission> Attempts { get; set; }
+
+        public Assignment Copy(string newName)
+        {
+            return new Assignment()
+            {
+                DictaatDetailsId = newName,
+                Description = this.Description,
+                AssignmentSecret = this.AssignmentSecret,
+                AssignmentType = this.AssignmentType,
+                ExternalId = this.ExternalId,
+                Level = this.Level,
+                Metadata = this.Metadata,
+                Points = this.Points,
+                Title = this.Title
+            };
+        }
     }
 }

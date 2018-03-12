@@ -46,5 +46,26 @@ namespace Webdictaat.Domain
 
         }
 
+        public Quiz Copy(string newName)
+        {
+            return new Quiz()
+            {
+                Questions = this.Questions
+                    .Select(qq => new QuestionQuiz()
+                    {
+                        Question = new Question()
+                        {
+                            //Answers = ?? deprecated! :)
+                            Text = qq.Question.Text,
+                            Body = qq.Question.Body,
+                            Explanation = qq.Question.Explanation,
+                            IsDeleted = qq.Question.IsDeleted,
+                            QuestionType = qq.Question.QuestionType
+                        }
+                    }).ToList(),
+                    Timestamp = DateTime.Now,
+                    Assignment =  this.Assignment.Copy(newName) 
+            };
+        }
     }
 }

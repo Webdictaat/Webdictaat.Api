@@ -28,7 +28,19 @@ namespace Webdictaat.Domain
 
         public virtual ICollection<Assignment> Assignments { get; set; }
 
+        public virtual ICollection<Quiz> Quizes { get; set; }
+
         public virtual ICollection<DictaatGroup> Groups { get; set; }
+
+        public virtual ICollection<Poll> Polls { get; set; }
+
+        public DictaatDetails()
+        {
+            this.Quizes = new List<Quiz>();
+            this.Assignments = new List<Assignment>();
+            this.Sessions = new List<DictaatSession>();
+            this.Polls = new List<Poll>();
+        }
 
 
         public ICollection<string> GetContributersIds()

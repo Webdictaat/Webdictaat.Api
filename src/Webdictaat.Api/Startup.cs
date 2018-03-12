@@ -51,6 +51,8 @@ namespace Webdictaat.Api
             services.AddCors();
             services.AddMvc();
 
+            var cs = Configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<WebdictaatContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

@@ -11,6 +11,16 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="appsettings.development.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.development.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
@@ -21,6 +31,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Webdictaat.Api\Webdictaat.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Script\" />
   </ItemGroup>
   
 </Project>

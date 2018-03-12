@@ -20,5 +20,10 @@ namespace Webdictaat.Domain
         public string DictaatDetailsId { get; set; }
 
         public virtual ICollection<DictaatSessionUser> Participants { get; set; }
+
+        public DictaatSession()
+        {
+            this.StartedOn = DateTime.Now;
+        }
     }
 }

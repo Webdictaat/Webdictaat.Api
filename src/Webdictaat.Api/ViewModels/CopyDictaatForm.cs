@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Webdictaat.Api.ViewModels
+{
+    public class CopyDictaatForm
+    {
+        public DictaatForm Dictaat { get; set; }
+    }
+}

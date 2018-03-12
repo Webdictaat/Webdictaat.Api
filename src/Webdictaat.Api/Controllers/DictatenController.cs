@@ -30,8 +30,7 @@ namespace Webdictaat.Api.Controllers
         public DictatenController(
             IDictaatRepository dictaatRepo,
             UserManager<Domain.User.ApplicationUser> userManager,
-            IAuthorizeService authorizationService,
-            WebdictaatContext context) : base(authorizationService)
+            IAuthorizeService authorizationService) : base(authorizationService)
         {
             _authorizationService = authorizationService;
             _dictaatRepo = dictaatRepo;
@@ -46,11 +45,11 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public async Task<IEnumerable<ViewModels.DictaatSummary>> Post([FromBody]ViewModels.DictaatForm form)
         {
-            if (!ModelState.IsValid){
+            if (!ModelState.IsValid) {
                 this.HttpContext.Response.StatusCode = 400; // I'm a teapot
                 return null;
             }
-                 
+
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             _dictaatRepo.CreateDictaat(form.Name, user, form.Template);
             return this.Get();
@@ -157,6 +156,12 @@ namespace Webdictaat.Api.Controllers
                 Response.StatusCode = 404;
 
             return response;
+        }
+
+        [HttpPost("{dictaatName}/copies")]
+        public ViewModels.Dictaat CopyDictaat(string dictaatName, CopyDictaatForm form)
+        {
+            return _dictaatRepo.CopyDictaat(dictaatName, form);
         }
     }
 }

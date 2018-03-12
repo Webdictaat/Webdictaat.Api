@@ -13,29 +13,94 @@ using Webdictaat.Domain;
 using Webdictaat.Domain.User;
 using Xunit;
 using Webdictaat.Api.Services;
+using System.Security.Claims;
+using System.Threading;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Webdictaat.Core;
+using Moq;
 
 namespace Webdictaat.Api.Test.Controller
 {
-    public class DictaatControllerTest : BaseTestController
+    public class DictaatControllerTest : BaseTestController,  IDisposable
     {
-        private DictatenController _controller;
-        private IDictaatRepository _repo;
-        private UserManager<ApplicationUser> _userManager;
-     
+        Webdictaat.Api.Controllers.DictatenController _c;
+        Mock<IDictaatFactory> _dictaatFactory;
 
         public DictaatControllerTest()
         {
-            //_repo = new DictaatRepository(_context, _file, _dir, _json, _context);
-            //_userManager = new UserManager<ApplicationUser>(_store.Object, null, null, null, null, null, null, null, null);
-            //_controller = new DictatenController(_repo, _userManager, _authService, _context)
+            _context.Database.BeginTransaction();
+
+            _c = new DictatenController(_dictaatRepo, null, base.am.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new TestPrincipal(new Claim[]{
+                            new Claim("name", "ssmulder")
+                        })
+                    }
+                }
+            };
+        }
+
+        public void Dispose()
+        {
+            _context.Database.RollbackTransaction();
         }
 
         [Fact]
-        public void Should_Get_Participants()
+        public void Should_Get_Dictaat()
         {
-           
+            //arrange
+            //act
+            var response = _c.Get("Test");
+
+            //assert
+            Assert.NotNull(response.Result);
+            Assert.Equal("Test", response.Result.Name);
+
         }
 
+        [Fact]
+        public void Should_Copy_Dictaat()
+        {
+            //arrange
+
+            //act
+            var response = _c.CopyDictaat("Test", new CopyDictaatForm()
+            {
+                Dictaat = new DictaatForm() {  Name = "Test2" }
+            });
+
+            //assert
+            Assert.NotNull(response);
+            Assert.Equal("Test2", response.Name);
+
+            var newDictaat = _context.DictaatDetails
+                .Include(dd => dd.Assignments)
+                .Include(dd => dd.DictaatOwner)
+                .Include(dd => dd.Polls)
+                .Include(dd => dd.Sessions)
+                .Include("Quizes.Questions.Question.Answers")
+                .FirstOrDefault(d => d.Name == "Test2");
+
+            Assert.NotNull(newDictaat);
+            Assert.Equal(2, newDictaat.Assignments.Count());
+            Assert.Equal(4, _context.Assignments.Count());
+            Assert.Equal(1, newDictaat.Quizes.Count());
+            Assert.Equal(2, _context.Quizes.Count());
+            Assert.Equal(1, newDictaat.Sessions.Count());
+            Assert.Equal(2, _context.Sessions.Count());
+            Assert.Equal(1, newDictaat.Polls.Count());
+            Assert.Equal(2, _context.Polls.Count());
+
+
+
+
+
+        }
     }
 }
 

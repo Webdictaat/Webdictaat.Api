@@ -29,6 +29,7 @@ namespace Webdictaat.Api.Models
         ViewModels.DictaatMarkings getMarkings(string name);
         IEnumerable<UserVM> GetContributers(string dictaatName);
         IEnumerable<UserVM> AddContributer(string dictaatName, string contributerEmail);
+        ViewModels.Dictaat CopyDictaat(string dictaatName, CopyDictaatForm form);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -75,6 +76,29 @@ namespace Webdictaat.Api.Models
             _dictaatFactory = new DictaatFactory(appSettings.Value, directory, file, json);
             _pathHelper = new PathHelper(appSettings.Value);
 
+        }
+
+        /// <summary>
+        /// Extra constructor mainly created for unit testing purposes.
+        /// </summary>
+        /// <param name="appSettings"></param>
+        /// <param name="directory"></param>
+        /// <param name="dictaatFactory"></param>
+        /// <param name="context"></param>
+        public DictaatRepository(
+            IOptions<ConfigVariables> appSettings,
+            IGoogleAnalytics analyticsRepo,
+            IDictaatFactory dictaatFactory,
+            WebdictaatContext context)
+        {
+            _directoryRoot = appSettings.Value.DictaatRoot;
+            _pagesDirectory = appSettings.Value.PagesDirectory;
+            _dictatenDirectory = appSettings.Value.DictatenDirectory;
+            _templatesDirectory = appSettings.Value.TemplatesDirectory;
+            _analyticsRepo = analyticsRepo;
+            _context = context;
+            _dictaatFactory = dictaatFactory;
+            _pathHelper = new PathHelper(appSettings.Value);
         }
 
         public IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null)
@@ -228,6 +252,53 @@ namespace Webdictaat.Api.Models
             _context.SaveChanges();
 
             return this.GetContributers(dictaatName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dictaatName"></param>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public ViewModels.Dictaat CopyDictaat(string dictaatName, CopyDictaatForm form)
+        {
+            var dictaat = _context.DictaatDetails
+                .Include(dd => dd.Assignments)
+                .Include(dd => dd.DictaatOwner)
+                .Include("Polls.Options")
+                .Include("Quizes.Questions.Question.Answers")
+                .FirstOrDefault(d => d.Name == dictaatName);
+
+            string newName = form.Dictaat.Name;
+
+            //from file system
+            Domain.Dictaat newDictaat= _dictaatFactory.GetDictaat(dictaatName);
+            newDictaat.Name = newName;
+
+            var newDictaatDetails = new Domain.DictaatDetails();
+            newDictaatDetails.Name = newName;
+            newDictaatDetails.DictaatOwner = dictaat.DictaatOwner;
+
+            //copy quizes
+            dictaat.Quizes.ToList().ForEach(q => newDictaatDetails.Quizes.Add(q.Copy(newName)));
+
+            //copy assignments
+            dictaat.Assignments.Where(a => a.AssignmentType != AssignmentType.Quiz).ToList()
+                .ForEach(a => newDictaatDetails.Assignments.Add(a.Copy(newName)));
+
+            //copy polls
+            dictaat.Polls.ToList()
+                .ForEach(p => newDictaatDetails.Polls.Add(p.Copy()));
+
+            //create session
+            newDictaatDetails.Sessions.Add(new DictaatSession());
+
+            //In the end: Save all the changes!
+            _context.DictaatDetails.Add(newDictaatDetails);
+            _context.SaveChanges();
+
+            return new ViewModels.Dictaat(newDictaat, newDictaatDetails, null);
+
         }
     }
 }

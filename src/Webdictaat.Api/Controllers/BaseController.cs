@@ -33,9 +33,9 @@ namespace Webdictaat.Api
             var authorize = false;
 
             if (isOwner)
-                authorize = _authService.isDictaatOwner(User.Identity.Name, dictaatName).Result;
+                authorize = _authService.isDictaatOwner(HttpContext.User.Identity.Name, dictaatName).Result;
             else
-                authorize = _authService.IsDictaatContributer(User.Identity.Name, dictaatName).Result;
+                authorize = _authService.IsDictaatContributer(HttpContext.User.Identity.Name, dictaatName).Result;
             
             if (!authorize)
                 HttpContext.Response.StatusCode = 403;
