@@ -46,6 +46,11 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public async Task<IEnumerable<ViewModels.DictaatSummary>> Post([FromBody]ViewModels.DictaatForm form)
         {
+            if (!ModelState.IsValid) ({
+                this.HttpContext.Response.StatusCode = 400; // I'm a teapot
+                return null;
+            }
+                 
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             _dictaatRepo.CreateDictaat(form.Name, user, form.Template);
             return this.Get();
