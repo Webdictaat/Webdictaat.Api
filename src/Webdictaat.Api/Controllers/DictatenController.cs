@@ -46,7 +46,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public async Task<IEnumerable<ViewModels.DictaatSummary>> Post([FromBody]ViewModels.DictaatForm form)
         {
-            if (!ModelState.IsValid) ({
+            if (!ModelState.IsValid){
                 this.HttpContext.Response.StatusCode = 400; // I'm a teapot
                 return null;
             }
