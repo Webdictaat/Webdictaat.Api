@@ -12,16 +12,32 @@ namespace Webdictaat.Core
         IEnumerable<DirectorySummary> GetDirectoriesSummary(string path);
         DirectoryDetails GetDirectoryDetails(string path);
         IEnumerable<FileSummary> GetFilesSummary(string path);
-        void CopyDirectory(string name, string template);
+        void CopyDirectory(string pathNew, string pathSource);
         bool Exists(string pathNew);
         void DeleteDirectory(string path);
     }
 
     public class Directory : IDirectory
     {
-        public void CopyDirectory(string pathNew, string pathTemplate)
+        public void CopyDirectory(string pathNew, string pathSource)
         {
-            this.DirectoryCopy(pathTemplate, pathNew, true);
+            this.DirectoryCopy(pathSource, pathNew, true);
+        }
+
+
+        public void CreateDirectory(string path){
+
+            // Get the subdirectories for the specified directory.
+            System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(path);
+
+            if (dir.Exists)
+            {
+                throw new System.IO.IOException(
+                    "There is already a direcotry on this location: "
+                    + path);
+            }
+
+            System.IO.Directory.CreateDirectory(path);
         }
 
         public IEnumerable<DirectorySummary> GetDirectoriesSummary(string directoryRoot)
@@ -32,6 +48,7 @@ namespace Webdictaat.Core
             {
                 Name = d.Split('\\').Last(),
                 LastChange = System.IO.Directory.GetLastWriteTime(d),
+                Path = d,
             });
         }
 
@@ -108,6 +125,7 @@ namespace Webdictaat.Core
             {
                 Name = path.Split('\\').Last().Split('.').FirstOrDefault(),
                 LastChanged = System.IO.Directory.GetLastWriteTime(path),
+                Path = path,
             };
         }
 
@@ -119,6 +137,16 @@ namespace Webdictaat.Core
 
         public void DeleteDirectory(string path)
         {
+            // Get the subdirectories for the specified directory.
+            System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(path);
+
+            if (!dir.Exists)
+            {
+                throw new System.IO.DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + path);
+            }
+
             EmptyFolder(new DirectoryInfo(@path));
         }
 

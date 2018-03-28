@@ -20,7 +20,12 @@ namespace Webdictaat.Domain.Assignments
     public class Assignment
     {
         [Key]
+        [Required]
         public int Id { get; set; }
+
+        [Required]
+        public string DictaatDetailsId { get; set; }
+
 
         [Required]
         public string Title { get; set; }
@@ -33,8 +38,6 @@ namespace Webdictaat.Domain.Assignments
         public virtual DictaatDetails DictaatDetails { get; set; }
 
 
-        [Required]
-        public string DictaatDetailsId { get; set; }
 
         public string Metadata { get; set; }
 
@@ -58,6 +61,7 @@ namespace Webdictaat.Domain.Assignments
             return new Assignment()
             {
                 DictaatDetailsId = newName,
+                Id = this.Id,
                 Description = this.Description,
                 AssignmentSecret = this.AssignmentSecret,
                 AssignmentType = this.AssignmentType,

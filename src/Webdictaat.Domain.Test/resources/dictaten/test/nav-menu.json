@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Home",
+    "Url": "home",
+    "MenuItems": [],
+    "IsDisabled": false
+  },
+  {
+    "Name": "Contact",
+    "Url": "contact",
+    "MenuItems": [],
+    "IsDisabled": false
+  }
+]

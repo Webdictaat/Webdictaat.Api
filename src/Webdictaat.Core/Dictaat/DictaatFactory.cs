@@ -15,6 +15,7 @@ namespace Webdictaat.Core
         Dictaat CreateDictaat(string name, string template);
         IEnumerable<DirectorySummary> GetDictaten();
         void DeleteDictaaat(string dictaatPath);
+        Dictaat CopyDictaat(string dictaatName, DictaatDetails newDictaatName);
     }
 
     public class DictaatFactory : IDictaatFactory
@@ -52,7 +53,8 @@ namespace Webdictaat.Core
             string pathNew = _pathHelper.DictaatPath(name);
             string pathNewConfig = _pathHelper.DictaatConfigPath(name);
 
-            if (_directory.Exists(pathNew)){
+            if (_directory.Exists(pathNew))
+            {
                 return null;
             }
 
@@ -65,7 +67,7 @@ namespace Webdictaat.Core
             _json.EditFile(pathNewConfig, dictaatConfig);
 
             return this.GetDictaat(name);
-              
+
         }
 
         /// <summary>
@@ -81,6 +83,23 @@ namespace Webdictaat.Core
         public void DeleteDictaaat(string dictaatPath)
         {
             _directory.DeleteDirectory(dictaatPath);
+        }
+
+        public Dictaat CopyDictaat(string dictaatName, DictaatDetails newDictaat)
+        {
+            var oldDir = _pathHelper.DictaatPath(dictaatName);
+            var newDir = _pathHelper.DictaatPath(newDictaat.Name);
+
+            //This is where the copy happens
+            _directory.CopyDirectory(newDir, oldDir);
+
+            //edit custom files
+            string pathNewConfig = _pathHelper.DictaatConfigPath(newDictaat.Name);
+            var dictaatConfig = _json.ReadFile(pathNewConfig);
+            dictaatConfig["name"] = newDictaat.Name;
+            _json.EditFile(pathNewConfig, dictaatConfig);
+
+            return GetDictaat(newDictaat.Name);
         }
     }
 }

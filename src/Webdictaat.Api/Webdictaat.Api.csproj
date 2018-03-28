@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20180319130201_originalAssignmentId.cs" />
+    <Compile Remove="Data\Migrations\20180319130201_originalAssignmentId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20180319172604_composite-quiz.cs" />
+    <Compile Remove="Data\Migrations\20180319172604_composite-quiz.Designer.cs" />
     <Compile Remove="Models\AnalyticsRepository.cs" />
     <Compile Remove="ViewModels\Pages\PageView.cs" />
   </ItemGroup>

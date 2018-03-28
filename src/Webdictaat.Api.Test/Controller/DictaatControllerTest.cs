@@ -25,7 +25,6 @@ namespace Webdictaat.Api.Test.Controller
     public class DictaatControllerTest : BaseTestController,  IDisposable
     {
         Webdictaat.Api.Controllers.DictatenController _c;
-        Mock<IDictaatFactory> _dictaatFactory;
 
         public DictaatControllerTest()
         {
@@ -69,9 +68,9 @@ namespace Webdictaat.Api.Test.Controller
             //arrange
 
             //act
-            var response = _c.CopyDictaat("Test", new CopyDictaatForm()
+            var response = _c.CopyDictaat("Test", new DictaatForm()
             {
-                Dictaat = new DictaatForm() {  Name = "Test2" }
+                Name = "Test2" 
             });
 
             //assert
@@ -86,21 +85,21 @@ namespace Webdictaat.Api.Test.Controller
                 .Include("Quizes.Questions.Question.Answers")
                 .FirstOrDefault(d => d.Name == "Test2");
 
+            //Assert DB
             Assert.NotNull(newDictaat);
-            Assert.Equal(2, newDictaat.Assignments.Count());
+            Assert.Equal(2, newDictaat.Assignments.Count()); 
             Assert.Equal(4, _context.Assignments.Count());
-            Assert.Equal(1, newDictaat.Quizes.Count());
-            Assert.Equal(2, _context.Quizes.Count());
-            Assert.Equal(1, newDictaat.Sessions.Count());
-            Assert.Equal(2, _context.Sessions.Count());
-            Assert.Equal(1, newDictaat.Polls.Count());
-            Assert.Equal(2, _context.Polls.Count());
+            Assert.Equal(1, newDictaat.Quizes.Count()); //1 quiz in new
+            Assert.Equal(2, _context.Quizes.Count()); //2 quizes in total
+            Assert.Equal(1, newDictaat.Sessions.Count()); //1 session in new
+            Assert.Equal(2, _context.Sessions.Count());  //2 sessions in total
+            Assert.Equal(1, newDictaat.Polls.Count()); //1 poll in new
+            Assert.Equal(2, _context.Polls.Count()); //2 polls in total
 
+            //Assert File system
+            _dictaatFactory.Verify(d => d.CopyDictaat("Test", new DictaatDetails() { Name = "Test2" }), Times.Once());
 
-
-
-
-        }
+            }
     }
 }
 

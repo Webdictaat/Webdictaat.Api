@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Domain", "src\We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Api.Test", "src\Webdictaat.Api.Test\Webdictaat.Api.Test.csproj", "{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webdictaat.Core.Test", "src\Webdictaat.Domain.Test\Webdictaat.Core.Test.csproj", "{8A2FCD5D-2B41-4607-92F1-BCC48377B6C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2FCD5D-2B41-4607-92F1-BCC48377B6C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2FCD5D-2B41-4607-92F1-BCC48377B6C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2FCD5D-2B41-4607-92F1-BCC48377B6C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2FCD5D-2B41-4607-92F1-BCC48377B6C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		{5EA7A7A1-1617-47E1-BC1C-A7C946AC48CB} = {681E112E-374E-4D52-BA0F-F32BD5897768}
 		{403147F9-7049-46DB-9241-40DEB290FE77} = {681E112E-374E-4D52-BA0F-F32BD5897768}
 		{5CEBF9FF-0BFC-4A95-87AD-92BADC95BEBD} = {681E112E-374E-4D52-BA0F-F32BD5897768}
+		{8A2FCD5D-2B41-4607-92F1-BCC48377B6C0} = {681E112E-374E-4D52-BA0F-F32BD5897768}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34BFE5D4-25A1-487A-9E7E-5E6D2A510450}

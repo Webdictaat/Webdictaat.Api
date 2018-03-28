@@ -10,5 +10,6 @@ namespace Webdictaat.Domain
         public DateTime LastChange { get; set; }
 
         public string Name { get; set; }
+        public string Path { get; set; }
     }
 }

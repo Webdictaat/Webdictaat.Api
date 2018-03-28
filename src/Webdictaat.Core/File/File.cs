@@ -80,6 +80,5 @@ namespace Webdictaat.Core
             source = System.IO.File.ReadAllText(path);
             return source;
         }
-
     }
 }

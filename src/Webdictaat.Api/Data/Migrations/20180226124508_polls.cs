@@ -63,6 +63,15 @@ namespace Webdictaat.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.AddForeignKey(
+                name: "FK_Polls_DictaatDetails_DictaatName",
+                table: "Polls",
+                column: "DictaatName",
+                principalTable: "DictaatDetails",
+                principalColumn: "Name",
+                onDelete: ReferentialAction.Cascade);
+
+
             migrationBuilder.CreateIndex(
                 name: "IX_PollOption_PollId",
                 table: "PollOption",

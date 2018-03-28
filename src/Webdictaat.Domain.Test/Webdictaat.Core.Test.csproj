@@ -27,27 +27,35 @@
     </Content>
     <Content Include="resources\dictaten\test\css\bootstrap.min.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\dictaten\test\css\custom.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\dictaten\test\css\style.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\dictaten\test\dictaat.config.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\dictaten\test\index.html">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\dictaten\test\nav-menu.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\dictaten\test\pages\contact.html">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\dictaten\test\pages\home.html">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -59,12 +67,10 @@
     <PackageReference Include="Moq" Version="4.7.145" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Webdictaat.Api\Webdictaat.Api.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Script\" />
+    <ProjectReference Include="..\Webdictaat.Core\Webdictaat.Core.csproj" />
+    <ProjectReference Include="..\Webdictaat.Domain\Webdictaat.Domain.csproj" />
   </ItemGroup>
   
 </Project>

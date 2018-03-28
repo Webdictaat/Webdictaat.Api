@@ -158,8 +158,9 @@ namespace Webdictaat.Api.Controllers
             return response;
         }
 
+        [Authorize]
         [HttpPost("{dictaatName}/copies")]
-        public ViewModels.Dictaat CopyDictaat(string dictaatName, CopyDictaatForm form)
+        public ViewModels.Dictaat CopyDictaat(string dictaatName, [FromBody] DictaatForm form)
         {
             return _dictaatRepo.CopyDictaat(dictaatName, form);
         }

@@ -8,6 +8,7 @@ using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
 using Webdictaat.Core;
 using Webdictaat.Data;
+using Webdictaat.Domain;
 using Webdictaat.Domain.Google;
 using Webdictaat.Domain.User;
 
@@ -86,6 +87,7 @@ namespace Webdictaat.Api.Test.Controller
             //managers and factories
             _dictaatFactory = new Mock<IDictaatFactory>();
             _dictaatFactory.Setup(df => df.GetDictaat(It.IsAny<string>())).Returns(new Domain.Dictaat(){Name = "Test"});
+            _dictaatFactory.Setup(df => df.CopyDictaat(It.IsAny<string>(), It.IsAny<DictaatDetails>())).Returns(new Domain.Dictaat() { Name = "Test2" });
             _analytics = new Mock<IGoogleAnalytics>(); 
 
             //repos

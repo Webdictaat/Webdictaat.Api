@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Webdictaat app</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet"> <!-- from cdn -->
+    <link rel="stylesheet" href="/client/css/custom-bootstrap.min.css"> <!-- from the server root -->
+    <link rel="stylesheet" href="/client/css/styles.css"> <!-- from the server root -->
+	<link rel="stylesheet" href="css/style.css"> <!-- from website root -->
+
+    <!-- es6 shim for safari -->
+    <script src="/client/js/shim.min.js"></script>
+
+    <!-- enviroment variables -->
+    <script src="/client/js/env.js"></script> <!-- from the server root -->
+
+</head>
+
+<body>
+
+  	<wd-client-app>Loading...</wd-client-app>
+</body>
+
+<!-- load angular app -->
+<script type="text/javascript" src="/client/inline.bundle.js"></script>
+<script type="text/javascript" src="/client/polyfills.bundle.js"></script>
+<script type="text/javascript" src="/client/vendor.bundle.js"></script>
+<script type="text/javascript" src="/client/main.bundle.js"></script>
+
+
+</html>

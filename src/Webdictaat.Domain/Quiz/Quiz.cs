@@ -25,16 +25,16 @@ namespace Webdictaat.Domain
         /// </summary>
         public string Description { get; set; }
 
-        [Required]
-        public string DictaatDetailsName { get; set; }
-
         public DateTime Timestamp { get; set; }
         
         public Boolean Shuffle { get; set; }
 
         public int? AssignmentId { get; set; }
 
-        [ForeignKey("AssignmentId")]
+        [Required]
+        public string DictaatDetailsName { get; set; }
+
+        [ForeignKey("AssignmentId")] 
         public virtual Assignment Assignment { get; set; }
 
         public virtual ICollection<QuestionQuiz> Questions { get; set; }

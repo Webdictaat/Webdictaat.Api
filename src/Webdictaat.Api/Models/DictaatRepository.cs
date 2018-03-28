@@ -16,6 +16,7 @@ using Webdictaat.Api;
 using Webdictaat.Api.ViewModels;
 using Webdictaat.Domain.Assignments;
 using Webdictaat.Domain.Google;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Webdictaat.Api.Models
 {
@@ -29,7 +30,7 @@ namespace Webdictaat.Api.Models
         ViewModels.DictaatMarkings getMarkings(string name);
         IEnumerable<UserVM> GetContributers(string dictaatName);
         IEnumerable<UserVM> AddContributer(string dictaatName, string contributerEmail);
-        ViewModels.Dictaat CopyDictaat(string dictaatName, CopyDictaatForm form);
+        ViewModels.Dictaat CopyDictaat(string dictaatName, DictaatForm form);
     }
 
     public class DictaatRepository : IDictaatRepository
@@ -260,7 +261,7 @@ namespace Webdictaat.Api.Models
         /// <param name="dictaatName"></param>
         /// <param name="form"></param>
         /// <returns></returns>
-        public ViewModels.Dictaat CopyDictaat(string dictaatName, CopyDictaatForm form)
+        public ViewModels.Dictaat CopyDictaat(string dictaatName, DictaatForm form)
         {
             var dictaat = _context.DictaatDetails
                 .Include(dd => dd.Assignments)
@@ -269,11 +270,7 @@ namespace Webdictaat.Api.Models
                 .Include("Quizes.Questions.Question.Answers")
                 .FirstOrDefault(d => d.Name == dictaatName);
 
-            string newName = form.Dictaat.Name;
-
-            //from file system
-            Domain.Dictaat newDictaat= _dictaatFactory.GetDictaat(dictaatName);
-            newDictaat.Name = newName;
+            string newName = form.Name;
 
             var newDictaatDetails = new Domain.DictaatDetails();
             newDictaatDetails.Name = newName;
@@ -296,6 +293,11 @@ namespace Webdictaat.Api.Models
             //In the end: Save all the changes!
             _context.DictaatDetails.Add(newDictaatDetails);
             _context.SaveChanges();
+
+            //copy files
+            Domain.Dictaat newDictaat = _dictaatFactory
+                .CopyDictaat(dictaatName, newDictaatDetails);
+
 
             return new ViewModels.Dictaat(newDictaat, newDictaatDetails, null);
 
