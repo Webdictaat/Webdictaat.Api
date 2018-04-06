@@ -61,7 +61,6 @@ namespace Webdictaat.Domain.Assignments
             return new Assignment()
             {
                 DictaatDetailsId = newName,
-                Id = this.Id,
                 Description = this.Description,
                 AssignmentSecret = this.AssignmentSecret,
                 AssignmentType = this.AssignmentType,
