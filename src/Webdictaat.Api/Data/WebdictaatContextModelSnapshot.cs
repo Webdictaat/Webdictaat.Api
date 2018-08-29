@@ -12,14 +12,13 @@ using Webdictaat.Domain.Assignments;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20180226124508_polls")]
-    partial class polls
+    partial class WebdictaatContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -257,7 +256,8 @@ namespace Webdictaat.Api.Migrations
             modelBuilder.Entity("Webdictaat.Domain.DictaatDetails", b =>
                 {
                     b.Property<string>("Name")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(450);
 
                     b.Property<string>("DictaatOwnerId")
                         .IsRequired();
@@ -326,11 +326,17 @@ namespace Webdictaat.Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("DictaatName")
+                        .IsRequired()
+                        .HasMaxLength(450);
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Question");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DictaatName");
 
                     b.ToTable("Polls");
                 });
@@ -420,6 +426,8 @@ namespace Webdictaat.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AssignmentId");
+
+                    b.HasIndex("DictaatDetailsName");
 
                     b.ToTable("Quizes");
                 });
@@ -709,6 +717,14 @@ namespace Webdictaat.Api.Migrations
                         .HasForeignKey("Group", "DictaatName");
                 });
 
+            modelBuilder.Entity("Webdictaat.Domain.Poll", b =>
+                {
+                    b.HasOne("Webdictaat.Domain.DictaatDetails", "Dictaat")
+                        .WithMany("Polls")
+                        .HasForeignKey("DictaatName")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Webdictaat.Domain.PollOption", b =>
                 {
                     b.HasOne("Webdictaat.Domain.Poll", "Poll")
@@ -748,6 +764,11 @@ namespace Webdictaat.Api.Migrations
                     b.HasOne("Webdictaat.Domain.Assignments.Assignment", "Assignment")
                         .WithMany()
                         .HasForeignKey("AssignmentId");
+
+                    b.HasOne("Webdictaat.Domain.DictaatDetails")
+                        .WithMany("Quizes")
+                        .HasForeignKey("DictaatDetailsName")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Webdictaat.Domain.QuizAttempt", b =>

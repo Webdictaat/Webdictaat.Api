@@ -12,14 +12,14 @@ using Webdictaat.Domain.Assignments;
 namespace Webdictaat.Api.Migrations
 {
     [DbContext(typeof(WebdictaatContext))]
-    [Migration("20180321105053_originalassignmentid")]
-    partial class originalassignmentid
+    [Migration("20180409133506_polls")]
+    partial class polls
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -192,8 +192,6 @@ namespace Webdictaat.Api.Migrations
 
                     b.Property<string>("Metadata");
 
-                    b.Property<int>("OriginalAssignmentId");
-
                     b.Property<int>("Points");
 
                     b.Property<string>("Title")
@@ -259,7 +257,8 @@ namespace Webdictaat.Api.Migrations
             modelBuilder.Entity("Webdictaat.Domain.DictaatDetails", b =>
                 {
                     b.Property<string>("Name")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(450);
 
                     b.Property<string>("DictaatOwnerId")
                         .IsRequired();
@@ -329,7 +328,8 @@ namespace Webdictaat.Api.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("DictaatName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(450);
 
                     b.Property<bool>("IsDeleted");
 

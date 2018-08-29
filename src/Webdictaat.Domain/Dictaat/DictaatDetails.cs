@@ -11,6 +11,7 @@ namespace Webdictaat.Domain
     public class DictaatDetails : IResource
     {
         [Key]
+        [MaxLength(450)]
         public string Name { get; set; }
 
         [Required]

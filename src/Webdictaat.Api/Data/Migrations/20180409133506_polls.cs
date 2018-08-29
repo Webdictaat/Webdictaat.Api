@@ -15,13 +15,19 @@ namespace Webdictaat.Api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    DictaatName = table.Column<string>(maxLength: 450, nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    DictaatName = table.Column<string>(nullable: false),
                     Question = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Polls", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Polls_DictaatDetails_DictaatName",
+                        column: x => x.DictaatName,
+                        principalTable: "DictaatDetails",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,26 +62,28 @@ namespace Webdictaat.Api.Migrations
                 {
                     table.PrimaryKey("PK_PollVotes", x => new { x.PollId, x.UserId });
                     table.ForeignKey(
+                        name: "FK_PollVotes_Polls_PollId",
+                        column: x => x.PollId,
+                        principalTable: "Polls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_PollVotes_PollOption_PollOptionId",
                         column: x => x.PollOptionId,
                         principalTable: "PollOption",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Polls_DictaatDetails_DictaatName",
-                table: "Polls",
-                column: "DictaatName",
-                principalTable: "DictaatDetails",
-                principalColumn: "Name",
-                onDelete: ReferentialAction.Cascade);
-
 
             migrationBuilder.CreateIndex(
                 name: "IX_PollOption_PollId",
                 table: "PollOption",
                 column: "PollId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Polls_DictaatName",
+                table: "Polls",
+                column: "DictaatName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PollVotes_PollOptionId",

@@ -29,7 +29,8 @@ namespace Webdictaat.Api.ViewModels
 
                 if (this.VotesCount != 0)
                 {
-                    this.VotesPercentage = 100 / (poll.Votes.Count() / this.VotesCount);
+                    double ratio = (double) poll.Votes.Count() / this.VotesCount;
+                    this.VotesPercentage = (int)( 100 / ratio);
                 }
             }
 

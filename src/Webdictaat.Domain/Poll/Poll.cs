@@ -20,9 +20,10 @@ namespace Webdictaat.Domain
         public virtual ICollection<PollVote> Votes { get; set; }
 
         [Required]
+        [ForeignKey("Dictaat")]
+        [MaxLength(450)]
         public string DictaatName { get; set; }
 
-        [ForeignKey("DictaatName")]
         public DictaatDetails Dictaat { get; set; }
 
         public string Question { get; set; }

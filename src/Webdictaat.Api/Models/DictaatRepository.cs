@@ -205,6 +205,7 @@ namespace Webdictaat.Api.Models
         {
             var assignments = _context.Assignments
                 .Include(a => a.Attempts)
+                .OrderBy(a => a.Metadata)
                 .Where(a => a.DictaatDetailsId == name)
                 .ToList();
 

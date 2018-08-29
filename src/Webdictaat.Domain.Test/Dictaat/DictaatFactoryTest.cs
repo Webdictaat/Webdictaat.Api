@@ -57,7 +57,7 @@ namespace Webdictaat.Domain.Test.Dictaat
             {
                 Assignments = new List<Assignment>()
                 {
-                    new Assignment(){ Id = 2, OriginalAssignmentId = 1},
+                    new Assignment(){ Id = 2},
                 }
             };
 
