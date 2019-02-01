@@ -41,6 +41,8 @@ namespace Webdictaat.Api.Test.Controller
 
         #region Repos 
         protected DictaatRepository _dictaatRepo;
+        protected ParticipantRepository _participantRepo;
+
         #endregion
 
         protected ClaimsPrincipal _user;
@@ -57,8 +59,9 @@ namespace Webdictaat.Api.Test.Controller
             am.Setup(a => a.IsDictaatContributer(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(true));
 
-            prm = new Mock<ParticipantRepository>();
-            umm = new Mock<UserManager<ApplicationUser>>();
+            //mock user store
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var umm = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
 
             _user = new TestPrincipal(new Claim[]{
                 new Claim("Name", "ssmulder")
@@ -80,8 +83,9 @@ namespace Webdictaat.Api.Test.Controller
 
             //database
             var options = new DbContextOptionsBuilder<WebdictaatContext>()
-                .UseSqlServer("Data Source=(localdb)\\webdictaat;Initial Catalog=webdictaat;Integrated Security=False;User ID=ssmulder;Password=password;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
+                .UseSqlServer("Data Source=(localdb)\\webdictaat;Initial Catalog=webdictaat.test;Integrated Security=False;User ID=ssmulder;Password=password;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
                 .Options;
+
             _context = new WebdictaatContext(options);
 
             //managers and factories
@@ -92,6 +96,8 @@ namespace Webdictaat.Api.Test.Controller
 
             //repos
             _dictaatRepo = new DictaatRepository(_config.Object, _analytics.Object, _dictaatFactory.Object, _context);
+            _participantRepo = new ParticipantRepository(_context, umm.Object);
+
         }
     }
 }

@@ -87,19 +87,19 @@ namespace Webdictaat.Api.Test.Controller
 
             //Assert DB
             Assert.NotNull(newDictaat);
-            Assert.Equal(2, newDictaat.Assignments.Count()); 
-            Assert.Equal(4, _context.Assignments.Count());
+            Assert.Equal(3, newDictaat.Assignments.Count()); 
+            Assert.Equal(6, _context.Assignments.Count());
             Assert.Equal(1, newDictaat.Quizes.Count()); //1 quiz in new
             Assert.Equal(2, _context.Quizes.Count()); //2 quizes in total
+            Assert.Equal(4, newDictaat.Quizes.First().Questions.Count); //coppied 3 questions
             Assert.Equal(1, newDictaat.Sessions.Count()); //1 session in new
             Assert.Equal(2, _context.Sessions.Count());  //2 sessions in total
             Assert.Equal(1, newDictaat.Polls.Count()); //1 poll in new
             Assert.Equal(2, _context.Polls.Count()); //2 polls in total
 
             //Assert File system
-            _dictaatFactory.Verify(d => d.CopyDictaat("Test", new DictaatDetails() { Name = "Test2" }), Times.Once());
-
-            }
+            _dictaatFactory.Verify(d => d.CopyDictaat(It.IsAny<String>(), It.IsAny<DictaatDetails>()));
+        }
     }
 }
 

@@ -1,18 +1,47 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Security.Claims;
 using Webdictaat.Api.Controllers;
+using Webdictaat.Api.ViewModels;
+using Webdictaat.Api.ViewModels.Participant;
 using Xunit;
+
 
 namespace Webdictaat.Api.Test.Controller
 {
     public class ParticipantControllerTest : BaseTestController
     {
-        [Fact]
-        public void Should_Get_Participant()
-        {
-            
+        Webdictaat.Api.Controllers.ParticipantController _c;
 
+        public ParticipantControllerTest()
+        {
+            _context.Database.BeginTransaction();
+
+            _c = new ParticipantController(_participantRepo, null, base.am.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new TestPrincipal(new Claim[]{
+                            new Claim("name", "ssmulder")
+                        })
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void Should_Get_Participant_comform_AVG()
+        {
+            //ARRANGE
+            //ACT
+            List<UserVM> result = _c.GetParticipants("Test").ToList();
+
+            //ASSERT
+            Assert.DoesNotContain(result, p => p.Email != null);
         }
     }
 }

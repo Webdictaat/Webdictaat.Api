@@ -30,7 +30,7 @@ namespace Webdictaat.Api.ViewModels
         public UserVM(ApplicationUser p)
         {
             this.Id = p.Id;
-            this.Email = p.Email;
+            //this.Email = p.Email; //avg
             this.UserName = p.UserName;
             this.Name = p.FullName;
         }
