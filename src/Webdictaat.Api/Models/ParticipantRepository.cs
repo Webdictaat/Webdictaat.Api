@@ -138,6 +138,7 @@ namespace Webdictaat.Api.Models
 
             return new ParticipantVM(user)
             { 
+                Email = user.Email, //need this one for 1 participant
                 Group = participant != null ? participant.Group : null,
                 AssignmentIds = assignmentIds,
                 RecievedPoints = myPoints,

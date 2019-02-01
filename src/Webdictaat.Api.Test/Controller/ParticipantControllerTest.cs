@@ -34,7 +34,7 @@ namespace Webdictaat.Api.Test.Controller
         }
 
         [Fact]
-        public void Should_Get_Participant_comform_AVG()
+        public void Should_Get_Participants_comform_AVG()
         {
             //ARRANGE
             //ACT
@@ -42,6 +42,17 @@ namespace Webdictaat.Api.Test.Controller
 
             //ASSERT
             Assert.DoesNotContain(result, p => p.Email != null);
+        }
+
+        [Fact]
+        public void Should_Get_Participant_with_email()
+        {
+            //ARRANGE
+            //ACT
+            ParticipantVM result = _c.GetParticipant("Test", "linksonder@gmail.com");
+
+            //ASSERT
+            Assert.NotNull(result.Email);
         }
     }
 }
