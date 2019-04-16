@@ -167,7 +167,7 @@ namespace MVCWithAuth.Controllers
         public async Task<Webdictaat.Api.ViewModels.UserVM> Current()
         {
             ApplicationUser user = await this.GetCurrentUserAsync();
-            return new Webdictaat.Api.ViewModels.UserVM(user);
+            return new Webdictaat.Api.ViewModels.UserVM(user, true);
         }
 
         /// <summary>

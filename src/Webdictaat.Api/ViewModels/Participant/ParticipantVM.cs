@@ -9,7 +9,7 @@ namespace Webdictaat.Api.ViewModels.Participant
 {
     public class ParticipantVM : UserVM
     {
-        public ParticipantVM(ApplicationUser p) : base(p){}
+        public ParticipantVM(ApplicationUser p) : base(p) {}
 
         public UserVM User { get; set; }
         public int[] AssignmentIds { get; set; }

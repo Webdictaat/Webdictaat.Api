@@ -27,10 +27,10 @@ namespace Webdictaat.Api.ViewModels
 
         }
 
-        public UserVM(ApplicationUser p)
+        public UserVM(ApplicationUser p, Boolean showPrivateInfo =false)
         {
             this.Id = p.Id;
-            //this.Email = p.Email; //avg
+            this.Email = showPrivateInfo ? p.Email : null; //avg
             this.UserName = p.UserName;
             this.Name = p.FullName;
         }

@@ -45,14 +45,14 @@ namespace Webdictaat.Api.Test.Controller
         }
 
         [Fact]
-        public void Should_Get_Participant_with_email()
+        public void Should_Get_Participant_comform_AVG()
         {
             //ARRANGE
             //ACT
             ParticipantVM result = _c.GetParticipant("Test", "linksonder@gmail.com");
 
             //ASSERT
-            Assert.NotNull(result.Email);
+            Assert.Null(result.Email);
         }
     }
 }
