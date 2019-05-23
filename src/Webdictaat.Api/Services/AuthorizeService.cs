@@ -16,6 +16,7 @@ namespace Webdictaat.Api.Services
     {
         Task<bool> IsDictaatContributer(string userName, string dictaatName);
         Task<bool> isDictaatOwner(string userName, string dictaatName);
+        Task<bool> isAdmin(string userId);
     }
 
     public class AuthorizeService : IAuthorizeService
@@ -29,6 +30,17 @@ namespace Webdictaat.Api.Services
         {
             this._context = context;
             this._userManager = userManager;
+        }
+
+        /// <summary>
+        /// returns true of false, based on the role of the user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<bool> isAdmin(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            return await _userManager.IsInRoleAsync(user, "Admin");
         }
 
         /// <summary>

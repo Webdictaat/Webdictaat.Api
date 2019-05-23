@@ -52,7 +52,7 @@ namespace Webdictaat.Api.Controllers
 
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             _dictaatRepo.CreateDictaat(form.Name, user, form.Template);
-            return this.Get();
+            return await this.Get();
         }
 
         /// <summary>
@@ -60,10 +60,11 @@ namespace Webdictaat.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<ViewModels.DictaatSummary> Get()
+        public async Task<IEnumerable<ViewModels.DictaatSummary>> Get()
         {
-            string userId = _userManager.GetUserId(HttpContext.User);
-            var dictaten = _dictaatRepo.GetDictaten(userId);
+            string userId = _userManager.GetUserId(User);
+            bool isAdmin = await _authorizationService.isAdmin(User.Identity.Name);
+            var dictaten = _dictaatRepo.GetDictaten(userId, isAdmin);
             return dictaten;
         }
 

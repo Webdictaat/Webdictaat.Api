@@ -22,7 +22,7 @@ namespace Webdictaat.Api.Models
 {
     public interface IDictaatRepository
     {
-        IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null);
+        IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null, bool isAdmin = false);
         Task<ViewModels.Dictaat> getDictaat(string name);
         ViewModels.Session GetCurrentSession(string dictaatName, string userId = null);
         void CreateDictaat(string name, ApplicationUser user, string template);
@@ -102,16 +102,19 @@ namespace Webdictaat.Api.Models
             _pathHelper = new PathHelper(appSettings.Value);
         }
 
-        public IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null)
+        public IEnumerable<ViewModels.DictaatSummary> GetDictaten(string userId = null, bool isAdmin = false)
         {
             var dictaatDetails = _context.DictaatDetails
                 .Include(dd => dd.Contributers).ThenInclude(Contributer => Contributer.User)
                 .Include(dd => dd.DictaatOwner)
                 .ToList();
 
-            //var dictaatSummarys = _dictaatFactory.GetDictaten();
+            var dictaatSummarys = dictaatDetails.Select(dd => new ViewModels.DictaatSummary(dd, userId)).ToList();
 
-            return dictaatDetails.Select(dd => new ViewModels.DictaatSummary(dd, userId)).ToList();
+            if (isAdmin)
+                dictaatSummarys.ForEach(dd => dd.CanEdit = true);
+
+            return dictaatSummarys;
         }
 
         public async Task<ViewModels.Dictaat> getDictaat(string dictaatName)

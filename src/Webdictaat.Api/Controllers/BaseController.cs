@@ -28,9 +28,13 @@ namespace Webdictaat.Api
         /// Returns if the user can access the resource
         /// </summary>
         /// <param name="dictaatName"></param>
+        /// <param name="isOwner">Default is false</param>
         protected bool AuthorizeResrouce(string dictaatName, bool isOwner = false)
         {
             var authorize = false;
+
+            if (_authService.isAdmin(User.Identity.Name).Result)
+                return true;
 
             if (isOwner)
                 authorize = _authService.isDictaatOwner(HttpContext.User.Identity.Name, dictaatName).Result;
