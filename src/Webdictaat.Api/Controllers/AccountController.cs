@@ -97,15 +97,16 @@ namespace MVCWithAuth.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var user = _context.Users.FirstOrDefault(u => u.Email == info.Principal.FindFirstValue(ClaimTypes.Email));
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
             //Not yet a user
             if (user == null)
             { 
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
                 //Get the information about the user from the external login provider
                 user = new ApplicationUser {
-                    UserName = email.Split('@')[0],
+                    UserName = email,
                     Email = email,
                     FullName = info.Principal.FindFirstValue(ClaimTypes.Name)
                 };
@@ -150,7 +151,7 @@ namespace MVCWithAuth.Controllers
             if(user.FullName == null)
             {
                 user.FullName = info.Principal.FindFirstValue(ClaimTypes.Name);
-                user.UserName = email.Split('@')[0];
+                user.UserName = email;
                 user.NormalizedUserName = user.UserName.ToUpper();
             }
 

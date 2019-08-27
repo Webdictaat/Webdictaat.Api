@@ -39,6 +39,8 @@ namespace Webdictaat.Api.Services
         /// <returns></returns>
         public async Task<bool> isAdmin(string userName)
         {
+            if (userName == null) return false;
+
             var user = await _userManager.FindByNameAsync(userName);
             return await _userManager.IsInRoleAsync(user, "Admin");
         }
