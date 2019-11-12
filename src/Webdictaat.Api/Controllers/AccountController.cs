@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Webdictaat.Data;
+using Webdictaat.Core;
 
 namespace MVCWithAuth.Controllers
 {
@@ -23,6 +24,7 @@ namespace MVCWithAuth.Controllers
     public class AccountController : Controller
     {
         private readonly ILogger _logger;
+        private readonly string _jwtsecret;
         private readonly JsonSerializerSettings _serializerSettings;
 
         private readonly UserManager<ApplicationUser> _userManager;
@@ -35,6 +37,7 @@ namespace MVCWithAuth.Controllers
         /// <param name="loggerFactory"></param>
         /// <param name="userManager"></param>
         public AccountController(
+            ConfigVariables config,
             WebdictaatContext context,
             ILoggerFactory loggerFactory,
             UserManager<ApplicationUser> userManager,
@@ -44,6 +47,8 @@ namespace MVCWithAuth.Controllers
             _context = context;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
+
+            this._jwtsecret = config.JWTSECRET;
 
             _serializerSettings = new JsonSerializerSettings
             {
@@ -136,7 +141,7 @@ namespace MVCWithAuth.Controllers
 
             var token = new JwtSecurityToken(
                 new JwtHeader(new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("the secret that needs to be at least 16 characeters long for HmacSha256")),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtsecret)),
                                              SecurityAlgorithms.HmacSha256)),
                 new JwtPayload(claims));
 

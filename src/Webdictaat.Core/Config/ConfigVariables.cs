@@ -11,5 +11,7 @@ namespace Webdictaat.Core
         public string ImagesDirectory { get; set; }
         public string DictaatConfigName { get; set; }
         public object StyleDirectory { get; set; }
+
+        public string JWTSECRET { get; set; }
     }
 }
