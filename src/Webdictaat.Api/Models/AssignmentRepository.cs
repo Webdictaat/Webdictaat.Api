@@ -136,7 +136,7 @@ namespace Webdictaat.Api.Models
 
         public AssignmentVM UpdateAssignment(string dictaatName, int assignmentId, AssignmentFormVM form)
         {
-            var assignment = _context.Assignments.FirstOrDefault(a => a.Id == assignmentId);
+            var assignment = _context.Assignments.FirstOrDefault(a => a.Id == assignmentId && a.DictaatDetailsId == dictaatName);
 
             if (assignment == null)
                 return null;

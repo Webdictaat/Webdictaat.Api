@@ -68,7 +68,10 @@ namespace Webdictaat.Api.Models
         {
             Poll oldPoll = _context.Polls
             .Include("Options")
-            .FirstOrDefault(q => q.Id == pollId);
+                .FirstOrDefault(q => q.Id == pollId && q.DictaatName == dictaatName);
+
+            if (oldPoll == null)
+                return null;
 
             oldPoll.Question = newPoll.Question;
 
@@ -101,7 +104,7 @@ namespace Webdictaat.Api.Models
             Poll p = _context.Polls
               .Include("Options.Votes")
               .Include("Votes")
-              .FirstOrDefault(q => q.Id == pollId);
+                .FirstOrDefault(q => q.Id == pollId && q.DictaatName == dictaatName);
 
             if (p == null)
                 return null;
