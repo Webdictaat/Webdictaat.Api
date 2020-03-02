@@ -54,7 +54,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPut("{styleName}")]
         public async Task<String> Put(string dictaatName, string styleName, [FromBody]ViewModels.StyleVM styleContent)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _styleRepo.EditDictaatStyling(dictaatName, styleName, styleContent.Content);

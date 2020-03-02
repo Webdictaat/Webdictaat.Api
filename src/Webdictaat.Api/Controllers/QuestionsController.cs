@@ -45,7 +45,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPost]
         public QuestionVM Post(string dictaatName, [FromBody]QuestionVM question)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             QuestionVM result = _questionRepo.CreateQuestion(question);
@@ -63,7 +63,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPut("{questionId}")]
         public async Task<QuestionVM> Put(string dictaatName, int questionId, [FromBody]QuestionVM question)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
             QuestionVM result = _questionRepo.UpdateQuestion(question);
             return result;
@@ -79,7 +79,7 @@ namespace Webdictaat.Api.Controllers
         [HttpDelete("{questionId}")]
         public QuestionVM Delete(string dictaatName, int questionId)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             QuestionVM result = _questionRepo.DeleteQuestion(questionId);

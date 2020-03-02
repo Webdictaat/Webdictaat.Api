@@ -63,7 +63,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public PollVM Create(string dictaatName, [FromBody] PollVM poll)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _pollRepository.CreatePoll(dictaatName, poll);
@@ -80,7 +80,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public PollVM Update(string dictaatName, int pollId, [FromBody] PollVM poll)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _pollRepository.UpdatePoll(dictaatName, pollId, poll);
@@ -95,7 +95,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public IEnumerable<PollVM> GetAll(string dictaatName)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _pollRepository.GetPolls(dictaatName);

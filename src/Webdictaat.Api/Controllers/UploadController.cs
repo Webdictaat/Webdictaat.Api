@@ -35,7 +35,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public string Post(string dictaatName, IFormFile file)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             if (file?.Length > 0)

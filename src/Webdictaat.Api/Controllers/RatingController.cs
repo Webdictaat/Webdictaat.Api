@@ -64,7 +64,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public RatingVM Post(string dictaatName, [FromBody]RatingVM rating)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             RatingVM result = _ratingRepo.CreateRating(dictaatName, rating);

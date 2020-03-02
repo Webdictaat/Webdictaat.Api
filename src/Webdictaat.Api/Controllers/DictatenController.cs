@@ -79,7 +79,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public Task<ViewModels.Dictaat> Get(string dictaatName)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _dictaatRepo.getDictaat(dictaatName);
@@ -110,7 +110,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public bool Delete(string dictaatName)
         {
-            if (!AuthorizeResrouce(dictaatName, true))
+            if (!AuthorizeResource(dictaatName, true))
                 return false;
 
             //Nog niet goed nagedacht over wat er fout kan gaan bij het deleten.
@@ -132,7 +132,7 @@ namespace Webdictaat.Api.Controllers
         [HttpGet("{dictaatName}/contributers")]
         public IEnumerable<UserVM> GetContributers(string dictaatName)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _dictaatRepo.GetContributers(dictaatName);
@@ -148,7 +148,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPost("{dictaatName}/contributers")]
         public IEnumerable<UserVM> AddContributer(string dictaatName, [FromBody]UserVM contributer)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             var response = _dictaatRepo.AddContributer(dictaatName, contributer.Email);

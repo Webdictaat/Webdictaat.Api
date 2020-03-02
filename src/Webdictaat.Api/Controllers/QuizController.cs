@@ -70,7 +70,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPost] 
         public async Task<QuizVM> Post(string dictaatName, [FromBody]QuizVM quiz)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             QuizVM result = _quizRepo.CreateQuiz(dictaatName, quiz);
@@ -87,7 +87,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPut("{quizId}")]
         public async Task<QuizVM> Put(string dictaatName, [FromBody]QuizVM quiz)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             QuizVM result = _quizRepo.UpdateQuiz(dictaatName, quiz);

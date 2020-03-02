@@ -74,7 +74,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPost]
         public AssignmentVM Post(string dictaatName, [FromBody] AssignmentFormVM form)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _assignmentRepo.CreateAssignment(dictaatName, form);
@@ -90,7 +90,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPut("{assignmentId}")]
         public AssignmentVM Put(string dictaatName, int assignmentId, [FromBody] AssignmentFormVM form)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _assignmentRepo.UpdateAssignment(dictaatName, assignmentId, form);
@@ -105,7 +105,7 @@ namespace Webdictaat.Api.Controllers
         [HttpDelete("{assignmentId}")]
         public AssignmentVM Delete(string dictaatName, int assignmentId)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _assignmentRepo.DeleteAssignment(dictaatName, assignmentId);
@@ -122,7 +122,7 @@ namespace Webdictaat.Api.Controllers
         [Authorize]
         public Boolean DeleteSubmission(string dictaatName, int assignmentId, string userId)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return false;
 
             return _assignmentRepo.UndoCompleteAssignment(assignmentId, userId);

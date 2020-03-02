@@ -54,7 +54,7 @@ namespace Webdictaat.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<ViewModels.DictaatPageSummary>> Get(string dictaatName)
         {
-            if (!AuthorizeResrouce(dictaatName))    
+            if (!AuthorizeResource(dictaatName))    
                 return null;
 
             return _pageRepo.GetDictaatPages(dictaatName);
@@ -69,7 +69,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPost]
         public async Task<List<ViewModels.MenuItem>> Post(string dictaatName, [FromBody]ViewModels.DictaatPageForm form)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             if(!ModelState.IsValid)
@@ -100,7 +100,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPut("{pageName}")]
         public async Task<ViewModels.DictaatPage> Put(string dictaatName, string pageName, [FromBody]ViewModels.DictaatPage page)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _pageRepo.EditDictaatPage(dictaatName, page);
@@ -117,7 +117,7 @@ namespace Webdictaat.Api.Controllers
         [HttpDelete("{pageName}")]
         public async Task<List<ViewModels.MenuItem>> Delete(string dictaatName, string pageName)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             var menu = _menuRepo.RemoveMenuItem(dictaatName, pageName);

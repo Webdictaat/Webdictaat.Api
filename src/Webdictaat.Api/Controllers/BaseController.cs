@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
 
-namespace Webdictaat.Api
+namespace Webdictaat.Api.Controllers
 {
     /// <summary>
     /// Acts like a resource checker 
@@ -19,7 +19,8 @@ namespace Webdictaat.Api
         /// 
         /// </summary>
         /// <param name="authService"></param>
-        public BaseController(IAuthorizeService authService) { 
+        public BaseController(IAuthorizeService authService)
+        {
             _authService = authService;
         }
 
@@ -29,22 +30,22 @@ namespace Webdictaat.Api
         /// </summary>
         /// <param name="dictaatName"></param>
         /// <param name="isOwner">Default is false</param>
-        protected bool AuthorizeResrouce(string dictaatName, bool isOwner = false)
+        public bool AuthorizeResource(string dictaatName, bool isOwner = false)
         {
             var authorize = false;
 
             if (_authService.isAdmin(User.Identity.Name).Result)
                 return true;
 
-            if (isOwner)
-                authorize = _authService.isDictaatOwner(HttpContext.User.Identity.Name, dictaatName).Result;
-            else
+            authorize = _authService.isDictaatOwner(HttpContext.User.Identity.Name, dictaatName).Result;
+
+            if (!authorize && !isOwner)
                 authorize = _authService.IsDictaatContributer(HttpContext.User.Identity.Name, dictaatName).Result;
-            
+
             if (!authorize)
                 HttpContext.Response.StatusCode = 403;
-            
-            return authorize;    
+
+            return authorize;
         }
     }
 }

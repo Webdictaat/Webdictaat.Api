@@ -98,7 +98,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPost("groups")]
         public IEnumerable<GroupVM> Create(string dictaatName, [FromBody] IEnumerable<GroupVM> groups)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _participantRepository.CreateGroups(dictaatName, groups);

@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Webdictaat.Data;
 using Webdictaat.Core;
+using Microsoft.Extensions.Options;
 
 namespace MVCWithAuth.Controllers
 {
@@ -37,7 +38,7 @@ namespace MVCWithAuth.Controllers
         /// <param name="loggerFactory"></param>
         /// <param name="userManager"></param>
         public AccountController(
-            ConfigVariables config,
+            IOptions<ConfigVariables> appSettings,
             WebdictaatContext context,
             ILoggerFactory loggerFactory,
             UserManager<ApplicationUser> userManager,
@@ -48,7 +49,7 @@ namespace MVCWithAuth.Controllers
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
 
-            this._jwtsecret = config.JWTSECRET;
+            this._jwtsecret = appSettings.Value.JWTSECRET;
 
             _serializerSettings = new JsonSerializerSettings
             {

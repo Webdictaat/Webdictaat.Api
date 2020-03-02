@@ -38,7 +38,7 @@ namespace Webdictaat.Api.Controllers
         [HttpPut]
         public List<ViewModels.MenuItem> Put(string dictaatName, [FromBody]List<ViewModels.MenuItem> menuItems)
         {
-            if (!AuthorizeResrouce(dictaatName))
+            if (!AuthorizeResource(dictaatName))
                 return null;
 
             return _menuRepo.EditMenu(dictaatName, menuItems);
