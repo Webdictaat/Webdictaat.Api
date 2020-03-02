@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Webdictaat.Api.Models;
 using Webdictaat.Api.Services;
@@ -33,14 +34,16 @@ namespace Webdictaat.Api.Controllers
         public bool AuthorizeResource(string dictaatName, bool isOwner = false)
         {
             var authorize = false;
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if (_authService.isAdmin(User.Identity.Name).Result)
+            if (_authService.isAdmin(userId).Result)
                 return true;
 
-            authorize = _authService.isDictaatOwner(HttpContext.User.Identity.Name, dictaatName).Result;
+            authorize = _authService.isDictaatOwner(userId, dictaatName).Result;
 
             if (!authorize && !isOwner)
-                authorize = _authService.IsDictaatContributer(HttpContext.User.Identity.Name, dictaatName).Result;
+                authorize = _authService.IsDictaatContributer(userId, dictaatName).Result;
 
             if (!authorize)
                 HttpContext.Response.StatusCode = 403;

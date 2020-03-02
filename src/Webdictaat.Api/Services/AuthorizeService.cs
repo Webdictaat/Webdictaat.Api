@@ -37,11 +37,11 @@ namespace Webdictaat.Api.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<bool> isAdmin(string userName)
+        public async Task<bool> isAdmin(string userId)
         {
-            if (userName == null) return false;
+            if (userId == null) return false;
 
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId);
             return await _userManager.IsInRoleAsync(user, "Admin");
         }
 
@@ -51,17 +51,17 @@ namespace Webdictaat.Api.Services
         /// <param name="userName"></param>
         /// <param name="dictaatName"></param>
         /// <returns></returns>
-        public async Task<bool> IsDictaatContributer(string userName, string dictaatName)
+        public async Task<bool> IsDictaatContributer(string userId, string dictaatName)
         {
             IResource details = _context.DictaatDetails.Include(dd => dd.Contributers).FirstOrDefault(dd => dd.Name == dictaatName);
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId);
             return details.GetContributersIds().Contains(user.Id);
         }
 
-        public async Task<bool> isDictaatOwner(string userName, string dictaatName)
+        public async Task<bool> isDictaatOwner(string userId, string dictaatName)
         {
             DictaatDetails details = _context.DictaatDetails.FirstOrDefault(dd => dd.Name == dictaatName);
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId);
             return details.DictaatOwnerId == user.Id;
         }
     }

@@ -36,9 +36,7 @@ namespace Webdictaat.Api.Test.Controller
                 {
                     HttpContext = new DefaultHttpContext
                     {
-                        User = new TestPrincipal(new Claim[]{
-                            new Claim("name", "ssmulder")
-                        })
+                        User = _user
                     }
                 }
             };
@@ -59,7 +57,6 @@ namespace Webdictaat.Api.Test.Controller
             //assert
             Assert.NotNull(response.Result);
             Assert.Equal("Test", response.Result.Name);
-
         }
 
         [Fact]

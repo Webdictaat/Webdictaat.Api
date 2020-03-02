@@ -30,8 +30,8 @@ namespace Webdictaat.Api.Test.Controller
 
     public class BaseTestController
     {
-        protected Mock<ParticipantRepository> prm { get; set; }
-        protected Mock<UserManager<ApplicationUser>> umm { get; set; }
+        //mocks
+
         protected Mock<IAuthorizeService> am { get; set; }
 
         protected Mock<IOptions<ConfigVariables>> _config { get; set; }
@@ -40,8 +40,10 @@ namespace Webdictaat.Api.Test.Controller
 
 
         #region Repos 
+        protected AssignmentRepository _assignmentRepo;
         protected DictaatRepository _dictaatRepo;
         protected ParticipantRepository _participantRepo;
+
 
         #endregion
 
@@ -64,7 +66,8 @@ namespace Webdictaat.Api.Test.Controller
             var umm = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
 
             _user = new TestPrincipal(new Claim[]{
-                new Claim("Name", "ssmulder")
+                new Claim(ClaimTypes.Name, "ssmulder"),
+                new Claim(ClaimTypes.NameIdentifier, "06c52646-53fd-4a03-8009-d2ad921e954e")
             });
 
             _config = new Mock<IOptions<ConfigVariables>>();
@@ -92,9 +95,10 @@ namespace Webdictaat.Api.Test.Controller
             _dictaatFactory = new Mock<IDictaatFactory>();
             _dictaatFactory.Setup(df => df.GetDictaat(It.IsAny<string>())).Returns(new Domain.Dictaat(){Name = "Test"});
             _dictaatFactory.Setup(df => df.CopyDictaat(It.IsAny<string>(), It.IsAny<DictaatDetails>())).Returns(new Domain.Dictaat() { Name = "Test2" });
-            _analytics = new Mock<IGoogleAnalytics>(); 
+            _analytics = new Mock<IGoogleAnalytics>();
 
             //repos
+            _assignmentRepo = new AssignmentRepository(_context, null);
             _dictaatRepo = new DictaatRepository(_config.Object, _analytics.Object, _dictaatFactory.Object, _context);
             _participantRepo = new ParticipantRepository(_context, umm.Object);
 

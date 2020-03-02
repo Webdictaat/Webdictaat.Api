@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Webdictaat.Api.ViewModels;
 using Webdictaat.Api.Controllers;
 using Webdictaat.Api.Models;
-using Webdictaat.Api.ViewModels;
 using Webdictaat.Data;
 using Webdictaat.Domain;
 using Webdictaat.Domain.User;
@@ -36,9 +35,7 @@ namespace Webdictaat.Api.Test.Controller
                 {
                     HttpContext = new DefaultHttpContext
                     {
-                        User = new TestPrincipal(new Claim[]{
-                            new Claim("name", "ssmulder")
-                        })
+                        User = _user
                     }
                 }
             };

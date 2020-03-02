@@ -12,6 +12,9 @@ using Webdictaat.Domain.User;
 
 namespace Webdictaat.Api.Controllers
 {
+    /// <summary>
+    /// Assignment Controller
+    /// </summary>
     [Route("api/dictaten/{dictaatName}/[controller]")]
     public class AssignmentController :BaseController
     {
