@@ -151,8 +151,8 @@ namespace MVCWithAuth.Controllers
 
         private async void UpdateUserName(ExternalLoginInfo info)
         {
-           var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-           var user = _userManager.FindByEmailAsync(email).Result;
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var user = _userManager.FindByEmailAsync(email).Result;
 
             if(user.FullName == null)
             {
@@ -202,7 +202,9 @@ namespace MVCWithAuth.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return _userManager.FindByNameAsync(User.Identity.Name);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userManager.FindByIdAsync(userId);
         }
 
         #endregion

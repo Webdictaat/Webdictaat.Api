@@ -17,6 +17,19 @@ namespace Webdictaat.Api.Controllers
         protected IAuthorizeService _authService;
 
         /// <summary>
+        /// Returns the current user UserId (if any).
+        /// </summary>
+        protected string userId
+        {
+            get
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var idClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                return idClaim == null ? null : idClaim.Value;
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="authService"></param>
@@ -34,21 +47,21 @@ namespace Webdictaat.Api.Controllers
         public bool AuthorizeResource(string dictaatName, bool isOwner = false)
         {
             var authorize = false;
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if (_authService.isAdmin(userId).Result)
+            if (_authService.isAdmin(this.userId).Result)
                 return true;
 
-            authorize = _authService.isDictaatOwner(userId, dictaatName).Result;
+            authorize = _authService.isDictaatOwner(this.userId, dictaatName).Result;
 
             if (!authorize && !isOwner)
-                authorize = _authService.IsDictaatContributer(userId, dictaatName).Result;
+                authorize = _authService.IsDictaatContributer(this.userId, dictaatName).Result;
 
             if (!authorize)
                 HttpContext.Response.StatusCode = 403;
 
             return authorize;
         }
+
+
     }
 }

@@ -62,9 +62,8 @@ namespace Webdictaat.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<ViewModels.DictaatSummary>> Get()
         {
-            string userId = _userManager.GetUserId(User);
-            bool isAdmin = await _authorizationService.isAdmin(User.Identity.Name);
-            var dictaten = _dictaatRepo.GetDictaten(userId, isAdmin);
+            bool isAdmin = await _authorizationService.isAdmin(base.userId);
+            var dictaten = _dictaatRepo.GetDictaten(base.userId, isAdmin);
             return dictaten;
         }
 
