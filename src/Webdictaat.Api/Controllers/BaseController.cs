@@ -44,7 +44,7 @@ namespace Webdictaat.Api.Controllers
         /// </summary>
         /// <param name="dictaatName"></param>
         /// <param name="isOwner">Default is false</param>
-        public bool AuthorizeResource(string dictaatName, bool isOwner = false)
+        protected bool AuthorizeResource(string dictaatName, bool isOwner = false)
         {
             var authorize = false;
 

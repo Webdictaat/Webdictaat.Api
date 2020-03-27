@@ -14,8 +14,8 @@ namespace Webdictaat.Api.Services
     /// </summary>
     public interface IAuthorizeService
     {
-        Task<bool> IsDictaatContributer(string userName, string dictaatName);
-        Task<bool> isDictaatOwner(string userName, string dictaatName);
+        Task<bool> IsDictaatContributer(string userId, string dictaatName);
+        Task<bool> isDictaatOwner(string userId, string dictaatName);
         Task<bool> isAdmin(string userId);
     }
 

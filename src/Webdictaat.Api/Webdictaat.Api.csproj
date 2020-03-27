@@ -64,11 +64,8 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Swashbuckle.SwaggerGen" Version="6.0.0-beta901" />
-    <PackageReference Include="Swashbuckle.SwaggerUi" Version="6.0.0-beta901" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>

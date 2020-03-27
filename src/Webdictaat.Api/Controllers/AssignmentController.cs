@@ -21,7 +21,7 @@ namespace Webdictaat.Api.Controllers
         private IAssignmentRepository _assignmentRepo;
         private IAuthorizeService _authorizeService;
         private UserManager<ApplicationUser> _userManager;
-         
+
 
         public AssignmentController(
             IAuthorizeService authorizeService,
@@ -47,7 +47,7 @@ namespace Webdictaat.Api.Controllers
             {
                 userId = _userManager.GetUserId(HttpContext.User);
             }
-          
+
             return _assignmentRepo.GetAssignment(assignmentId, userId);
         }
 
@@ -129,7 +129,7 @@ namespace Webdictaat.Api.Controllers
                 return false;
 
             return _assignmentRepo.UndoCompleteAssignment(assignmentId, userId);
-            
+
         }
 
         [HttpPost("{assignmentId}/submissions")]
@@ -146,9 +146,19 @@ namespace Webdictaat.Api.Controllers
             }
             else
             {
-                var isContributer = await _authorizeService.IsDictaatContributer(User.Identity.Name, dictaatName);
-                return _assignmentRepo.CompleteAssignment(assignmentId, form.UserId, isContributer);
-                
+                var isContributer = await _authorizeService.IsDictaatContributer(userId, dictaatName);
+
+                if(isContributer)
+                {
+                    //if you are a contributer, you can choose who has completed the assignment (form data)
+                    return _assignmentRepo.CompleteAssignment(assignmentId, form.UserId, isContributer);
+                }
+                else
+                {
+                    return _assignmentRepo.CompleteAssignment(assignmentId, userId, isContributer);
+
+                }
+
             }
         }
 
