@@ -142,7 +142,8 @@ namespace MVCWithAuth.Controllers
             }
 
             //get request token
-            var oauthToken = AvansOauthHelper.GetRequestToken(this.AvansOauthHelperOptions);
+            string baseUrl = $"{this.Request.Scheme}://{this.Request.Host}";
+            var oauthToken = AvansOauthHelper.GetRequestToken(baseUrl, this.AvansOauthHelperOptions);
 
 
             //store the oauth token, secret and return url temporarily

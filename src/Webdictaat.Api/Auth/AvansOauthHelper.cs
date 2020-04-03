@@ -12,7 +12,7 @@ namespace Webdictaat.Api.Auth
 {
     public class AvansOauthHelper
     {
-        public static OauthToken GetRequestToken(AvansOauthHelperOptions options)
+        public static OauthToken GetRequestToken(string baseUrl, AvansOauthHelperOptions options)
         {
             // Creating a new instance with a helper method
             OAuthRequest client = OAuthRequest.ForRequestToken(options.AvansClientId, options.AvansSecret);
