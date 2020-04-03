@@ -17,7 +17,7 @@ namespace Webdictaat.Api.Auth
             // Creating a new instance with a helper method
             OAuthRequest client = OAuthRequest.ForRequestToken(options.AvansClientId, options.AvansSecret);
             client.RequestUrl = "https://publicapi.avans.nl/oauth/request_token";
-            client.CallbackUrl = "http://localhost:65418/api/account/AvansCallback";
+            client.CallbackUrl = baseUrl + "/api/account/AvansCallback";
 
             // Using URL query authorization to get the request token
             string auth = client.GetAuthorizationQuery();
