@@ -41,10 +41,13 @@ namespace Webdictaat.Api.Controllers
         /// <summary>
         /// Throws a 403 if denied
         /// Returns if the user can access the resource
+        /// This is a public method for testing purposes. 
+        /// That's why it needs to be marked with NonAction.
         /// </summary>
         /// <param name="dictaatName"></param>
         /// <param name="isOwner">Default is false</param>
-        protected bool AuthorizeResource(string dictaatName, bool isOwner = false)
+        [NonAction]
+        public bool AuthorizeResource(string dictaatName, bool isOwner = false)
         {
             var authorize = false;
 

@@ -13,5 +13,8 @@ namespace Webdictaat.Core
         public object StyleDirectory { get; set; }
 
         public string JWTSECRET { get; set; }
+
+        public string AvansOauthClientId {get; set;}
+        public string AvansOauthSecret { get; set; }
     }
 }

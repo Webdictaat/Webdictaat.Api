@@ -15,6 +15,13 @@ using System.Text;
 using Webdictaat.Data;
 using Webdictaat.Core;
 using Microsoft.Extensions.Options;
+using OAuth;
+using System.Net;
+using System.IO;
+using System.Web;
+using Webdictaat.Api.Auth;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 
 namespace MVCWithAuth.Controllers
 {
@@ -31,6 +38,8 @@ namespace MVCWithAuth.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly WebdictaatContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
+
+        private AvansOauthHelperOptions AvansOauthHelperOptions;
 
         /// <summary>
         /// 
@@ -54,6 +63,12 @@ namespace MVCWithAuth.Controllers
             _serializerSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented
+            };
+                 
+            this.AvansOauthHelperOptions = new AvansOauthHelperOptions()
+            {
+                AvansClientId = appSettings.Value.AvansOauthClientId, 
+                AvansSecret = appSettings.Value.AvansOauthSecret
             };
         }
 
@@ -104,30 +119,81 @@ namespace MVCWithAuth.Controllers
 
             // Sign in the user with this external login provider if the user already has a login.
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            var fullName = info.Principal.FindFirstValue(ClaimTypes.Name);
 
-            //Not yet a user
-            if (user == null)
-            { 
-
-                //Get the information about the user from the external login provider
-                user = new ApplicationUser {
-                    UserName = email,
-                    Email = email,
-                    FullName = info.Principal.FindFirstValue(ClaimTypes.Name)
-                };
-
-                var createUserResult = await _userManager.CreateAsync(user);
-                if (createUserResult.Succeeded)
-                {
-                    createUserResult = await _userManager.AddLoginAsync(user, info);
-                }
-                AddErrors(createUserResult);
-            }
+            ApplicationUser user = await this.GetOrCreateUser(email, email, fullName, info);
 
             var token = GenerateToken(user);
             var url = returnUrl + "#/process-token?token=" + token;
             return Redirect(url);
+        }
+
+   
+           
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("AvansLogin")]
+        public IActionResult AvansLogin(string returnUrl)
+        {
+            if(String.IsNullOrEmpty(returnUrl))
+            {
+                return StatusCode(400);
+            }
+
+            //get request token
+            var oauthToken = AvansOauthHelper.GetRequestToken(this.AvansOauthHelperOptions);
+
+
+            //store the oauth token, secret and return url temporarily
+            HttpContext.Session.SetString("oauth_token", oauthToken.Token);
+            HttpContext.Session.SetString("oauth_secret", oauthToken.Secret);
+            HttpContext.Session.SetString("returnUrl", returnUrl);
+
+            //redirect to saml screen
+            return Redirect("https://publicapi.avans.nl/oauth/saml.php?oauth_token=" + oauthToken.Token);
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("AvansCallback")]
+        public async Task<IActionResult> AvansCallback()
+        {
+            //get the token from the session
+            var token = new OauthToken()
+            {
+                Token = HttpContext.Session.GetString("oauth_token"),
+                Secret = HttpContext.Session.GetString("oauth_secret")
+            };
+
+            var returnUrl = HttpContext.Session.GetString("returnUrl");
+            var verifier = HttpContext.Request.Query["oauth_verifier"];
+
+            OauthToken accesToken = AvansOauthHelper.GetAccesToken(this.AvansOauthHelperOptions, token, verifier);
+
+            //clear session of temp data
+            HttpContext.Session.Remove("oauth_token");
+            HttpContext.Session.Remove("oauth_secret");
+            HttpContext.Session.Remove("returnUrl");
+
+            string userInfo = AvansOauthHelper.GetUserInfo(this.AvansOauthHelperOptions, accesToken);
+            var avansDetails = JObject.Parse(userInfo);
+
+            var name = (string)avansDetails["nickname"];
+            var isEmployee = (string)avansDetails["employee"] == "true";
+            var email = (string)avansDetails["emails"][0];
+            var username = (string)avansDetails["accounts"]["username"];
+
+            var info = new UserLoginInfo("Avans", "Avans", "Avans");
+
+            ApplicationUser user = await this.GetOrCreateUser(email, username, name, info);
+
+            var jwt = GenerateToken(user);
+            returnUrl = returnUrl + "#/process-token?token=" + jwt;
+
+
+            return Redirect(returnUrl);
         }
 
         private string GenerateToken(ApplicationUser user)
@@ -205,6 +271,34 @@ namespace MVCWithAuth.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             return _userManager.FindByIdAsync(userId);
+        }
+
+        private async Task<ApplicationUser> GetOrCreateUser(string email, string username, string fullname, UserLoginInfo info)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
+            //Not yet a user
+            if (user == null)
+            {
+
+                //Get the information about the user from the external login provider
+                user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    FullName = fullname
+                };
+
+                var createUserResult = await _userManager.CreateAsync(user);
+
+                if (createUserResult.Succeeded)
+                {
+                    createUserResult = await _userManager.AddLoginAsync(user, info);
+                }
+                AddErrors(createUserResult);
+            }
+
+            return user;
         }
 
         #endregion

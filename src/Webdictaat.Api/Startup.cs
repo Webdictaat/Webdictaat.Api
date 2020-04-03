@@ -51,6 +51,11 @@ namespace Webdictaat.Api
             services.AddCors();
             services.AddMvc();
 
+            //required for storing return url and tokens between requests
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(1);//You can set Time   
+            });
+
             var cs = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<WebdictaatContext>(options =>
@@ -141,7 +146,7 @@ namespace Webdictaat.Api
                 app.UseDeveloperExceptionPage();
             }
 
-
+            app.UseSession();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseCors(b => b
@@ -158,6 +163,7 @@ namespace Webdictaat.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+
 
             app.Run(async (context) =>
             {
