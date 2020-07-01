@@ -42,7 +42,7 @@ namespace Webdictaat.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "Teacher")]
+        //[Authorize(Roles = "Teacher,Admin")] moet Role nog toevoegen aan JWT
         public async Task<IEnumerable<ViewModels.DictaatSummary>> Post([FromBody]ViewModels.DictaatForm form)
         {
             if (!ModelState.IsValid) {
@@ -51,6 +51,13 @@ namespace Webdictaat.Api.Controllers
             }
 
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (!(await _userManager.IsInRoleAsync(user, "Teacher")))
+            {
+                this.HttpContext.Response.StatusCode = 403;
+                return null;
+            }
+
             _dictaatRepo.CreateDictaat(form.Name, user, form.Template);
             return await this.Get();
         }
