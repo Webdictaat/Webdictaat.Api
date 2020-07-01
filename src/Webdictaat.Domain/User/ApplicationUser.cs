@@ -16,6 +16,5 @@ namespace Webdictaat.Domain.User
         public ICollection<AssignmentSubmission> AssignmentSubmissions { get; set; }
 
         public string FullName { get; set; }
-
     }
 }

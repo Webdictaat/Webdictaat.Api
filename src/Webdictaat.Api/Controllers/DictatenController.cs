@@ -42,7 +42,7 @@ namespace Webdictaat.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Teacher")]
         public async Task<IEnumerable<ViewModels.DictaatSummary>> Post([FromBody]ViewModels.DictaatForm form)
         {
             if (!ModelState.IsValid) {

@@ -22,6 +22,7 @@ using System.Web;
 using Webdictaat.Api.Auth;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
+using Webdictaat.Api.ViewModels;
 
 namespace MVCWithAuth.Controllers
 {
@@ -121,7 +122,7 @@ namespace MVCWithAuth.Controllers
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             var fullName = info.Principal.FindFirstValue(ClaimTypes.Name);
 
-            ApplicationUser user = await this.GetOrCreateUser(email, email, fullName, info);
+            ApplicationUser user = await this.GetOrCreateUser(email, email, fullName, info, false);
 
             var token = GenerateToken(user);
             var url = returnUrl + "#/process-token?token=" + token;
@@ -188,7 +189,7 @@ namespace MVCWithAuth.Controllers
 
             var info = new UserLoginInfo("Avans", "Avans", "Avans");
 
-            ApplicationUser user = await this.GetOrCreateUser(email, username, name, info);
+            ApplicationUser user = await this.GetOrCreateUser(email, username, name, info, isEmployee);
 
             var jwt = GenerateToken(user);
             returnUrl = returnUrl + "#/process-token?token=" + jwt;
@@ -241,7 +242,9 @@ namespace MVCWithAuth.Controllers
         public async Task<Webdictaat.Api.ViewModels.UserVM> Current()
         {
             ApplicationUser user = await this.GetCurrentUserAsync();
-            return new Webdictaat.Api.ViewModels.UserVM(user, true);
+            var userVM = new Webdictaat.Api.ViewModels.UserVM(user, true);
+            userVM.IsTeacher = await _userManager.IsInRoleAsync(user, "Teacher");
+            return userVM;
         }
 
         /// <summary>
@@ -274,7 +277,7 @@ namespace MVCWithAuth.Controllers
             return _userManager.FindByIdAsync(userId);
         }
 
-        private async Task<ApplicationUser> GetOrCreateUser(string email, string username, string fullname, UserLoginInfo info)
+        private async Task<ApplicationUser> GetOrCreateUser(string email, string username, string fullname, UserLoginInfo info, bool isEmployee)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
@@ -290,6 +293,7 @@ namespace MVCWithAuth.Controllers
                     FullName = fullname
                 };
 
+
                 var createUserResult = await _userManager.CreateAsync(user);
 
                 if (createUserResult.Succeeded)
@@ -298,6 +302,9 @@ namespace MVCWithAuth.Controllers
                 }
                 AddErrors(createUserResult);
             }
+
+            if(isEmployee)
+                await _userManager.AddToRoleAsync(user, "Teacher");
 
             return user;
         }

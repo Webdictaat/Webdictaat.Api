@@ -21,6 +21,7 @@ namespace Webdictaat.Api.ViewModels
         public string Name { get; set; }
 
         public double Points { get; set; }
+        public bool IsTeacher { get; internal set; }
 
         public UserVM()
         {

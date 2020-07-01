@@ -1,5 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <DebugType>portable</DebugType>
@@ -9,18 +8,18 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <UpgradeBackupLocation>C:\Users\links\Documents\Github\webdictaat\Webdictaat.Api\Backup\src\Webdictaat.Api.Test\</UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="resources\dictaten\images\**" />
     <EmbeddedResource Remove="resources\dictaten\images\**" />
     <None Remove="resources\dictaten\images\**" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="appsettings.development.json" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="appsettings.development.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -50,21 +49,16 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
     <PackageReference Include="Moq" Version="4.10.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Webdictaat.Api\Webdictaat.Api.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Script\" />
   </ItemGroup>
-  
 </Project>
