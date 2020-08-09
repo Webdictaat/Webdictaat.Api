@@ -9,7 +9,7 @@ This project requires ASP.NET core to be installed with a minimum version of 1.0
 After cloning this repo, run the 'dotnet restore' command. 
 
 ### Development secrets
-Instead of storing sensetive information in the web.config, these veriables are served as enviromental variables. In a hosting enviroment like IIS, these variables can be stored in configuration settings of you're application. During development, these variables are served via the dotnet secret store. 
+Instead of storing sensetive information in the web.config, these variables are served as enviromental variables. In a hosting enviroment like IIS, these variables can be stored in configuration settings of you're application. During development, these variables are served via the dotnet secret store. 
 
 https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets
 
